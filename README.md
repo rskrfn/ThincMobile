@@ -2,7 +2,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/rskrfn/ThincMobile">
-    <img src="android/app/src/main/res/logo512.png" alt="Logo" width="90" height="90">
+    <img src="android/app/src/main/res/logo_512.png" alt="Logo" width="90" height="90">
   </a>
 
   <h3 align="center">Thinc</h3>
