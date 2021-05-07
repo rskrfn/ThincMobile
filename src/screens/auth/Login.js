@@ -8,12 +8,17 @@ import {
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import Feather from 'react-native-vector-icons/Feather';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import CustomIcon from '../../components/customicon/icomoon';
+import env from '../../../env';
 
 export default function Login({navigation}) {
   const [data, setData] = React.useState({
     username: '',
     password: '',
     secureText: true,
+    userIcon: '',
   });
 
   const usernameHandler = username => {
@@ -47,20 +52,20 @@ export default function Login({navigation}) {
     <Animatable.View animation="fadeIn" style={styles.container}>
       <Text style={styles.header}>Login</Text>
       <View style={styles.inputGroup}>
-        <View style={styles.button}>
+        <View style={styles.input}>
+          <Text style={styles.inputLabel}>Email or Username</Text>
           <TextInput
             style={styles.textInputUsername}
-            placeholder="Email or Username"
             autoCapitalize="none"
             onChangeText={username => {
               usernameHandler(username);
             }}
           />
         </View>
-        <View style={styles.button}>
+        <View style={styles.input}>
+          <Text style={styles.inputLabel}>Password</Text>
           <TextInput
             style={styles.textInputPassword}
-            placeholder="Password"
             autoCapitalize="none"
             secureTextEntry={data.secureText ? true : false}
             onChangeText={password => {
@@ -69,10 +74,26 @@ export default function Login({navigation}) {
           />
           <TouchableOpacity style={styles.eye} onPress={updateSecureText}>
             {data.secureText ? (
-              <Feather name="eye-off" color="black" size={20} />
+              <MaterialIcons name="visibility" color="black" size={24} />
             ) : (
-              <Feather name="eye" color="black" size={20} />
+              <MaterialIcons name="visibility-off" color="black" size={24} />
             )}
+          </TouchableOpacity>
+        </View>
+        <View style={styles.input}>
+          <TouchableOpacity style={styles.forgot}>
+            <Text style={styles.forgottext}>Forgot Password?</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.input}>
+          <TouchableOpacity style={styles.btnlogin}>
+            <Text style={styles.btntextlogin}>Login</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.input}>
+          <TouchableOpacity style={styles.btngoogle}>
+            <FontAwesome name="google" size={24} style={styles.icongoogle} />
+            <Text style={styles.btntextgoogle}>Login with Google</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -88,21 +109,36 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: '#F9F9F9',
   },
+  scroll: {
+    justifyContent: 'center',
+  },
   inputGroup: {
     justifyContent: 'center',
     alignItems: 'center',
   },
   header: {
-    fontFamily: 'Kanit-Medium',
+    fontFamily: 'Kanit-SemiBold',
     fontSize: 32,
     color: 'black',
     marginBottom: '10%',
   },
-  button: {
+  input: {
     flexDirection: 'row',
     alignItems: 'center',
     marginLeft: '10%',
     marginRight: '10%',
+  },
+  inputLabel: {
+    position: 'absolute',
+    justifyContent: 'center',
+    backgroundColor: '#F9F9F9',
+    color: '#ADA9BB',
+    fontFamily: 'Kanit-Regular',
+    left: 8,
+    top: -10,
+    paddingLeft: 2,
+    paddingRight: 2,
+    zIndex: 10,
   },
   textInputUsername: {
     flex: 1,
@@ -111,6 +147,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     marginBottom: '10%',
+    fontFamily: 'Roboto-Regular',
+    fontSize: 20,
+    color: 'black',
   },
   textInputPassword: {
     flex: 1,
@@ -118,10 +157,62 @@ const styles = StyleSheet.create({
     borderColor: '#ADA9BB',
     borderRadius: 10,
     padding: 10,
+    fontFamily: 'Roboto-Regular',
+    fontSize: 20,
+    color: 'black',
   },
   eye: {
     position: 'absolute',
     right: 15,
     justifyContent: 'center',
+  },
+  forgot: {
+    flex: 1,
+    alignItems: 'flex-end',
+  },
+  forgottext: {
+    marginTop: 10,
+    fontFamily: 'Roboto-Medium',
+    fontSize: 18,
+  },
+  btnlogin: {
+    width: '100%',
+    alignItems: 'center',
+    marginTop: '10%',
+    backgroundColor: '#5784BA',
+    justifyContent: 'center',
+    height: 50,
+    borderRadius: 10,
+    padding: 10,
+  },
+  btntextlogin: {
+    fontSize: 18,
+    width: '100%',
+    color: 'white',
+    textAlign: 'center',
+    fontFamily: 'Kanit-Medium',
+  },
+  btngoogle: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
+    backgroundColor: 'rgba(0, 13, 79, 0.08)',
+    justifyContent: 'center',
+    height: 50,
+    borderRadius: 10,
+    padding: 10,
+  },
+  btntextgoogle: {
+    fontSize: 16,
+    width: '100%',
+    color: 'black',
+    textAlign: 'center',
+    fontFamily: 'Kanit-Medium',
+  },
+  icongoogle: {
+    position: 'absolute',
+    left: '20%',
+    color: '#5784BA',
   },
 });
