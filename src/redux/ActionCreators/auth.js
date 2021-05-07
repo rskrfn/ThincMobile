@@ -1,11 +1,5 @@
 import axios from 'axios';
 
-export let userData = data => {
-  return {
-    type: 'USERDATA',
-    payload: data,
-  };
-};
 export let userRegister = (url, auth) => {
   return {
     type: 'USER_REGISTER',
