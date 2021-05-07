@@ -5,7 +5,10 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
+  ScrollView,
+  SafeAreaView,
 } from 'react-native';
+import {Container} from 'native-base';
 import * as Animatable from 'react-native-animatable';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -49,78 +52,79 @@ export default function Login({navigation}) {
   console.log('password', data.password);
 
   return (
-    <Animatable.View animation="fadeIn" style={styles.container}>
-      <Text style={styles.header}>Login</Text>
-      <View style={styles.inputGroup}>
-        <View style={styles.input}>
-          <Text style={styles.inputLabel}>Email or Username</Text>
-          <TextInput
-            style={styles.textInputUsername}
-            autoCapitalize="none"
-            onChangeText={username => {
-              usernameHandler(username);
-            }}
-          />
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerstyle={styles.container}>
+        <Text style={styles.header}>Login</Text>
+        <View style={styles.inputGroup}>
+          <View style={styles.input}>
+            <Text style={styles.inputLabel}>Email or Username</Text>
+            <TextInput
+              style={styles.textInputUsername}
+              autoCapitalize="none"
+              onChangeText={username => {
+                usernameHandler(username);
+              }}
+            />
+          </View>
+          <View style={styles.input}>
+            <Text style={styles.inputLabel}>Password</Text>
+            <TextInput
+              style={styles.textInputPassword}
+              autoCapitalize="none"
+              secureTextEntry={data.secureText ? true : false}
+              onChangeText={password => {
+                passwordHandler(password);
+              }}
+            />
+            <TouchableOpacity style={styles.eye} onPress={updateSecureText}>
+              {data.secureText ? (
+                <MaterialIcons name="visibility" color="black" size={24} />
+              ) : (
+                <MaterialIcons name="visibility-off" color="black" size={24} />
+              )}
+            </TouchableOpacity>
+          </View>
+          <View style={styles.input}>
+            <TouchableOpacity style={styles.forgot}>
+              <Text style={styles.forgottext}>Forgot Password?</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.input}>
+            <TouchableOpacity style={styles.btnlogin}>
+              <Text style={styles.btntextlogin}>Login</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.input}>
+            <TouchableOpacity style={styles.btngoogle}>
+              <FontAwesome name="google" size={24} style={styles.icongoogle} />
+              <Text style={styles.btntextgoogle}>Login with Google</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.input}>
-          <Text style={styles.inputLabel}>Password</Text>
-          <TextInput
-            style={styles.textInputPassword}
-            autoCapitalize="none"
-            secureTextEntry={data.secureText ? true : false}
-            onChangeText={password => {
-              passwordHandler(password);
-            }}
-          />
-          <TouchableOpacity style={styles.eye} onPress={updateSecureText}>
-            {data.secureText ? (
-              <MaterialIcons name="visibility" color="black" size={24} />
-            ) : (
-              <MaterialIcons name="visibility-off" color="black" size={24} />
-            )}
-          </TouchableOpacity>
-        </View>
-        <View style={styles.input}>
-          <TouchableOpacity style={styles.forgot}>
-            <Text style={styles.forgottext}>Forgot Password?</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.input}>
-          <TouchableOpacity style={styles.btnlogin}>
-            <Text style={styles.btntextlogin}>Login</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.input}>
-          <TouchableOpacity style={styles.btngoogle}>
-            <FontAwesome name="google" size={24} style={styles.icongoogle} />
-            <Text style={styles.btntextgoogle}>Login with Google</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </Animatable.View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'column',
+    flexDirection: 'row',
     backgroundColor: '#F9F9F9',
   },
-  scroll: {
-    justifyContent: 'center',
-  },
-  inputGroup: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+
   header: {
+    alignSelf: 'center',
     fontFamily: 'Kanit-SemiBold',
     fontSize: 32,
     color: 'black',
     marginBottom: '10%',
+  },
+  inputGroup: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   input: {
     flexDirection: 'row',
@@ -173,7 +177,7 @@ const styles = StyleSheet.create({
   forgottext: {
     marginTop: 10,
     fontFamily: 'Roboto-Medium',
-    fontSize: 18,
+    fontSize: 14,
   },
   btnlogin: {
     width: '100%',
