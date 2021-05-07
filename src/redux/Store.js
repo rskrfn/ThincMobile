@@ -1,17 +1,11 @@
 import {createStore, combineReducers, applyMiddleware} from 'redux';
-import {createLogger} from 'redux-logger';
+import {persistStore, persistReducer} from 'redux-persist';
 import {composeWithDevTools} from 'redux-devtools-extension';
-import rpm from 'redux-promise-middleware';
-import loginReducers from './Reducers/login';
-import registerReducers from './Reducers/register';
+import rootReducer from './Root';
 
-const logger = createLogger();
-const devtools = composeWithDevTools(applyMiddleware(rpm, logger));
-// const enhancers = applyMiddleware(rpm, logger);
-const reducers = combineReducers({
-  loginReducers,
-  registerReducers,
-});
-const reduxStore = createStore(reducers, devtools);
+const store = createStore(rootReducer, composeWithDevTools());
+const persistor = persistStore(store);
 
-export default reduxStore;
+const storeWithPersistor = {store, persistor};
+
+export default storeWithPersistor;
