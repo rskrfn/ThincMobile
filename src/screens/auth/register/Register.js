@@ -38,7 +38,7 @@ const Register = props => {
     } else {
       setValidate(true);
       setData({...data, email: text});
-      console.log('Email is Correct');
+      // console.log('Email is Correct');
     }
   };
   let submitHandler = e => {
@@ -91,10 +91,10 @@ const Register = props => {
           data.timer = setTimeout(() => {
             props.navigation.navigate('Login');
           }, 5000);
-          console.log(res);
+          // console.log(res);
         })
         .catch(error => {
-          console.log(error);
+          // console.log(error);
           return Toast.show({
             text: 'Error',
             type: 'danger',
@@ -103,7 +103,7 @@ const Register = props => {
         });
     }
   };
-  console.log(eye);
+  // console.log(eye);
   return (
     <SafeAreaView style={classes.container}>
       <ScrollView contentContainerstyle={classes.container}>

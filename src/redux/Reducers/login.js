@@ -3,12 +3,11 @@ let initialState = {
   isRejected: false,
   isFulfilled: false,
   isLogin: false,
-  result: {},
   user: {},
   err: {},
 };
 
-let loginReducer = (state = initialState, action) => {
+let loginReducers = (state = initialState, action) => {
   const {type, payload} = action;
   switch (type) {
     case 'LOGIN_PENDING':
@@ -25,7 +24,7 @@ let loginReducer = (state = initialState, action) => {
         isPending: false,
         err: payload,
       };
-    case 'LOGIN_FULFILLED':
+    case 'LOGIN_SUCCESS':
       return {
         ...state,
         isFulfilled: true,
@@ -47,4 +46,4 @@ let loginReducer = (state = initialState, action) => {
   }
 };
 
-export default loginReducer;
+export default loginReducers;
