@@ -1,25 +1,33 @@
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import {connect} from 'react-redux';
 import Login from './src/screens/auth/login/Login';
-import {Provider} from 'react-redux';
-import {PersistGate} from 'redux-persist/integration/react';
-import storeWithPersistor from './src/redux/Store';
+import Register from './src/screens/auth/register/Register';
 
-const Router = () => {
-  const {Navigator, Screen} = createStackNavigator();
+const Router = props => {
+  // let init = async () => {
+  //   // …do multiple async tasks
+  // };
+
+  useEffect(() => {}, []);
+  console.log(props);
+  const Stack = createStackNavigator();
   return (
-    <Provider store={storeWithPersistor.store}>
-      <PersistGate loading={null} persistor={storeWithPersistor.persistor}>
-        <NavigationContainer>
-          <Navigator headerMode={'none'}>
-            <Screen name="Login" component={Login} />
-          </Navigator>
-        </NavigationContainer>
-      </PersistGate>
-    </Provider>
+    <NavigationContainer>
+      <Stack.Navigator headerMode={'none'}>
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Register" component={Register} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
-export default Router;
+const mapStatetoProps = state => {
+  return {
+    loginReducer: state.loginReducer,
+  };
+};
+const connectedRouter = connect(mapStatetoProps)(Router);
+export default connectedRouter;

@@ -113,6 +113,22 @@ const styles = StyleSheet.create({
     left: '20%',
     color: '#5784BA',
   },
+  register: {
+    position: 'absolute',
+    flexDirection: 'row',
+    bottom: 24,
+  },
+  newusertext: {
+    color: '#ADA9BB',
+    fontFamily: 'Kanit-Medium',
+    fontSize: 15,
+  },
+  registertext: {
+    fontFamily: 'Kanit-Medium',
+    marginLeft: 8,
+    color: '#5784BA',
+    fontSize: 15,
+  },
 });
 
 export default styles;

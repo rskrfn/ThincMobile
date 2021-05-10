@@ -7,26 +7,26 @@ export let userRegister = (url, auth) => {
     payload: axios.post(url, auth),
   };
 };
-// export let userLogin = (url, auth) => {
+// export let loginAction = data => {
 //   return {
 //     type: 'USER_LOGIN',
-//     payload: axios.post(url, auth),
+//     payload: axios.post(`${API_URL}/users/login`, data),
 //   };
 // };
 
-export function loginHandler(data) {
+export function loginAction(data) {
   return dispatch => {
     dispatch({
       type: 'LOGIN_PENDING',
     });
     axios
-      .post(`${API_URL}/users/login`, data)
+      .post('http://192.168.0.102:9080/users/login', data)
       .then(res => {
         dispatch({type: 'LOGIN_SUCCESS', payload: res.data});
       })
       .catch(err => {
         dispatch({
-          type: 'LOGIN_ERROR',
+          type: 'LOGIN_REJECTED',
           payload: err,
         });
       });

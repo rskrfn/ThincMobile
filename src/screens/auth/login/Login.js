@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import styles from './Style';
 import {connect} from 'react-redux';
-import {loginHandler} from '../../../redux/ActionCreators/auth';
+import {loginAction} from '../../../redux/Action/auth';
 import * as Animatable from 'react-native-animatable';
 // import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -18,10 +18,12 @@ import {Toast} from 'native-base';
 
 // import CustomIcon from '../../components/customicon/icomoon';
 
-function Login({navigation}) {
+function Login({...props}) {
   const [data, setData] = useState({
     username: '',
     password: '',
+  });
+  const [eye, setEye] = useState({
     secureText: true,
   });
 
@@ -35,7 +37,7 @@ function Login({navigation}) {
     });
   };
   const passwordHandler = password => {
-    if (!password || password.length < 8) {
+    if (!password || password.length < 2) {
       return;
     }
     setData({
@@ -44,9 +46,9 @@ function Login({navigation}) {
     });
   };
   const updateSecureText = () => {
-    setData({
-      ...data,
-      secureText: !data.secureText,
+    setEye({
+      ...eye,
+      secureText: !eye.secureText,
     });
   };
   let submitHandler = e => {
@@ -55,15 +57,16 @@ function Login({navigation}) {
       username: data.username,
       password: data.password,
     };
-    if (!auth.email || !auth.password) {
+    if (!auth.username || !auth.password) {
       return Toast.show({
         text: 'Fill in your data',
+        type: 'warning',
       });
+    } else {
+      console.log(props);
+      props.onLoginHandler(auth);
     }
   };
-
-  // console.log('username', data.username);
-  // console.log('password', data.password);
 
   return (
     <SafeAreaView fadeIn style={styles.container}>
@@ -86,13 +89,13 @@ function Login({navigation}) {
               <TextInput
                 style={styles.textInputPassword}
                 autoCapitalize="none"
-                secureTextEntry={data.secureText ? true : false}
+                secureTextEntry={eye.secureText ? true : false}
                 onChangeText={password => {
                   passwordHandler(password);
                 }}
               />
               <TouchableOpacity style={styles.eye} onPress={updateSecureText}>
-                {data.secureText ? (
+                {eye.secureText ? (
                   <MaterialIcons name="visibility" color="black" size={24} />
                 ) : (
                   <MaterialIcons
@@ -109,7 +112,7 @@ function Login({navigation}) {
               </TouchableOpacity>
             </View>
             <View style={styles.input}>
-              <TouchableOpacity style={styles.btnlogin}>
+              <TouchableOpacity style={styles.btnlogin} onPress={submitHandler}>
                 <Text style={styles.btntextlogin}>Login</Text>
               </TouchableOpacity>
             </View>
@@ -126,21 +129,30 @@ function Login({navigation}) {
           </View>
         </Animatable.View>
       </ScrollView>
+      <View style={styles.register}>
+        <Text style={styles.newusertext}>New user?</Text>
+        <Text
+          style={styles.registertext}
+          onPress={() => props.navigation.navigate('Register')}>
+          Register
+        </Text>
+      </View>
     </SafeAreaView>
   );
 }
-// const mapStatetoProps = state => {
-//   const {loginReducer} = state;
-//   return {loginReducer};
-// };
+const mapStatetoProps = state => {
+  return {
+    loginReducer: state.loginReducer,
+  };
+};
 
-// const mapDispatchtoProps = dispatch => {
-//   return {
-//     onLoginHandler: data => {
-//       dispatch(loginHandler(data));
-//     },
-//   };
-// };
+const mapDispatchtoProps = dispatch => {
+  return {
+    onLoginHandler: data => {
+      dispatch(loginAction(data));
+    },
+  };
+};
 
-const connectedLogin = connect(null, null)(Login);
+const connectedLogin = connect(mapStatetoProps, mapDispatchtoProps)(Login);
 export default connectedLogin;

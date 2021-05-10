@@ -8,7 +8,7 @@ let initialState = {
   err: {},
 };
 
-let loginReducers = (state = initialState, action) => {
+let loginReducer = (state = initialState, action) => {
   const {type, payload} = action;
   switch (type) {
     case 'LOGIN_PENDING':
@@ -47,4 +47,4 @@ let loginReducers = (state = initialState, action) => {
   }
 };
 
-export default loginReducers;
+export default loginReducer;
