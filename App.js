@@ -3,6 +3,7 @@ import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {connect} from 'react-redux';
+import RNBootSplash from 'react-native-bootsplash';
 import Login from './src/screens/auth/login/Login';
 import Register from './src/screens/auth/register/Register';
 
@@ -10,12 +11,13 @@ const Router = props => {
   // let init = async () => {
   //   // …do multiple async tasks
   // };
-
-  useEffect(() => {}, []);
+  // React.useEffect(() => {
+  //   RNBootSplash.hide({fade: true});
+  // }, []);
   console.log(props);
   const Stack = createStackNavigator();
   return (
-    <NavigationContainer>
+    <NavigationContainer onReady={() => RNBootSplash.hide()}>
       <Stack.Navigator headerMode={'none'}>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />

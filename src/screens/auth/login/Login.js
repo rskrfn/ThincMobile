@@ -63,7 +63,7 @@ function Login({...props}) {
         type: 'warning',
       });
     } else {
-      console.log(props);
+      // console.log(props);
       props.onLoginHandler(auth);
     }
   };

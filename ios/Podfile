@@ -16,6 +16,8 @@ target 'ThincMobile' do
 
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-async-storage/async-storage'
 
+  pod 'RNBootSplash', :path => '../node_modules/react-native-bootsplash'
+
   target 'ThincMobileTests' do
     inherit! :complete
     # Pods for testing
