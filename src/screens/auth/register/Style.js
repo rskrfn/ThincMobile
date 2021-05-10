@@ -109,17 +109,18 @@ const classes = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
   },
+  googleicon: {
+    alignSelf: 'center',
+    width: 20,
+    height: 20,
+  },
   btntextgoogle: {
+    flex: 0.6,
     fontSize: 16,
     width: '100%',
     color: 'black',
     textAlign: 'center',
     fontFamily: 'Kanit-Medium',
-  },
-  icongoogle: {
-    position: 'absolute',
-    left: '20%',
-    color: '#5784BA',
   },
   register: {
     flexDirection: 'row',

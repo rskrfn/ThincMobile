@@ -6,6 +6,7 @@ import {
   TextInput,
   ScrollView,
   SafeAreaView,
+  Image,
 } from 'react-native';
 import styles from './Style';
 import {connect} from 'react-redux';
@@ -119,10 +120,9 @@ function Login({...props}) {
             </View>
             <View style={styles.input}>
               <TouchableOpacity style={styles.btngoogle}>
-                <FontAwesome
-                  name="google"
-                  size={24}
-                  style={styles.icongoogle}
+                <Image
+                  style={styles.googleicon}
+                  source={require('../../../assets/icons/icon_google.png')}
                 />
                 <Text style={styles.btntextgoogle}>Login with Google</Text>
               </TouchableOpacity>

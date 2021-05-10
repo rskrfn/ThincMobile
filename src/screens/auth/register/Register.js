@@ -6,6 +6,7 @@ import {
   TextInput,
   ScrollView,
   SafeAreaView,
+  Image,
 } from 'react-native';
 import classes from './Style';
 import * as Animatable from 'react-native-animatable';
@@ -25,14 +26,9 @@ const Register = props => {
     timer: null,
   });
   const [eye, setEye] = useState({
-    secureText: true,
+    securePass: true,
+    secureRepeat: true,
   });
-  const updateSecureText = () => {
-    setEye({
-      ...eye,
-      secureText: !eye.secureText,
-    });
-  };
   const [isemailValid, setValidate] = useState();
   let validateEmail = text => {
     let reg = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w\w+)+$/;
@@ -108,9 +104,9 @@ const Register = props => {
         });
     }
   };
-  console.log(data);
+  console.log(eye);
   return (
-    <SafeAreaView fadeIn style={classes.container}>
+    <SafeAreaView style={classes.container}>
       <ScrollView contentContainerstyle={classes.container}>
         <Animatable.View animation="fadeIn">
           <Text style={classes.header}>Register</Text>
@@ -151,13 +147,20 @@ const Register = props => {
               <TextInput
                 style={classes.textInputPassword}
                 autoCapitalize="none"
-                secureTextEntry={eye.secureText ? true : false}
+                secureTextEntry={eye.securePass ? true : false}
                 onChangeText={password => {
                   setData({...data, password: password});
                 }}
               />
-              <TouchableOpacity style={classes.eye} onPress={updateSecureText}>
-                {eye.secureText ? (
+              <TouchableOpacity
+                style={classes.eye}
+                onPress={() => {
+                  setEye({
+                    ...eye,
+                    securePass: !eye.securePass,
+                  });
+                }}>
+                {eye.securePass ? (
                   <MaterialIcons name="visibility" color="black" size={24} />
                 ) : (
                   <MaterialIcons
@@ -173,13 +176,20 @@ const Register = props => {
               <TextInput
                 style={classes.textInputrepeatPassword}
                 autoCapitalize="none"
-                secureTextEntry={eye.secureText ? true : false}
+                secureTextEntry={eye.secureRepeat ? true : false}
                 onChangeText={repeat => {
                   setData({...data, repeat: repeat});
                 }}
               />
-              <TouchableOpacity style={classes.eye} onPress={updateSecureText}>
-                {eye.secureText ? (
+              <TouchableOpacity
+                style={classes.eye}
+                onPress={() => {
+                  setEye({
+                    ...eye,
+                    secureRepeat: !eye.secureRepeat,
+                  });
+                }}>
+                {eye.secureRepeat ? (
                   <MaterialIcons name="visibility" color="black" size={24} />
                 ) : (
                   <MaterialIcons
@@ -199,10 +209,9 @@ const Register = props => {
             </View>
             <View style={classes.input}>
               <TouchableOpacity style={classes.btngoogle}>
-                <FontAwesome
-                  name="google"
-                  size={24}
-                  style={classes.icongoogle}
+                <Image
+                  style={classes.googleicon}
+                  source={require('../../../assets/icons/icon_google.png')}
                 />
                 <Text style={classes.btntextgoogle}>Register with Google</Text>
               </TouchableOpacity>
