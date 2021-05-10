@@ -1,6 +1,6 @@
 import React from 'react';
 import {AppRegistry} from 'react-native';
-import App from './App';
+import Router from './Router';
 import {name as appName} from './app.json';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
@@ -16,7 +16,7 @@ const RouterRedux = () => {
     <Root>
       <Provider store={storeWithPersistor.store}>
         <PersistGate loading={null} persistor={storeWithPersistor.persistor}>
-          <App />
+          <Router />
         </PersistGate>
       </Provider>
     </Root>

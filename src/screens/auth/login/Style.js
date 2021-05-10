@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     color: 'black',
     marginBottom: '10%',
+    marginTop: 100,
   },
   inputGroup: {
     justifyContent: 'center',
@@ -114,9 +115,8 @@ const styles = StyleSheet.create({
     color: '#5784BA',
   },
   register: {
-    position: 'absolute',
     flexDirection: 'row',
-    bottom: 24,
+    marginTop: 150,
   },
   newusertext: {
     color: '#ADA9BB',

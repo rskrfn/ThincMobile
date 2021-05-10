@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -61,6 +61,7 @@ function Login({...props}) {
       return Toast.show({
         text: 'Fill in your data',
         type: 'warning',
+        textStyle: {textAlign: 'center'},
       });
     } else {
       // console.log(props);
@@ -126,17 +127,17 @@ function Login({...props}) {
                 <Text style={styles.btntextgoogle}>Login with Google</Text>
               </TouchableOpacity>
             </View>
+            <View style={styles.register}>
+              <Text style={styles.newusertext}>New user?</Text>
+              <Text
+                style={styles.registertext}
+                onPress={() => props.navigation.navigate('Register')}>
+                Register
+              </Text>
+            </View>
           </View>
         </Animatable.View>
       </ScrollView>
-      <View style={styles.register}>
-        <Text style={styles.newusertext}>New user?</Text>
-        <Text
-          style={styles.registertext}
-          onPress={() => props.navigation.navigate('Register')}>
-          Register
-        </Text>
-      </View>
     </SafeAreaView>
   );
 }
