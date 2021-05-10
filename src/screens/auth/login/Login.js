@@ -13,7 +13,6 @@ import {connect} from 'react-redux';
 import {loginAction} from '../../../redux/Action/auth';
 import * as Animatable from 'react-native-animatable';
 // import Feather from 'react-native-vector-icons/Feather';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {Toast} from 'native-base';
 

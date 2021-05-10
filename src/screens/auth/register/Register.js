@@ -11,7 +11,6 @@ import {
 import classes from './Style';
 import * as Animatable from 'react-native-animatable';
 // import Feather from 'react-native-vector-icons/Feather';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {Toast} from 'native-base';
 import axios from 'axios';
