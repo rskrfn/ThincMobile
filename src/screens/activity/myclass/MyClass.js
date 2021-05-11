@@ -17,7 +17,7 @@ function MyClass({...props}) {
       />
       <View style={classes.container}>
         <View style={classes.header}>
-          <View style={classes.topSection}>
+          <View style={classes.infosection}>
             <MaterialIcons
               name="chevron-left"
               color="white"

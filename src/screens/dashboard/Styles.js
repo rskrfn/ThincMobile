@@ -16,7 +16,7 @@ const classes = StyleSheet.create({
     paddingBottom: 24,
     backgroundColor: '#5784BA',
   },
-  infoSection: {
+  infosection: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -31,7 +31,7 @@ const classes = StyleSheet.create({
     fontFamily: 'Kanit-Medium',
     fontSize: 28,
   },
-  searchSection: {
+  searchsection: {
     alignItems: 'center',
     flexDirection: 'row',
     marginTop: 32,
@@ -40,7 +40,7 @@ const classes = StyleSheet.create({
     borderRadius: 24,
     height: 42,
   },
-  searchInput: {
+  inputsearch: {
     flex: 1,
     fontFamily: 'Roboto-Medium',
     color: '#010620',

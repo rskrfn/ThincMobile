@@ -20,7 +20,7 @@ import ForYou from '../../components/dashboard/foryou/ForYou';
 const Dashboard = props => {
   const notifActive = true;
   const name = props.loginReducers.user.data.data.name;
-  let role = props.loginReducers.user.data.data.role;
+  // let role = props.loginReducers.user.data.data.role;
   const [activeTab, setActive] = React.useState(0);
   const tabList = ['All Schedule', 'For You'];
   console.log(props.loginReducers.user.data);
@@ -36,7 +36,7 @@ const Dashboard = props => {
       />
       <View style={classes.container}>
         <View style={classes.header}>
-          <View style={classes.infoSection}>
+          <View style={classes.infosection}>
             <Text style={classes.welcometext}>Welcome back,</Text>
             <Material
               name={notifActive ? 'notifications-active' : 'notifications'}
@@ -45,10 +45,10 @@ const Dashboard = props => {
             />
           </View>
           <Text style={classes.name}>{name ? name : 'User'}</Text>
-          <View style={classes.searchSection}>
+          <View style={classes.searchsection}>
             <Material name="search" color="#010620" size={24} />
             <TextInput
-              style={classes.searchInput}
+              style={classes.inputsearch}
               placeholder="Looking for something?"
               placeholderTextColor={{color: '#010620'}}
             />

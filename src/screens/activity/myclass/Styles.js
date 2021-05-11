@@ -16,7 +16,7 @@ const classes = StyleSheet.create({
     borderBottomEndRadius: 20,
     paddingBottom: 24,
   },
-  topSection: {
+  infosection: {
     flexDirection: 'row',
   },
   title: {

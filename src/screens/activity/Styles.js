@@ -16,10 +16,10 @@ const classes = StyleSheet.create({
     borderBottomEndRadius: 20,
     paddingBottom: 24,
   },
-  infoSection: {
+  infosection: {
     flexDirection: 'row',
   },
-  screentitle: {
+  title: {
     fontFamily: 'Kanit-Medium',
     fontSize: 28,
     color: 'white',

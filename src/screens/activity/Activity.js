@@ -10,8 +10,8 @@ const Activity = props => {
     <>
       <View style={classes.container}>
         <View style={classes.header}>
-          <View style={classes.infoSection}>
-            <Text style={classes.screentitle}>Activity</Text>
+          <View style={classes.infosection}>
+            <Text style={classes.title}>Activity</Text>
           </View>
         </View>
         {role === 'Member' ? (
