@@ -1,5 +1,4 @@
 import axios from 'axios';
-import {API_URL} from '@env';
 
 export let userRegister = (url, auth) => {
   return {
@@ -30,5 +29,10 @@ export function loginAction(data) {
           payload: err,
         });
       });
+  };
+}
+export function logoutHandler() {
+  return dispatch => {
+    dispatch({type: 'LOGOUT'});
   };
 }

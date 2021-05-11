@@ -11,11 +11,24 @@ import Login from './src/screens/auth/login/Login';
 import Register from './src/screens/auth/register/Register';
 import Dashboard from './src/screens/dashboard/Dashboard';
 import Activity from './src/screens/activity/Activity';
+import MyClass from './src/screens/activity/myclass/MyClass';
 import Chat from './src/screens/chat/Chat';
 import Profile from './src/screens/profile/Profile';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+
+function ActivityStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}>
+      <Stack.Screen name="ActivityMain" component={Activity} />
+      <Stack.Screen name="MyClass" component={MyClass} />
+    </Stack.Navigator>
+  );
+}
 
 function AuthNavigation() {
   return (
@@ -46,7 +59,6 @@ function AuthNavigation() {
             iconColor = focused ? '#5784BA' : '#ADA9BB';
             active = focused ? <View style={classes.active} /> : null;
           }
-
           return (
             <>
               {active}
@@ -59,7 +71,7 @@ function AuthNavigation() {
         showLabel: false,
       }}>
       <Tab.Screen name="Dashboard" component={Dashboard} />
-      <Tab.Screen name="Activity" component={Activity} />
+      <Tab.Screen name="Activity" component={ActivityStack} />
       <Tab.Screen name="Chat" component={Chat} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
@@ -68,7 +80,7 @@ function AuthNavigation() {
 
 function Router(props) {
   React.useEffect(() => {
-    // console.log(props);
+    console.log(props);
   }, [props]);
 
   return (
@@ -96,7 +108,6 @@ const classes = StyleSheet.create({
     borderBottomColor: '#5784BA',
   },
 });
-
 const mapStatetoProps = state => {
   return {
     loginReducers: state.loginReducers,

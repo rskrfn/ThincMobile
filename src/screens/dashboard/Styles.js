@@ -16,38 +16,21 @@ const classes = StyleSheet.create({
     paddingBottom: 24,
     backgroundColor: '#5784BA',
   },
-  topSection: {
+  infoSection: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  notifFlag: {
-    position: 'absolute',
-    height: 9,
-    width: 9,
-    borderRadius: 4.5,
-    backgroundColor: 'red',
-    borderColor: '#5784BA',
-    borderWidth: 1,
-    right: 1.9,
-    top: 2,
-  },
-  txtGreeting: {
+  welcometext: {
     fontFamily: 'Kanit-Medium',
     color: 'white',
     fontSize: 20,
   },
-  profileSummary: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 18,
+  name: {
+    color: 'white',
+    fontFamily: 'Kanit-Medium',
+    fontSize: 28,
   },
-  avatar: {
-    height: 56,
-    width: 56,
-    borderRadius: 56 / 2,
-  },
-
   searchSection: {
     alignItems: 'center',
     flexDirection: 'row',
@@ -65,16 +48,6 @@ const classes = StyleSheet.create({
   },
   info: {
     marginLeft: 33,
-  },
-  name: {
-    color: 'white',
-    fontFamily: 'Kanit-Medium',
-    fontSize: 32,
-  },
-  status: {
-    color: 'white',
-    fontFamily: 'Roboto-Regular',
-    fontSize: 14,
   },
   schedule: {
     width: '100%',
