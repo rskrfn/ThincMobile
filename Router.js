@@ -18,7 +18,7 @@ import Profile from './src/screens/profile/Profile';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-function ActivityStack() {
+function ActivityNavigation() {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -42,22 +42,22 @@ function AuthNavigation() {
           if (route.name === 'Dashboard') {
             icon = 'home';
             iconColor = focused ? '#5784BA' : '#ADA9BB';
-            active = focused ? <View style={classes.active} /> : null;
+            active = focused ? <View style={classes.indicator} /> : null;
           }
           if (route.name === 'Activity') {
             icon = 'book';
             iconColor = focused ? '#5784BA' : '#ADA9BB';
-            active = focused ? <View style={classes.active} /> : null;
+            active = focused ? <View style={classes.indicator} /> : null;
           }
           if (route.name === 'Chat') {
             icon = 'chat';
             iconColor = focused ? '#5784BA' : '#ADA9BB';
-            active = focused ? <View style={classes.active} /> : null;
+            active = focused ? <View style={classes.indicator} /> : null;
           }
           if (route.name === 'Profile') {
             icon = 'user';
             iconColor = focused ? '#5784BA' : '#ADA9BB';
-            active = focused ? <View style={classes.active} /> : null;
+            active = focused ? <View style={classes.indicator} /> : null;
           }
           return (
             <>
@@ -71,7 +71,7 @@ function AuthNavigation() {
         showLabel: false,
       }}>
       <Tab.Screen name="Dashboard" component={Dashboard} />
-      <Tab.Screen name="Activity" component={ActivityStack} />
+      <Tab.Screen name="Activity" component={ActivityNavigation} />
       <Tab.Screen name="Chat" component={Chat} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
@@ -99,7 +99,7 @@ function Router(props) {
   );
 }
 const classes = StyleSheet.create({
-  active: {
+  indicator: {
     position: 'absolute',
     top: 0,
     width: '50%',
