@@ -10,6 +10,7 @@ import {
   ScrollView,
   SafeAreaView,
   LogBox,
+  RefreshControl,
 } from 'react-native';
 import {Button, Input, Icon, Item, Picker} from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -26,7 +27,7 @@ function Member({...props}) {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+    // LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);
 
   const getMyClass = () => {
@@ -34,9 +35,13 @@ function Member({...props}) {
       .get('http://192.168.0.102:9080/courses/myclass')
       .then(res => {
         // console.log(res);
-        setMyClass(res.data.data);
+        if (res.data.data.length > 0) {
+          setMyClass(res.data.data);
+        } else {
+          setMyClass('');
+        }
       })
-      .catch(err => console.log(err));
+      .catch(() => setMyClass());
   };
 
   const getNewClass = () => {
@@ -51,9 +56,21 @@ function Member({...props}) {
       .catch(err => console.log(err));
   };
 
-  useEffect(() => {
-    getMyClass();
-    getNewClass();
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(async () => {
+    try {
+      setRefreshing(true);
+      setMyClass('');
+      setNewClass('');
+      await getMyClass();
+      await getNewClass();
+      setRefreshing(false);
+    } catch (err) {}
   }, []);
 
   const setColor = score => {
@@ -71,18 +88,28 @@ function Member({...props}) {
       }
     }
   };
+
+  useEffect(() => {
+    getMyClass();
+    getNewClass();
+  }, []);
   return (
-    <ScrollView>
+    <ScrollView
+      nestedScrollEnabled
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
       <View style={classes.container}>
-        <Text style={classes.section}>My class</Text>
-        <View style={classes.heading}>
+        <Text style={classes.textpage}>My class</Text>
+        <View style={classes.header}>
           <Text style={classes.headmyclass}>Class Name</Text>
           <Text style={classes.headprogress}>Progress</Text>
           <Text style={classes.headscore}>Score</Text>
         </View>
         {myClass ? (
-          <SafeAreaView style={{flex: 1}}>
+          <SafeAreaView style={classes.maincontainer}>
             <FlatList
+              nestedScrollEnabled
               data={myClass.slice(0, 3)}
               keyExtractor={(item, index) => {
                 return index.toString();
@@ -131,7 +158,12 @@ function Member({...props}) {
               }}
             />
           </SafeAreaView>
-        ) : null}
+        ) : (
+          <View style={classes.servererror}>
+            <Text style={classes.texterror}>404</Text>
+            <Text style={classes.texterror}>Server Error</Text>
+          </View>
+        )}
         <View style={classes.allmyclass}>
           <Text
             style={classes.textallmyclass}
@@ -145,7 +177,7 @@ function Member({...props}) {
           />
         </View>
         <View style={classes.newClassSection}>
-          <Text style={{...classes.section, paddingLeft: 10}}>New class</Text>
+          <Text style={{...classes.newclassheader}}>New class</Text>
           <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
               <View style={classes.searchSection}>
@@ -266,7 +298,7 @@ function Member({...props}) {
               />
             </Item>
           </View>
-          <View style={classes.heading}>
+          <View style={classes.header}>
             <Text style={classes.headname}>Class Name</Text>
             <Text style={classes.headlevel}>Level</Text>
             <Text style={classes.headprice}>Price</Text>

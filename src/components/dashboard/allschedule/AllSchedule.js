@@ -29,6 +29,7 @@ const AllSchedule = () => {
   return (
     <View style={classes.timeline}>
       <Timeline
+        nestedScrollEnabled={true}
         data={data}
         circleSize={16}
         circleColor="#5784BA"

@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import Member from '../../components/activity/member/Member';
 import Facilitator from '../../components/activity/facilitator/Facilitator';
 const Activity = props => {
-  let role = props.loginReducers.user.data.data.role;
+  let role = props.loginReducers.user.data?.data.role;
   return (
     <>
       <View style={classes.container}>

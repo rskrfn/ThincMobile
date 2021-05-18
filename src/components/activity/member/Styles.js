@@ -1,16 +1,19 @@
-import {StyleSheet, Dimensions} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 
 const classes = StyleSheet.create({
+  maincontainer: {
+    flex: 1,
+  },
   container: {
     paddingHorizontal: 8,
     paddingVertical: 16,
   },
-  section: {
+  textpage: {
     fontFamily: 'Montserrat-Bold',
     fontSize: 18,
   },
-  heading: {
+  header: {
     flexDirection: 'row',
     marginBottom: 17,
     paddingHorizontal: 5,
@@ -76,6 +79,18 @@ const classes = StyleSheet.create({
     fontFamily: 'Montserrat-Medium',
     fontSize: 14,
   },
+  newClassSection: {
+    marginTop: 16,
+    backgroundColor: '#FFFFFF',
+    padding: 8,
+    borderRadius: 10,
+    paddingVertical: 28,
+  },
+  newclassheader: {
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 18,
+    paddingLeft: 8,
+  },
   newClassItem: {
     flexDirection: 'row',
     backgroundColor: '#FFFFFF',
@@ -108,13 +123,6 @@ const classes = StyleSheet.create({
     fontSize: 16,
     marginTop: 16,
     width: '18%',
-  },
-  newClassSection: {
-    marginTop: 12,
-    backgroundColor: '#FFFFFF',
-    padding: 8,
-    borderRadius: 10,
-    paddingVertical: 25,
   },
   searchSection: {
     flexDirection: 'row',
@@ -202,6 +210,15 @@ const classes = StyleSheet.create({
   loadarrow: {
     alignSelf: 'center',
     marginTop: -6,
+  },
+  servererror: {
+    padding: 8,
+  },
+  texterror: {
+    textAlign: 'center',
+    fontFamily: 'Kanit-Regular',
+    color: 'red',
+    borderRadius: 20,
   },
 });
 export default classes;

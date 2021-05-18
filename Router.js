@@ -6,7 +6,6 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {connect} from 'react-redux';
 import RNBootSplash from 'react-native-bootsplash';
-import CustomIcon from './src/components/customicon/icomoon';
 import Login from './src/screens/auth/login/Login';
 import Register from './src/screens/auth/register/Register';
 import Dashboard from './src/screens/dashboard/Dashboard';
@@ -14,6 +13,8 @@ import Activity from './src/screens/activity/Activity';
 import MyClass from './src/screens/activity/myclass/MyClass';
 import Chat from './src/screens/chat/Chat';
 import Profile from './src/screens/profile/Profile';
+
+import CustomIcon from './src/components/customicon/icomoon';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -79,9 +80,9 @@ function AuthNavigation() {
 }
 
 function Router(props) {
-  React.useEffect(() => {
-    console.log(props);
-  }, [props]);
+  // React.useEffect(() => {
+  //   console.log(props);
+  // }, [props]);
 
   return (
     <NavigationContainer onReady={() => RNBootSplash.hide()}>
@@ -103,7 +104,7 @@ const classes = StyleSheet.create({
     position: 'absolute',
     top: 0,
     width: '50%',
-    borderBottomWidth: 4,
+    borderBottomWidth: 2.5,
     borderRadius: 100,
     borderBottomColor: '#5784BA',
   },

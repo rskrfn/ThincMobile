@@ -50,7 +50,7 @@ function MyClassMember({...props}) {
   };
   return (
     <>
-      <View style={classes.heading}>
+      <View style={classes.header}>
         <Text style={classes.headmyclass}>Class Name</Text>
         <Text style={classes.headprogress}>Progress</Text>
         <Text style={classes.headscore}>Score</Text>

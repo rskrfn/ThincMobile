@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
@@ -19,7 +19,7 @@ import ForYou from '../../components/dashboard/foryou/ForYou';
 
 const Dashboard = props => {
   const notifActive = true;
-  const name = props.loginReducers.user.data.data.name;
+  const name = props.loginReducers.user.data?.data.name;
   // let role = props.loginReducers.user.data.data.role;
   const [activeTab, setActive] = React.useState(0);
   const tabList = ['All Schedule', 'For You'];
@@ -54,7 +54,7 @@ const Dashboard = props => {
             />
           </View>
         </View>
-        <ScrollView>
+        <ScrollView nestedScrollEnabled={true}>
           <News />
           <View style={classes.schedule}>
             <View style={classes.uppersection}>
