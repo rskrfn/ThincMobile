@@ -8,6 +8,9 @@ import {connect} from 'react-redux';
 import RNBootSplash from 'react-native-bootsplash';
 import Login from './src/screens/auth/login/Login';
 import Register from './src/screens/auth/register/Register';
+import SendEmail from './src/screens/auth/reset/sendemail/SendEmail';
+import Verification from './src/screens/auth/reset/verification/Verification';
+import NewPassword from './src/screens/auth/reset/newpassword/NewPassword';
 import Dashboard from './src/screens/dashboard/Dashboard';
 import Activity from './src/screens/activity/Activity';
 import MyClass from './src/screens/activity/myclass/MyClass';
@@ -91,6 +94,9 @@ function Router(props) {
           <>
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Register" component={Register} />
+            <Stack.Screen name="SendEmail" component={SendEmail} />
+            <Stack.Screen name="Verification" component={Verification} />
+            <Stack.Screen name="NewPassword" component={NewPassword} />
           </>
         ) : (
           <Stack.Screen name="AuthNavigation" component={AuthNavigation} />

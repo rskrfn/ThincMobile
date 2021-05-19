@@ -108,7 +108,11 @@ function Login({...props}) {
               </TouchableOpacity>
             </View>
             <View style={styles.input}>
-              <TouchableOpacity style={styles.forgot}>
+              <TouchableOpacity
+                style={styles.forgot}
+                onPress={() => {
+                  props.navigation.navigate('SendEmail');
+                }}>
                 <Text style={styles.forgottext}>Forgot Password?</Text>
               </TouchableOpacity>
             </View>
