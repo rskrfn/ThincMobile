@@ -63,6 +63,13 @@ function Login({...props}) {
         type: 'warning',
         textStyle: {textAlign: 'center'},
       });
+    }
+    if (props.loginReducers?.err.message === 'Network Error') {
+      return Toast.show({
+        text: 'Network Error',
+        type: 'danger',
+        textStyle: {textAlign: 'center'},
+      });
     } else {
       // console.log(props);
       props.onLoginHandler(auth);
@@ -146,7 +153,7 @@ function Login({...props}) {
 }
 const mapStatetoProps = state => {
   return {
-    loginReducer: state.loginReducer,
+    loginReducers: state.loginReducers,
   };
 };
 
