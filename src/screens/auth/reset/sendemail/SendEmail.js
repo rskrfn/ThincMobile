@@ -1,12 +1,20 @@
 import React from 'react';
-import {View, Text, Image, TextInput, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  KeyboardAvoidingView,
+} from 'react-native';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import classes from '../../reset/sendemail/Style';
 import resetImage from '../../../../assets/images/reset1.png';
 
 const SendEmail = props => {
   return (
-    <View style={classes.maincontainer}>
+    <ScrollView style={classes.maincontainer}>
       <Material name="chevron-left" size={42} color={'#010620'} />
       <View style={classes.content}>
         <Text style={classes.header}>Reset Password</Text>
@@ -31,7 +39,7 @@ const SendEmail = props => {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
