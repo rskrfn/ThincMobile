@@ -6,7 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  KeyboardAvoidingView,
+  StatusBar,
 } from 'react-native';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import classes from '../../reset/sendemail/Style';
@@ -15,6 +15,7 @@ import resetImage from '../../../../assets/images/reset1.png';
 const SendEmail = props => {
   return (
     <ScrollView style={classes.maincontainer}>
+      <StatusBar barStyle="dark-content" backgroundColor="white" />
       <Material name="chevron-left" size={42} color={'#010620'} />
       <View style={classes.content}>
         <Text style={classes.header}>Reset Password</Text>
