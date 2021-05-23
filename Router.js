@@ -16,6 +16,7 @@ import Activity from './src/screens/activity/Activity';
 import MyClass from './src/screens/activity/myclass/MyClass';
 import Chat from './src/screens/chat/Chat';
 import Profile from './src/screens/profile/Profile';
+import Phone from './src/components/profile/phone/Phone';
 
 import CustomIcon from './src/components/customicon/icomoon';
 
@@ -30,6 +31,18 @@ function ActivityNavigation() {
       }}>
       <Stack.Screen name="ActivityMain" component={Activity} />
       <Stack.Screen name="MyClass" component={MyClass} />
+    </Stack.Navigator>
+  );
+}
+
+function ProfileNavigation() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}>
+      <Stack.Screen name="ProfileMain" component={Profile} />
+      <Stack.Screen name="Phone" component={Phone} />
     </Stack.Navigator>
   );
 }
@@ -77,7 +90,7 @@ function AuthNavigation() {
       <Tab.Screen name="Dashboard" component={Dashboard} />
       <Tab.Screen name="Activity" component={ActivityNavigation} />
       <Tab.Screen name="Chat" component={Chat} />
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen name="Profile" component={ProfileNavigation} />
     </Tab.Navigator>
   );
 }

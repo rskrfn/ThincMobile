@@ -1,13 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
-import {
-  Text,
-  View,
-  FlatList,
-  ScrollView,
-  SafeAreaView,
-  LogBox,
-} from 'react-native';
+import {Text, View, FlatList, SafeAreaView} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import classes from './Styles';
 import ProgressCircle from 'react-native-progress-circle';
@@ -16,9 +9,7 @@ import {API_URL} from '@env';
 
 function MyClassMember({...props}) {
   const [myClass, setMyClass] = useState();
-  useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  }, []);
+  useEffect(() => {}, []);
 
   const getMyClass = () => {
     axios

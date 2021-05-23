@@ -1,28 +1,37 @@
 import {StyleSheet} from 'react-native';
+import {getStatusBarHeight} from 'react-native-status-bar-height';
+
+const statusBarHeight = getStatusBarHeight();
 
 const classes = StyleSheet.create({
   maincontainer: {
     flex: 1,
     flexDirection: 'column',
     backgroundColor: 'white',
+    paddingTop: statusBarHeight + 16,
+  },
+  buttonbar: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: '5%',
+    alignItems: 'center',
   },
   content: {
+    flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
+    paddingVertical: 16,
   },
   header: {
     marginTop: '2%',
+    marginBottom: '10%',
     fontFamily: 'Kanit-Medium',
     fontSize: 28,
   },
-  image: {
-    marginTop: '10%',
-    width: 200,
-    height: 210,
-  },
   desc1: {
     marginHorizontal: '10%',
-    marginTop: '10%',
+    marginTop: '5%',
     fontFamily: 'Kanit-Medium',
     fontSize: 20,
     textAlign: 'center',
@@ -54,7 +63,7 @@ const classes = StyleSheet.create({
     paddingRight: 2,
     zIndex: 10,
   },
-  emailinput: {
+  phoneinput: {
     flex: 1,
     borderWidth: 1,
     borderColor: '#ADA9BB',
@@ -64,7 +73,7 @@ const classes = StyleSheet.create({
     fontSize: 20,
     color: 'black',
   },
-  btnsend: {
+  btnsave: {
     width: '100%',
     marginHorizontal: '10%',
     alignItems: 'center',
@@ -75,7 +84,7 @@ const classes = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
   },
-  btntextsend: {
+  btntextsave: {
     fontSize: 18,
     width: '100%',
     color: 'white',
