@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {API_URL} from '@env';
 
 export let userRegister = (url, auth) => {
   return {
@@ -19,7 +20,7 @@ export function loginAction(data) {
       type: 'LOGIN_PENDING',
     });
     axios
-      .post('http://192.168.0.102:9080/users/login', data)
+      .post(`${API_URL}/users/login`, data)
       .then(res => {
         dispatch({type: 'LOGIN_SUCCESS', payload: res.data});
       })

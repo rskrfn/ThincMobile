@@ -12,6 +12,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import classes from './Styles';
 import ProgressCircle from 'react-native-progress-circle';
 import axios from 'axios';
+import {API_URL} from '@env';
 
 function MyClassMember({...props}) {
   const [myClass, setMyClass] = useState();
@@ -21,7 +22,7 @@ function MyClassMember({...props}) {
 
   const getMyClass = () => {
     axios
-      .get('http://192.168.0.102:9080/courses/myclass')
+      .get(`${API_URL}/courses/myclass`)
       .then(res => {
         // console.log(res);
         setMyClass(res.data.data);

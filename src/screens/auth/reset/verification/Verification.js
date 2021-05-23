@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import {Toast} from 'native-base';
 import axios from 'axios';
+import {API_URL} from '@env';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import classes from '../../reset/verification/Style';
 import resetImage from '../../../../assets/images/reset2.png';
@@ -33,7 +34,7 @@ const Verification = props => {
 
   const submitHandler = e => {
     let code = [code1, code2, code3, code4].join('');
-    let url = `http://192.168.0.102:9080/users?email=${email}&otp=${code}`;
+    let url = `${API_URL}users?email=${email}&otp=${code}`;
     if (!code1 || !code2 || !code3 || !code4) {
       return Toast.show({
         text: 'Enter the code',

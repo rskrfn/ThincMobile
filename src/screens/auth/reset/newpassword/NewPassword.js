@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import {Toast} from 'native-base';
 import axios from 'axios';
+import {API_URL} from '@env';
 import * as Animatable from 'react-native-animatable';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import classes from '../../reset/newpassword/Style';
@@ -30,7 +31,7 @@ const NewPassword = props => {
   const email = props.route.params.email;
 
   const submitHandler = e => {
-    let url = 'http://192.168.0.102:9080/users/forgot';
+    let url = `${API_URL}/users/forgot`;
 
     if (!password || !repeat) {
       return Toast.show({

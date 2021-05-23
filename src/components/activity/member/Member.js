@@ -4,12 +4,10 @@ import {
   Text,
   View,
   FlatList,
-  KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
   ScrollView,
   SafeAreaView,
-  LogBox,
   RefreshControl,
 } from 'react-native';
 import {Button, Input, Icon, Item, Picker} from 'native-base';
@@ -17,6 +15,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import ProgressCircle from 'react-native-progress-circle';
 import classes from './Styles';
 import axios from 'axios';
+import {API_URL} from '@env';
 import {TouchableOpacity} from 'react-native';
 
 function Member({...props}) {
@@ -26,13 +25,11 @@ function Member({...props}) {
   const [selectedPrice, setPrice] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
-  useEffect(() => {
-    // LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  }, []);
+  useEffect(() => {}, []);
 
   const getMyClass = () => {
     axios
-      .get('http://192.168.0.102:9080/courses/myclass')
+      .get(`${API_URL}/courses/myclass`)
       .then(res => {
         // console.log(res);
         if (res.data.data.length > 0) {
@@ -46,7 +43,7 @@ function Member({...props}) {
 
   const getNewClass = () => {
     axios
-      .get('http://192.168.0.102:9080/courses/all?limit=10')
+      .get(`${API_URL}/courses/all?limit=10`)
       .then(res => {
         console.log(res);
         setNewClass(res.data.data.result);
@@ -54,10 +51,6 @@ function Member({...props}) {
         setTotalPage(res.data.data.info.totalPage);
       })
       .catch(err => console.log(err));
-  };
-
-  const wait = timeout => {
-    return new Promise(resolve => setTimeout(resolve, timeout));
   };
 
   const [refreshing, setRefreshing] = React.useState(false);
@@ -96,6 +89,7 @@ function Member({...props}) {
   return (
     <ScrollView
       nestedScrollEnabled
+      showsVerticalScrollIndicator={false}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }>
@@ -109,7 +103,7 @@ function Member({...props}) {
         {myClass ? (
           <SafeAreaView style={classes.maincontainer}>
             <FlatList
-              nestedScrollEnabled
+              scrollEnabled={false}
               data={myClass.slice(0, 3)}
               keyExtractor={(item, index) => {
                 return index.toString();
@@ -178,31 +172,29 @@ function Member({...props}) {
         </View>
         <View style={classes.newClassSection}>
           <Text style={{...classes.newclassheader}}>New class</Text>
-          <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-              <View style={classes.searchSection}>
-                <Item style={classes.searchInputContainer}>
-                  <MaterialIcons name="search" color={'#ADA9A9'} size={24} />
-                  <Input
-                    placeholder="Quick search"
-                    placeholderTextColor="#ADA9A9"
-                    style={classes.searchInput}
-                  />
-                </Item>
-                <Button style={classes.btnSearch}>
-                  <Text
-                    style={{
-                      color: 'white',
-                      fontFamily: 'Montserrat-SemiBold',
-                      fontSize: 13,
-                      textAlign: 'center',
-                    }}>
-                    Search
-                  </Text>
-                </Button>
-              </View>
-            </TouchableWithoutFeedback>
-          </KeyboardAvoidingView>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={classes.searchSection}>
+              <Item style={classes.searchInputContainer}>
+                <MaterialIcons name="search" color={'#ADA9A9'} size={24} />
+                <Input
+                  placeholder="Quick search"
+                  placeholderTextColor="#ADA9A9"
+                  style={classes.searchInput}
+                />
+              </Item>
+              <Button style={classes.btnSearch}>
+                <Text
+                  style={{
+                    color: 'white',
+                    fontFamily: 'Montserrat-SemiBold',
+                    fontSize: 13,
+                    textAlign: 'center',
+                  }}>
+                  Search
+                </Text>
+              </Button>
+            </View>
+          </TouchableWithoutFeedback>
           <View style={classes.filterSection}>
             <Item picker style={{width: 100, overflow: 'hidden'}}>
               <Picker
@@ -306,6 +298,7 @@ function Member({...props}) {
           <View style={classes.newClassItems}>
             {newClass ? (
               <FlatList
+                scrollEnabled={false}
                 data={newClass}
                 keyExtractor={(item, index) => {
                   return index.toString();
@@ -354,7 +347,12 @@ function Member({...props}) {
                   ) : null
                 }
               />
-            ) : null}
+            ) : (
+              <View style={classes.servererror}>
+                <Text style={classes.texterror}>404</Text>
+                <Text style={classes.texterror}>Server Error</Text>
+              </View>
+            )}
           </View>
         </View>
       </View>

@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import {Toast} from 'native-base';
 import axios from 'axios';
+import {API_URL} from '@env';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import classes from '../../reset/sendemail/Style';
 import resetImage from '../../../../assets/images/reset1.png';
@@ -51,7 +52,7 @@ const SendEmail = props => {
       });
     }
 
-    let url = 'http://192.168.0.102:9080/users/sendemail';
+    let url = `${API_URL}/users/sendemail`;
     axios
       .post(url, {email: email})
       .then(res => {

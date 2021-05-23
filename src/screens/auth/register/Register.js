@@ -15,6 +15,7 @@ import * as Animatable from 'react-native-animatable';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {Toast} from 'native-base';
 import axios from 'axios';
+import {API_URL} from '@env';
 import resetImage from '../../../assets/images/reset3.png';
 
 const Register = props => {
@@ -82,7 +83,7 @@ const Register = props => {
     } else {
       // console.log(register);
       axios
-        .post('http://192.168.0.102:9080/users/register', {
+        .post(`${API_URL}/users/register`, {
           name: data.name,
           username: data.username,
           email: data.email,
