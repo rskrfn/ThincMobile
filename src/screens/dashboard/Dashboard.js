@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   LogBox,
+  SafeAreaView,
 } from 'react-native';
 import {connect} from 'react-redux';
 import classes from './Styles';
@@ -54,7 +55,7 @@ const Dashboard = props => {
             />
           </View>
         </View>
-        <ScrollView nestedScrollEnabled={true}>
+        <ScrollView nestedScrollEnabled>
           <News />
           <View style={classes.schedule}>
             <View style={classes.uppersection}>
@@ -77,7 +78,9 @@ const Dashboard = props => {
                 </TouchableOpacity>
               ))}
             </View>
-            {activeTab === 0 ? <AllSchedule /> : <ForYou />}
+            <SafeAreaView>
+              {activeTab === 0 ? <AllSchedule /> : <ForYou />}
+            </SafeAreaView>
           </View>
         </ScrollView>
       </View>

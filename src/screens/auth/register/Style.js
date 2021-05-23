@@ -8,7 +8,33 @@ const classes = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#F9F9F9',
   },
-
+  modalcontainer: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: 'rgba(255, 255, 255, 0.97)',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    paddingVertical: '20%',
+    marginHorizontal: '10%',
+  },
+  modalheader: {
+    alignSelf: 'center',
+    textAlign: 'center',
+    fontFamily: 'Kanit-Medium',
+    fontSize: 28,
+    color: 'black',
+    marginBottom: '10%',
+  },
+  image: {
+    width: 200,
+    height: 200,
+  },
+  textmodal: {
+    textAlign: 'center',
+    fontFamily: 'Kanit-Regular',
+    fontSize: 18,
+    color: '#5784BA',
+  },
   header: {
     alignSelf: 'center',
     fontFamily: 'Kanit-SemiBold',

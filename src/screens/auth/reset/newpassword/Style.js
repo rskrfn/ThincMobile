@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     paddingVertical: '15%',
+    marginHorizontal: '10%',
   },
   image: {
     width: 200,

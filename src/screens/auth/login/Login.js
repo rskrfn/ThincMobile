@@ -26,25 +26,6 @@ function Login({...props}) {
   const [eye, setEye] = useState({
     secureText: true,
   });
-
-  const usernameHandler = username => {
-    if (!username) {
-      return;
-    }
-    setData({
-      ...data,
-      username: username,
-    });
-  };
-  const passwordHandler = password => {
-    if (!password || password.length < 2) {
-      return;
-    }
-    setData({
-      ...data,
-      password: password,
-    });
-  };
   const updateSecureText = () => {
     setEye({
       ...eye,
@@ -61,6 +42,15 @@ function Login({...props}) {
       return Toast.show({
         text: 'Fill in your data',
         type: 'warning',
+        textStyle: {textAlign: 'center'},
+      });
+    }
+    if (
+      props.loginReducers?.err.message === 'Request failed with status code 404'
+    ) {
+      return Toast.show({
+        text: 'Invalid User Credential',
+        type: 'danger',
         textStyle: {textAlign: 'center'},
       });
     }
@@ -88,7 +78,10 @@ function Login({...props}) {
                 style={styles.textInputUsername}
                 autoCapitalize="none"
                 onChangeText={username => {
-                  usernameHandler(username);
+                  setData({
+                    ...data,
+                    username: username,
+                  });
                 }}
               />
             </View>
@@ -99,7 +92,10 @@ function Login({...props}) {
                 autoCapitalize="none"
                 secureTextEntry={eye.secureText ? true : false}
                 onChangeText={password => {
-                  passwordHandler(password);
+                  setData({
+                    ...data,
+                    password: password,
+                  });
                 }}
               />
               <TouchableOpacity style={styles.eye} onPress={updateSecureText}>
@@ -153,7 +149,7 @@ function Login({...props}) {
 }
 const mapStatetoProps = state => {
   return {
-    loginReducers: state.loginReducers,
+    loginReducer: state.loginReducers,
   };
 };
 

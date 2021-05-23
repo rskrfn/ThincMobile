@@ -2,11 +2,12 @@ import React, {useState} from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
+  Pressable,
   TextInput,
   ScrollView,
   SafeAreaView,
   Image,
+  Modal,
 } from 'react-native';
 import classes from './Style';
 import * as Animatable from 'react-native-animatable';
@@ -14,6 +15,7 @@ import * as Animatable from 'react-native-animatable';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {Toast} from 'native-base';
 import axios from 'axios';
+import resetImage from '../../../assets/images/reset3.png';
 
 const Register = props => {
   const [data, setData] = useState({
@@ -22,13 +24,13 @@ const Register = props => {
     email: '',
     password: '',
     repeat: '',
-    timer: null,
   });
   const [eye, setEye] = useState({
     securePass: true,
     secureRepeat: true,
   });
   const [isemailValid, setValidate] = useState();
+  const [modal, setModal] = useState(false);
   let validateEmail = text => {
     let reg = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w\w+)+$/;
     if (reg.test(text) === false) {
@@ -48,6 +50,7 @@ const Register = props => {
         text: 'Fill in your information',
         type: 'warning',
         textStyle: {textAlign: 'center'},
+        duration: 3000,
       });
     }
     if (data.username.length < 4) {
@@ -55,13 +58,15 @@ const Register = props => {
         text: 'Username must be at least 4 character',
         type: 'danger',
         textStyle: {textAlign: 'center'},
+        duration: 3000,
       });
     }
-    if (data.password.length <= 8) {
+    if (data.password.length < 8) {
       return Toast.show({
         text: 'Password must be at least 8 character',
         type: 'danger',
         textStyle: {textAlign: 'center'},
+        duration: 3000,
       });
     }
     if (!isemailValid) {
@@ -72,6 +77,7 @@ const Register = props => {
         text: "Password doesn't match",
         type: 'danger',
         textStyle: {textAlign: 'center'},
+        duration: 3000,
       });
     } else {
       // console.log(register);
@@ -83,22 +89,40 @@ const Register = props => {
           password: data.password,
         })
         .then(res => {
-          Toast.show({
-            text: 'Register Success, Redirecting to Login Page in 5 seconds',
-            type: 'success',
-            textStyle: {textAlign: 'center'},
-          });
-          data.timer = setTimeout(() => {
+          if (res.data.message === 'Registered Successfully') {
+            setModal(!modal);
+            setData({});
+          }
+          setTimeout(() => {
             props.navigation.navigate('Login');
           }, 5000);
-          // console.log(res);
+          console.log(res);
         })
         .catch(error => {
-          // console.log(error);
+          console.log({error});
+          if (
+            error.response?.data.message === 'Password cannot contain your name'
+          ) {
+            return Toast.show({
+              text: 'Password cannot contain your name',
+              type: 'danger',
+              textStyle: {textAlign: 'center'},
+              duration: 3000,
+            });
+          }
+          if (error.response?.data.message === 'Fullname required') {
+            return Toast.show({
+              text: 'Full Name required',
+              type: 'danger',
+              textStyle: {textAlign: 'center'},
+              duration: 3000,
+            });
+          }
           return Toast.show({
             text: 'Error',
             type: 'danger',
             textStyle: {textAlign: 'center'},
+            duration: 3000,
           });
         });
     }
@@ -106,6 +130,21 @@ const Register = props => {
   // console.log(eye);
   return (
     <SafeAreaView style={classes.container}>
+      <Modal
+        visible={modal}
+        animationType="fade"
+        transparent={true}
+        onRequestClose={() => {
+          return;
+        }}>
+        <View style={classes.modalcontainer}>
+          <Text style={classes.modalheader}>Registered Successfully!</Text>
+          <Image style={classes.image} source={resetImage} />
+          <View>
+            <Text style={classes.textmodal}>Redirecting to login page...</Text>
+          </View>
+        </View>
+      </Modal>
       <ScrollView contentContainerstyle={classes.container}>
         <Animatable.View animation="fadeIn">
           <Text style={classes.header}>Register</Text>
@@ -151,7 +190,7 @@ const Register = props => {
                   setData({...data, password: password});
                 }}
               />
-              <TouchableOpacity
+              <Pressable
                 style={classes.eye}
                 onPress={() => {
                   setEye({
@@ -168,7 +207,7 @@ const Register = props => {
                     size={24}
                   />
                 )}
-              </TouchableOpacity>
+              </Pressable>
             </View>
             <View style={classes.input2}>
               <Text style={classes.inputLabel}>Repeat Password</Text>
@@ -180,7 +219,7 @@ const Register = props => {
                   setData({...data, repeat: repeat});
                 }}
               />
-              <TouchableOpacity
+              <Pressable
                 style={classes.eye}
                 onPress={() => {
                   setEye({
@@ -197,23 +236,21 @@ const Register = props => {
                     size={24}
                   />
                 )}
-              </TouchableOpacity>
+              </Pressable>
             </View>
             <View style={classes.input}>
-              <TouchableOpacity
-                style={classes.btnlogin}
-                onPress={submitHandler}>
+              <Pressable style={classes.btnlogin} onPress={submitHandler}>
                 <Text style={classes.btntextlogin}>Register</Text>
-              </TouchableOpacity>
+              </Pressable>
             </View>
             <View style={classes.input}>
-              <TouchableOpacity style={classes.btngoogle}>
+              <Pressable style={classes.btngoogle}>
                 <Image
                   style={classes.googleicon}
                   source={require('../../../assets/icons/icon_google.png')}
                 />
                 <Text style={classes.btntextgoogle}>Register with Google</Text>
-              </TouchableOpacity>
+              </Pressable>
             </View>
             <View style={classes.register}>
               <Text style={classes.newusertext}>Already Registered?</Text>

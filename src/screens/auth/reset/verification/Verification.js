@@ -3,13 +3,14 @@ import {
   View,
   Text,
   Image,
-  TouchableOpacity,
   TextInput,
   ScrollView,
   Keyboard,
   Pressable,
   StatusBar,
 } from 'react-native';
+import {Toast} from 'native-base';
+import axios from 'axios';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import classes from '../../reset/verification/Style';
 import resetImage from '../../../../assets/images/reset2.png';
@@ -28,8 +29,69 @@ const Verification = props => {
   const [code4focus, setFocus4] = useState();
   const coderef4 = useRef();
 
-  const email = props[0]?.location.search.slice(7);
-  console.log(props);
+  const email = props.route.params.email;
+
+  const submitHandler = e => {
+    let code = [code1, code2, code3, code4].join('');
+    let url = `http://192.168.0.102:9080/users?email=${email}&otp=${code}`;
+    if (!code1 || !code2 || !code3 || !code4) {
+      return Toast.show({
+        text: 'Enter the code',
+        type: 'warning',
+        textStyle: {textAlign: 'center'},
+        duration: 3000,
+      });
+    }
+    props.navigation.replace('NewPassword', {email: email});
+    axios
+      .post(url)
+      .then(res => {
+        console.log(res);
+        if (res.data.message === 'OTP valid') {
+          props.navigation.navigate('NewPassword', {email: email});
+        }
+      })
+      .catch(err => {
+        if (err.response.data.message === 'Wrong otp code') {
+          setCode1('');
+          setCode2('');
+          setCode3('');
+          setCode4('');
+          setFocus1('');
+          setFocus2('');
+          setFocus3('');
+          setFocus4('');
+          return Toast.show({
+            text: 'Invalid Code',
+            type: 'danger',
+            textStyle: {textAlign: 'center'},
+            duration: 3000,
+          });
+        }
+        if (
+          err.response?.data.message === 'Email empty' ||
+          err.response?.data.message === 'Email not found'
+        ) {
+          return Toast.show({
+            text: 'Email Not Found',
+            type: 'danger',
+            textStyle: {textAlign: 'center'},
+            duration: 3000,
+          });
+        }
+        if (err.response.data.message === 'OTP Expired') {
+          Toast.show({
+            text: 'OTP Expired, Redirecting...',
+            type: 'danger',
+            textStyle: {textAlign: 'center'},
+            duration: 3000,
+          });
+          setTimeout(() => {
+            props.navigation.replace('SendEmail');
+          }, 5000);
+        }
+      });
+  };
 
   return (
     <ScrollView style={classes.maincontainer}>
@@ -114,13 +176,13 @@ const Verification = props => {
           </Pressable>
         </View>
         <View style={classes.input}>
-          <TouchableOpacity
+          <Pressable
             style={classes.btnsend}
             onPress={() => {
-              props.navigation.replace('NewPassword');
+              submitHandler();
             }}>
             <Text style={classes.btntextsend}>Verify</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </View>
     </ScrollView>

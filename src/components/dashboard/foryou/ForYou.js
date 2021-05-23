@@ -15,22 +15,19 @@ const ForYou = () => {
     },
   ];
   return (
-    <View style={classes.timeline}>
-      <Timeline
-        nestedScrollEnabled={true}
-        data={data}
-        circleSize={16}
-        circleColor="#5784BA"
-        lineColor="#5784BA"
-        renderFullLine
-        innerCircle={'dot'}
-        style={classes.list}
-        separator
-        titleStyle={classes.title}
-        timeStyle={classes.time}
-        eventDetailStyle={classes.event}
-      />
-    </View>
+    <Timeline
+      data={data}
+      circleSize={16}
+      circleColor="#5784BA"
+      lineColor="#5784BA"
+      renderFullLine
+      innerCircle={'dot'}
+      style={classes.list}
+      separator
+      titleStyle={classes.title}
+      timeStyle={classes.time}
+      eventDetailStyle={classes.event}
+    />
   );
 };
 

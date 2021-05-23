@@ -31,6 +31,7 @@ let loginReducers = (state = initialState, action) => {
         isPending: false,
         isLogin: true,
         user: payload,
+        err: {},
       };
     case 'LOGOUT':
       return {
@@ -39,6 +40,7 @@ let loginReducers = (state = initialState, action) => {
         isFulfilled: true,
         isLogin: false,
         user: {},
+        err: {},
       };
 
     default:

@@ -11,6 +11,9 @@ import {
   Pressable,
   Modal,
 } from 'react-native';
+import {Toast} from 'native-base';
+import axios from 'axios';
+import * as Animatable from 'react-native-animatable';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import classes from '../../reset/newpassword/Style';
 import resetImage from '../../../../assets/images/reset3.png';
@@ -23,6 +26,62 @@ const NewPassword = props => {
     secureRepeat: true,
   });
   const [modal, setModal] = useState(false);
+
+  const email = props.route.params.email;
+
+  const submitHandler = e => {
+    let url = 'http://192.168.0.102:9080/users/forgot';
+
+    if (!password || !repeat) {
+      return Toast.show({
+        text: 'Enter your new password!',
+        type: 'warning',
+        textStyle: {textAlign: 'center'},
+        duration: 3000,
+      });
+    }
+    if (password.length < 8) {
+      return Toast.show({
+        text: 'Password must be at least 8 characters',
+        type: 'warning',
+        textStyle: {textAlign: 'center'},
+        duration: 3000,
+      });
+    }
+    if (password !== repeat) {
+      return Toast.show({
+        text: "Password didn't match",
+        type: 'warning',
+        textStyle: {textAlign: 'center'},
+        duration: 3000,
+      });
+    }
+    axios
+      .patch(url, {email: email, newpassword: password})
+      .then(res => {
+        console.log(res);
+        if (res.data?.message === 'Password Changed') {
+          setModal(!modal);
+        }
+      })
+      .catch(err => {
+        if (err.message === 'Network Error') {
+          Toast.show({
+            text: 'Network Error',
+            type: 'danger',
+            textStyle: {textAlign: 'center'},
+            duration: 3000,
+          });
+        } else if (err) {
+          Toast.show({
+            text: 'An Error Occured',
+            type: 'danger',
+            textStyle: {textAlign: 'center'},
+            duration: 3000,
+          });
+        }
+      });
+  };
 
   function passwordWarning() {
     if (password.length < 8) {
@@ -140,7 +199,7 @@ const NewPassword = props => {
         animationType="fade"
         transparent={true}
         onRequestClose={() => {
-          setModal(!modal);
+          return;
         }}>
         <View style={classes.modalcontainer}>
           <Text style={classes.header}>Password Changed!</Text>
@@ -149,7 +208,13 @@ const NewPassword = props => {
             onPress={() => {
               props.navigation.replace('Login');
             }}>
-            <Text style={classes.textmodal}>Login to your account</Text>
+            <Animatable.Text
+              animation="pulse"
+              easing="ease-out"
+              iterationCount="infinite"
+              style={classes.textmodal}>
+              Login to your account
+            </Animatable.Text>
           </Pressable>
         </View>
       </Modal>
@@ -217,7 +282,7 @@ const NewPassword = props => {
           <Pressable
             style={classes.btnsend}
             onPress={() => {
-              setModal(!modal);
+              submitHandler();
             }}>
             <Text style={classes.btntextsend}>Send</Text>
           </Pressable>
