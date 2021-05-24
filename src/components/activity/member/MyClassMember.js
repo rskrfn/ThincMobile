@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {Text, View, FlatList, SafeAreaView} from 'react-native';
@@ -6,19 +7,29 @@ import classes from './Styles';
 import ProgressCircle from 'react-native-progress-circle';
 import axios from 'axios';
 import {API_URL} from '@env';
+import {connect} from 'react-redux';
 
 function MyClassMember({...props}) {
   const [myClass, setMyClass] = useState();
+  const userId = props.loginReducer.user.data?.data.id;
   useEffect(() => {}, []);
 
   const getMyClass = () => {
-    axios
-      .get(`${API_URL}/courses/myclass`)
+    let config = {
+      method: 'GET',
+      url: `${API_URL}/courses/myclass`,
+      params: {id: userId},
+    };
+    axios(config)
       .then(res => {
         // console.log(res);
-        setMyClass(res.data.data);
+        if (res.data.data.length > 0) {
+          setMyClass(res.data.data);
+        } else {
+          setMyClass('');
+        }
       })
-      .catch(err => console.log(err));
+      .catch(() => setMyClass());
   };
 
   useEffect(() => {
@@ -103,4 +114,11 @@ function MyClassMember({...props}) {
   );
 }
 
-export default MyClassMember;
+const mapStatetoProps = state => {
+  return {
+    loginReducer: state.loginReducers,
+  };
+};
+const connectedMyClassMember = connect(mapStatetoProps)(MyClassMember);
+
+export default connectedMyClassMember;

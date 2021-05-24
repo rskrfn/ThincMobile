@@ -15,12 +15,16 @@ export let userRegister = (url, auth) => {
 // };
 
 export function loginAction(data) {
+  let config = {
+    method: 'POST',
+    url: `${API_URL}/users/login`,
+    data: data,
+  };
   return dispatch => {
     dispatch({
       type: 'LOGIN_PENDING',
     });
-    axios
-      .post(`${API_URL}/users/login`, data)
+    axios(config)
       .then(res => {
         dispatch({type: 'LOGIN_SUCCESS', payload: res.data});
       })

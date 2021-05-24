@@ -15,6 +15,7 @@ import * as Animatable from 'react-native-animatable';
 // import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {Toast} from 'native-base';
+import {API_URL} from '@env';
 
 // import CustomIcon from '../../components/customicon/icomoon';
 
@@ -125,7 +126,11 @@ function Login({...props}) {
               </TouchableOpacity>
             </View>
             <View style={styles.input}>
-              <TouchableOpacity style={styles.btngoogle}>
+              <TouchableOpacity
+                style={styles.btngoogle}
+                onPress={() => {
+                  console.log(API_URL);
+                }}>
                 <Image
                   style={styles.googleicon}
                   source={require('../../../assets/icons/icon_google.png')}

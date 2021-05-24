@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -8,8 +8,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {connect} from 'react-redux';
-import axios from 'axios';
-import {API_URL} from '@env';
+// import axios from 'axios';
+// import {API_URL} from '@env';
 import classes from './Styles';
 import {logoutHandler} from '../../redux/Action/auth';
 import Material from 'react-native-vector-icons/MaterialIcons';
@@ -24,24 +24,32 @@ import iconFAQ from '../../assets/icons/icon_question.png';
 import iconLogout from '../../assets/icons/icon_logout.png';
 
 const Profile = props => {
+  // const TOKEN = props.loginReducers.user?.data.token;
   let name = props.loginReducers.user.data?.data.name;
   // let userId = props.loginReducers.user.data?.data.id;
   // const [profile, setProfile] = useState([]);
-
-  // const getProfile = () => {
-  //   axios
-  //     .get(`${API_URL}/profile/`, {params: {id: userId}})
-  //     .then(res => {
-  //       console.log(res);
-  //       setProfile(res.data.data);
-  //     })
-  //     .catch(err => console.log(err));
+  // let config = {
+  //   method: 'GET',
+  //   url: `${API_URL}/profile/`,
+  //   headers: {
+  //     token: TOKEN,
+  //   },
+  //   params: {id: userId},
   // };
+  // axios(config)
+  //   .then(res => {
+  //     console.log(res);
+  //     setProfile(res.data.data);
+  //   })
+  //   .catch(err => console.log(err));
 
   const onClick = () => {
     props.onLogoutHandler();
   };
-  console.log(props.navigation);
+  // useEffect(() => {
+  // }, []);
+
+  // console.log(props.navigation);
   return (
     <View style={classes.maincontainer}>
       <StatusBar

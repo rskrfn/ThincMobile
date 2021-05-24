@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {
@@ -17,19 +18,25 @@ import classes from './Styles';
 import axios from 'axios';
 import {API_URL} from '@env';
 import {TouchableOpacity} from 'react-native';
+import {connect} from 'react-redux';
 
 function Member({...props}) {
   const [myClass, setMyClass] = useState();
   const [newClass, setNewClass] = useState([]);
   const [selectedCategory, setCategory] = useState('');
   const [selectedPrice, setPrice] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPage, setTotalPage] = useState(1);
-  useEffect(() => {}, []);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [totalPage, setTotalPage] = useState(1);
+  const userId = props.loginReducer.user.data?.data.id;
+  // console.log(userId);
 
   const getMyClass = () => {
-    axios
-      .get(`${API_URL}/courses/myclass`)
+    let config = {
+      method: 'GET',
+      url: `${API_URL}/courses/myclass`,
+      params: {id: userId},
+    };
+    axios(config)
       .then(res => {
         // console.log(res);
         if (res.data.data.length > 0) {
@@ -42,15 +49,19 @@ function Member({...props}) {
   };
 
   const getNewClass = () => {
-    axios
-      .get(`${API_URL}/courses/all?limit=10`)
+    let config = {
+      method: 'GET',
+      url: `${API_URL}/courses/newclass`,
+      params: {id: userId},
+    };
+    axios(config)
       .then(res => {
         console.log(res);
-        setNewClass(res.data.data.result);
-        setCurrentPage(res.data.data.info.page);
-        setTotalPage(res.data.data.info.totalPage);
+        setNewClass(res.data.data);
+        // setCurrentPage(res.data.data.info.page);
+        // setTotalPage(res.data.data.info.totalPage);
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log({err}));
   };
 
   const [refreshing, setRefreshing] = React.useState(false);
@@ -313,13 +324,13 @@ function Member({...props}) {
                             ...item,
                           })
                         }>
-                        {item.course_name && item.course_name.length > 30
-                          ? item.course_name.slice(0, 30) + '...'
-                          : item.course_name}
+                        {item.Name && item.Name.length > 30
+                          ? item.Name.slice(0, 30) + '...'
+                          : item.Name}
                       </Text>
-                      <Text style={classes.newlevel}>{item.level}</Text>
+                      <Text style={classes.newlevel}>{item.Level}</Text>
                       <Text style={classes.newprice}>
-                        {item.price === 0 ? 'Free' : item.price}
+                        {item.Price === 0 ? 'Free' : item.Price}
                       </Text>
                       <TouchableOpacity style={classes.newbtnregister}>
                         <Text style={classes.txtRegister}>Register</Text>
@@ -327,25 +338,26 @@ function Member({...props}) {
                     </View>
                   );
                 }}
-                ListFooterComponent={
-                  currentPage < totalPage ? (
-                    <View style={classes.loadMore}>
-                      <TouchableOpacity
-                        style={classes.btnLoadMore}
-                        onPress={() => {
-                          setCurrentPage(currentPage);
-                        }}>
-                        <Text style={classes.load}>Expand</Text>
-                        <MaterialIcons
-                          name="expand-more"
-                          color="#ADA9A9"
-                          size={24}
-                          style={classes.loadarrow}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  ) : null
-                }
+                // ListFooterComponent={
+                //   currentPage < totalPage ? (
+                //     <View style={classes.loadMore}>
+                //       <TouchableOpacity
+                //         style={classes.btnLoadMore}
+                //         // onPress={() => {
+                //         //   setCurrentPage(currentPage);
+                //         // }}
+                //         >
+                //         <Text style={classes.load}>Expand</Text>
+                //         <MaterialIcons
+                //           name="expand-more"
+                //           color="#ADA9A9"
+                //           size={24}
+                //           style={classes.loadarrow}
+                //         />
+                //       </TouchableOpacity>
+                //     </View>
+                //   ) : null
+                // }
               />
             ) : (
               <View style={classes.servererror}>
@@ -360,4 +372,10 @@ function Member({...props}) {
   );
 }
 
-export default Member;
+const mapStatetoProps = state => {
+  return {
+    loginReducer: state.loginReducers,
+  };
+};
+const connectedMember = connect(mapStatetoProps)(Member);
+export default connectedMember;

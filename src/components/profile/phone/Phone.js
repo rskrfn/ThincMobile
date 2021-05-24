@@ -2,14 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
-  BackHandler,
-  Alert,
   ScrollView,
   StatusBar,
-  Image,
-  TextInput,
   TouchableOpacity,
-  Modal,
 } from 'react-native';
 import TextInputMask from 'react-native-text-input-mask';
 import {Toast} from 'native-base';
@@ -23,6 +18,7 @@ const Phone = props => {
   const [phone, setPhone] = useState('');
   const TOKEN = props.loginReducers.user?.data.token;
   const userId = props.loginReducers.user?.data.data.id;
+  let userPhone = props.loginReducers.user.data?.data.phone;
   // console.log(userId);
   const FormData = require('form-data');
   const data = new FormData();
@@ -62,14 +58,44 @@ const Phone = props => {
         duration: 3000,
       });
     }
+    if (phone === userPhone) {
+      return Toast.show({
+        text: 'This is your current phone number',
+        type: 'danger',
+        textStyle: {textAlign: 'center'},
+        duration: 3000,
+      });
+    }
     axios(config)
       .then(res => {
-        console.log(res);
+        if (res.data.message === 'Data Changed') {
+          return Toast.show({
+            text: 'Phone number has been changed',
+            type: 'Success',
+            textStyle: {textAlign: 'center'},
+            duration: 3000,
+          });
+        }
       })
       .catch(err => {
         console.log(err);
       });
   }
+
+  useEffect(() => {
+    // axios
+    //   .get(`${API_URL}/profile`, {params: {id: userId}})
+    //   .then(res => {
+    //     console.log(res.data.phone);
+    //     setPhone(res.data.phone);
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //   });
+    if (userPhone !== null) {
+      setPhone(userPhone);
+    }
+  }, [userPhone]);
 
   return (
     <ScrollView style={classes.maincontainer}>

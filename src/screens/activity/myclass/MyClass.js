@@ -1,10 +1,11 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, StatusBar, ScrollView} from 'react-native';
+/* eslint-disable react-native/no-inline-styles */
+import React from 'react';
+import {View, Text, StatusBar, ScrollView} from 'react-native';
 import {connect} from 'react-redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import classes from './Styles';
 import MyClassMember from '../../../components/activity/member/MyClassMember';
-import MyClassFacilitator from '../../../components/activity/facilitator/MyClassFacilitator';
+// import MyClassFacilitator from '../../../components/activity/facilitator/MyClassFacilitator';
 
 function MyClass({...props}) {
   let role = props.loginReducers.user.data.data.role;
