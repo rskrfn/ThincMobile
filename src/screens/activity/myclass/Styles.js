@@ -11,7 +11,7 @@ const classes = StyleSheet.create({
   header: {
     paddingTop: statusBarHeight + 16,
     backgroundColor: '#5784BA',
-    paddingHorizontal: 26,
+    paddingHorizontal: 16,
     borderBottomStartRadius: 20,
     borderBottomEndRadius: 20,
     paddingBottom: 24,

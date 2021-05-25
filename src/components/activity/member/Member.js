@@ -64,6 +64,25 @@ function Member({...props}) {
       .catch(err => console.log({err}));
   };
 
+  const getObjective = id => {
+    let config = {
+      method: 'GET',
+      url: `${API_URL}/courses/objective`,
+      params: {courseid: id},
+    };
+    axios(config)
+      .then(res => {
+        // console.log(res.data.data[0].Objective);
+        if (res.data.data.length > 0) {
+          let value = res.data.data[0].Objective;
+          return value;
+        } else {
+          return null;
+        }
+      })
+      .catch(() => {});
+  };
+
   const [refreshing, setRefreshing] = React.useState(false);
 
   const onRefresh = React.useCallback(async () => {
@@ -121,16 +140,28 @@ function Member({...props}) {
               }}
               renderItem={({item}) => {
                 return (
-                  <View style={classes.myclass}>
-                    <Text
-                      style={classes.tableclassname}
-                      onPress={() =>
-                        props.navigation.navigate('ClassDetail', {
-                          ...item,
+                  <TouchableOpacity
+                    style={classes.myclass}
+                    onPress={() => {
+                      let config = {
+                        method: 'GET',
+                        url: `${API_URL}/courses/objective`,
+                        params: {courseid: item.id},
+                      };
+                      axios(config)
+                        .then(res => {
+                          // console.log(res.data.data[0].Objective);
+                          if (res.data.data.length > 0) {
+                            let Objective = res.data.data[0].Objective;
+                            props.navigation.navigate('ClassDetail', {
+                              ...item,
+                              Objective,
+                            });
+                          }
                         })
-                      }>
-                      {item.Name}
-                    </Text>
+                        .catch(err => console.log(err));
+                    }}>
+                    <Text style={classes.tableclassname}>{item.Name}</Text>
                     <View style={classes.tableprogress}>
                       <ProgressCircle
                         percent={70}
@@ -158,7 +189,7 @@ function Member({...props}) {
                         right: 1,
                       }}
                     />
-                  </View>
+                  </TouchableOpacity>
                 );
               }}
             />
