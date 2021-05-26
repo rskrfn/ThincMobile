@@ -24,7 +24,7 @@ const Dashboard = props => {
   // let role = props.loginReducers.user.data.data.role;
   const [activeTab, setActive] = React.useState(0);
   const tabList = ['All Schedule', 'For You'];
-  console.log(props.loginReducers.user.data);
+  // console.log(props.loginReducers.user.data);
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   }, []);

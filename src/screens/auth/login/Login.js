@@ -19,7 +19,7 @@ import {API_URL} from '@env';
 
 // import CustomIcon from '../../components/customicon/icomoon';
 
-function Login({...props}) {
+function Login(props) {
   const [data, setData] = useState({
     username: '',
     password: '',
@@ -55,7 +55,7 @@ function Login({...props}) {
       ref.current = true;
     } else {
       if (
-        props.loginReducer.err.data?.message === 'Incorrect Email or Password'
+        props.loginReducer.err?.data?.message === 'Incorrect Email or Password'
       ) {
         return Toast.show({
           text: 'Incorrect Email or Password',
@@ -63,7 +63,7 @@ function Login({...props}) {
           textStyle: {textAlign: 'center'},
         });
       }
-      if (props.loginReducer.err.data?.message === 'Network Error') {
+      if (props.loginReducer.err?.data?.message === 'Network Error') {
         return Toast.show({
           text: 'Network Error',
           type: 'danger',
@@ -71,7 +71,7 @@ function Login({...props}) {
         });
       }
     }
-  }, [props.loginReducer.err.data?.message]);
+  }, [props.loginReducer.err?.data?.message]);
 
   return (
     <SafeAreaView fadeIn style={styles.container}>

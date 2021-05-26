@@ -60,7 +60,6 @@ const Profile = props => {
   const onClick = () => {
     props.onLogoutHandler();
   };
-
   useEffect(() => {
     getProfile();
   }, []);
