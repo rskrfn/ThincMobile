@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -6,10 +7,11 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  RefreshControl,
 } from 'react-native';
 import {connect} from 'react-redux';
-// import axios from 'axios';
-// import {API_URL} from '@env';
+import axios from 'axios';
+import {API_URL} from '@env';
 import classes from './Styles';
 import {logoutHandler} from '../../redux/Action/auth';
 import Material from 'react-native-vector-icons/MaterialIcons';
@@ -25,29 +27,43 @@ import iconLogout from '../../assets/icons/icon_logout.png';
 
 const Profile = props => {
   // const TOKEN = props.loginReducers.user?.data.token;
-  let name = props.loginReducers.user.data?.data.name;
-  // let userId = props.loginReducers.user.data?.data.id;
-  // const [profile, setProfile] = useState([]);
-  // let config = {
-  //   method: 'GET',
-  //   url: `${API_URL}/profile/`,
-  //   headers: {
-  //     token: TOKEN,
-  //   },
-  //   params: {id: userId},
-  // };
-  // axios(config)
-  //   .then(res => {
-  //     console.log(res);
-  //     setProfile(res.data.data);
-  //   })
-  //   .catch(err => console.log(err));
+  let userData = props.loginReducers.user.data?.data;
+  const [profile, setProfile] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const getProfile = () => {
+    let config = {
+      method: 'GET',
+      url: `${API_URL}/profile/`,
+      headers: {
+        token: userData.token,
+      },
+      params: {id: userData.id},
+    };
+    axios(config)
+      .then(res => {
+        console.log(res);
+        setProfile(res.data?.data[0]);
+      })
+      .catch(err => console.log(err));
+  };
+
+  const onRefresh = React.useCallback(async () => {
+    try {
+      setRefreshing(true);
+      await getProfile();
+      console.log(profile);
+      setRefreshing(false);
+    } catch (err) {}
+  }, []);
 
   const onClick = () => {
     props.onLogoutHandler();
   };
-  // useEffect(() => {
-  // }, []);
+
+  useEffect(() => {
+    getProfile();
+  }, []);
 
   // console.log(props.navigation);
   return (
@@ -64,19 +80,25 @@ const Profile = props => {
             <View style={classes.profileinfo}>
               <Image style={classes.profilepicture} source={DP} />
               <View style={classes.info}>
-                <Text style={classes.name}>{name ? name : 'User name'}</Text>
+                <Text style={classes.name}>
+                  {profile.name ? profile.name : 'User name'}
+                </Text>
                 <Text style={classes.status}>online</Text>
               </View>
             </View>
           </View>
         </View>
-        <ScrollView>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
           <View style={classes.menusection}>
             <Text style={classes.textsection}>Account</Text>
             <TouchableOpacity
               style={classes.submenus}
               onPress={() => {
-                props.navigation.push('Phone');
+                props.navigation.push('Phone', {phone: profile.phone});
               }}>
               <View style={classes.icontext}>
                 <Image style={classes.settingicon} source={iconPhone} />
@@ -84,7 +106,13 @@ const Profile = props => {
               </View>
               <Material name={'chevron-right'} size={32} color={'#010620'} />
             </TouchableOpacity>
-            <TouchableOpacity style={classes.submenus}>
+            <TouchableOpacity
+              style={classes.submenus}
+              onPress={() => {
+                props.navigation.push('ChangePassword', {
+                  email: userData.email,
+                });
+              }}>
               <View style={classes.icontext}>
                 <Image style={classes.settingicon} source={iconPassword} />
                 <Text style={classes.textsetting}>Change Password</Text>

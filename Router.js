@@ -18,6 +18,7 @@ import ClassDetail from './src/screens/activity/classdetail/ClassDetail';
 import Chat from './src/screens/chat/Chat';
 import Profile from './src/screens/profile/Profile';
 import Phone from './src/components/profile/phone/Phone';
+import ChangePassword from './src/components/profile/password/ChangePassword';
 
 import CustomIcon from './src/components/customicon/icomoon';
 
@@ -45,6 +46,7 @@ function ProfileNavigation() {
       }}>
       <Stack.Screen name="ProfileMain" component={Profile} />
       <Stack.Screen name="Phone" component={Phone} />
+      <Stack.Screen name="ChangePassword" component={ChangePassword} />
     </Stack.Navigator>
   );
 }

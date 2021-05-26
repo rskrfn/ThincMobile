@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -32,6 +32,12 @@ const SendEmail = props => {
     }
   };
 
+  useEffect(() => {
+    return () => {
+      setEmail('');
+    };
+  }, []);
+
   const sendHandler = e => {
     e.preventDefault();
     // console.log('clicked');
@@ -56,11 +62,11 @@ const SendEmail = props => {
     axios
       .post(url, {email: email})
       .then(res => {
-        // console.log(res);
+        console.log(res);
         props.navigation.navigate('Verification', {email: email});
       })
       .catch(err => {
-        if (err.response.data.message === 'User not found') {
+        if (err.response.data?.message === 'User not found') {
           return Toast.show({
             text: 'Account not found',
             type: 'danger',

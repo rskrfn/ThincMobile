@@ -1,37 +1,43 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
-  BackHandler,
-  Alert,
   ScrollView,
   StatusBar,
-  Image,
   TextInput,
-  Pressable,
-  Modal,
+  TouchableOpacity,
 } from 'react-native';
 import {Toast} from 'native-base';
 import axios from 'axios';
 import {API_URL} from '@env';
-import * as Animatable from 'react-native-animatable';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import classes from '../../reset/newpassword/Style';
-import resetImage from '../../../../assets/images/reset3.png';
+import classes from './Style';
+import {connect} from 'react-redux';
 
-const NewPassword = props => {
+const ChangePassword = props => {
+  const TOKEN = props.loginReducers.user?.data.token;
+  const userId = props.loginReducers.user?.data.data.id;
   const [password, setPassword] = useState();
   const [repeat, setRepeat] = useState();
   const [eye, setEye] = useState({
     securePass: true,
     secureRepeat: true,
   });
-  const [modal, setModal] = useState(false);
-
-  const email = props.route.params.email;
+  const FormData = require('form-data');
+  const data = new FormData();
+  data.append('id', userId);
+  data.append('password', password);
 
   const submitHandler = e => {
-    let url = `${API_URL}/users/forgot`;
+    const config = {
+      method: 'patch',
+      url: `${API_URL}/profile/`,
+      headers: {
+        token: TOKEN,
+      },
+      data: data,
+    };
 
     if (!password || !repeat) {
       return Toast.show({
@@ -57,30 +63,23 @@ const NewPassword = props => {
         duration: 3000,
       });
     }
-    axios
-      .patch(url, {email: email, newpassword: password})
+    axios(config)
       .then(res => {
         console.log(res);
-        if (res.data?.message === 'Password Changed') {
-          setModal(!modal);
+        if (res.data.message === 'Data Changed') {
+          Toast.show({
+            text: 'Password has been changed',
+            type: 'success',
+            textStyle: {textAlign: 'center'},
+            duration: 3000,
+          });
+          return setTimeout(() => {
+            props.navigation.goBack();
+          }, 5000);
         }
       })
       .catch(err => {
-        if (err.message === 'Network Error') {
-          Toast.show({
-            text: 'Network Error',
-            type: 'danger',
-            textStyle: {textAlign: 'center'},
-            duration: 3000,
-          });
-        } else if (err) {
-          Toast.show({
-            text: 'An Error Occured',
-            type: 'danger',
-            textStyle: {textAlign: 'center'},
-            duration: 3000,
-          });
-        }
+        console.log(err);
       });
   };
 
@@ -167,61 +166,23 @@ const NewPassword = props => {
     }
   }
 
-  useEffect(() => {
-    const backAction = () => {
-      Alert.alert('Hold on!', 'All progress will be lost', [
-        {
-          text: 'CANCEL',
-          onPress: () => {
-            setPassword('');
-            setRepeat('');
-          },
-        },
-        {
-          text: 'OK',
-          onPress: () => props.navigation.navigate('Login'),
-        },
-      ]);
-      return true;
-    };
-
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      backAction,
-    );
-
-    return () => backHandler.remove();
-  }, [props.navigation]);
+  useEffect(() => {}, []);
   return (
     <ScrollView style={classes.maincontainer}>
       <StatusBar barStyle="dark-content" backgroundColor="white" />
-      <Modal
-        visible={modal}
-        animationType="fade"
-        transparent={true}
-        onRequestClose={() => {
-          return;
-        }}>
-        <View style={classes.modalcontainer}>
-          <Text style={classes.header}>Password Changed!</Text>
-          <Image style={classes.image} source={resetImage} />
-          <Pressable
-            onPress={() => {
-              props.navigation.replace('Login');
-            }}>
-            <Animatable.Text
-              animation="pulse"
-              easing="ease-out"
-              iterationCount="infinite"
-              style={classes.textmodal}>
-              Login to your account
-            </Animatable.Text>
-          </Pressable>
-        </View>
-      </Modal>
-      <MaterialIcons name="chevron-left" size={42} color={'#010620'} />
+      <View style={classes.buttonbar}>
+        <TouchableOpacity
+          onPress={() => {
+            props.navigation.goBack();
+          }}>
+          <MaterialIcons name="chevron-left" size={42} color={'#ADA9BB'} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={submitHandler}>
+          <MaterialIcons name="save" size={32} color={'#5784BA'} />
+        </TouchableOpacity>
+      </View>
       <View style={classes.content}>
-        <Text style={classes.header}>Create New Password</Text>
+        <Text style={classes.header}>Change Password</Text>
         <Text style={classes.desc1}>
           Your new password must be different from previous used password!
         </Text>
@@ -236,7 +197,7 @@ const NewPassword = props => {
               setPassword(value);
             }}
           />
-          <Pressable
+          <TouchableOpacity
             style={classes.eye}
             onPress={() => {
               setEye({
@@ -249,7 +210,7 @@ const NewPassword = props => {
             ) : (
               <MaterialIcons name="visibility-off" color="black" size={24} />
             )}
-          </Pressable>
+          </TouchableOpacity>
         </View>
         {password ? passwordWarning() : null}
         <View style={classes.input2}>
@@ -263,7 +224,7 @@ const NewPassword = props => {
               setRepeat(value);
             }}
           />
-          <Pressable
+          <TouchableOpacity
             style={classes.eye}
             onPress={() => {
               setEye({
@@ -276,21 +237,25 @@ const NewPassword = props => {
             ) : (
               <MaterialIcons name="visibility-off" color="black" size={24} />
             )}
-          </Pressable>
+          </TouchableOpacity>
         </View>
         {repeat ? repeatWarning() : null}
         <View style={classes.input}>
-          <Pressable
+          <TouchableOpacity
             style={classes.btnsend}
             onPress={() => {
               submitHandler();
             }}>
             <Text style={classes.btntextsend}>Send</Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>
   );
 };
+const mapStateToProps = state => ({
+  loginReducers: state.loginReducers,
+});
+const connectedChangePassword = connect(mapStateToProps)(ChangePassword);
 
-export default NewPassword;
+export default connectedChangePassword;

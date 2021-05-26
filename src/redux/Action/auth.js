@@ -31,7 +31,7 @@ export function loginAction(data) {
       .catch(err => {
         dispatch({
           type: 'LOGIN_REJECTED',
-          payload: err,
+          payload: err.response,
         });
       });
   };

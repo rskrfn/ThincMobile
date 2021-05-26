@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   Text,
@@ -34,7 +34,6 @@ function Login({...props}) {
     });
   };
   let submitHandler = e => {
-    e.preventDefault();
     const auth = {
       username: data.username,
       password: data.password,
@@ -45,27 +44,34 @@ function Login({...props}) {
         type: 'warning',
         textStyle: {textAlign: 'center'},
       });
-    }
-    if (
-      props.loginReducers?.err.message === 'Request failed with status code 404'
-    ) {
-      return Toast.show({
-        text: 'Invalid User Credential',
-        type: 'danger',
-        textStyle: {textAlign: 'center'},
-      });
-    }
-    if (props.loginReducers?.err.message === 'Network Error') {
-      return Toast.show({
-        text: 'Network Error',
-        type: 'danger',
-        textStyle: {textAlign: 'center'},
-      });
     } else {
       // console.log(props);
       props.onLoginHandler(auth);
     }
   };
+  const ref = useRef();
+  useEffect(() => {
+    if (!ref.current) {
+      ref.current = true;
+    } else {
+      if (
+        props.loginReducer.err.data?.message === 'Incorrect Email or Password'
+      ) {
+        return Toast.show({
+          text: 'Incorrect Email or Password',
+          type: 'danger',
+          textStyle: {textAlign: 'center'},
+        });
+      }
+      if (props.loginReducer.err.data?.message === 'Network Error') {
+        return Toast.show({
+          text: 'Network Error',
+          type: 'danger',
+          textStyle: {textAlign: 'center'},
+        });
+      }
+    }
+  }, [props.loginReducer.err.data?.message]);
 
   return (
     <SafeAreaView fadeIn style={styles.container}>

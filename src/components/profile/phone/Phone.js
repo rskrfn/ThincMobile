@@ -18,8 +18,8 @@ const Phone = props => {
   const [phone, setPhone] = useState('');
   const TOKEN = props.loginReducers.user?.data.token;
   const userId = props.loginReducers.user?.data.data.id;
-  let userPhone = props.loginReducers.user.data?.data.phone;
-  // console.log(userId);
+  let userPhone = props.route.params.phone;
+  // console.log(props.route.params.phone);
   const FormData = require('form-data');
   const data = new FormData();
   data.append('id', userId);
@@ -69,12 +69,15 @@ const Phone = props => {
     axios(config)
       .then(res => {
         if (res.data.message === 'Data Changed') {
-          return Toast.show({
+          Toast.show({
             text: 'Phone number has been changed',
-            type: 'Success',
+            type: 'success',
             textStyle: {textAlign: 'center'},
             duration: 3000,
           });
+          return setTimeout(() => {
+            props.navigation.goBack();
+          }, 5000);
         }
       })
       .catch(err => {

@@ -34,7 +34,7 @@ const Verification = props => {
 
   const submitHandler = e => {
     let code = [code1, code2, code3, code4].join('');
-    let url = `${API_URL}users?email=${email}&otp=${code}`;
+    let urlaxios = `${API_URL}/users?email=${email}&otp=${code}`;
     if (!code1 || !code2 || !code3 || !code4) {
       return Toast.show({
         text: 'Enter the code',
@@ -43,17 +43,17 @@ const Verification = props => {
         duration: 3000,
       });
     }
-    props.navigation.replace('NewPassword', {email: email});
     axios
-      .post(url)
+      .post(urlaxios)
       .then(res => {
         console.log(res);
-        if (res.data.message === 'OTP valid') {
+        if (res.data?.message === 'OTP valid') {
           props.navigation.navigate('NewPassword', {email: email});
         }
       })
       .catch(err => {
-        if (err.response.data.message === 'Wrong otp code') {
+        console.log(err);
+        if (err.response.data?.message === 'Wrong otp code') {
           setCode1('');
           setCode2('');
           setCode3('');
@@ -70,8 +70,8 @@ const Verification = props => {
           });
         }
         if (
-          err.response?.data.message === 'Email empty' ||
-          err.response?.data.message === 'Email not found'
+          err.response.data?.message === 'Email empty' ||
+          err.response.data?.message === 'Email not found'
         ) {
           return Toast.show({
             text: 'Email Not Found',
@@ -80,7 +80,7 @@ const Verification = props => {
             duration: 3000,
           });
         }
-        if (err.response.data.message === 'OTP Expired') {
+        if (err.response.data?.message === 'OTP Expired') {
           Toast.show({
             text: 'OTP Expired, Redirecting...',
             type: 'danger',
@@ -90,6 +90,8 @@ const Verification = props => {
           setTimeout(() => {
             props.navigation.replace('SendEmail');
           }, 5000);
+        } else {
+          console.log(err);
         }
       });
   };
