@@ -15,7 +15,8 @@ import * as Animatable from 'react-native-animatable';
 // import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {Toast} from 'native-base';
-import {API_URL} from '@env';
+// import {API_URL} from '@env';
+// import NotifService from '../../../../NotifService';
 
 // import CustomIcon from '../../components/customicon/icomoon';
 
@@ -33,6 +34,24 @@ function Login(props) {
       secureText: !eye.secureText,
     });
   };
+  // const [registerToken, setRegisterToken] = useState('');
+  // const [fcmRegistered, setFcmRegistered] = useState(false);
+
+  // const onRegister = token => {
+  //   setRegisterToken(token.token);
+  //   setFcmRegistered(true);
+  // };
+
+  // const onNotif = notif => {
+  //   Alert.alert(notif.title, notif.message);
+  // };
+
+  // const notif = new NotifService(onRegister, onNotif);
+
+  // const handlePerm = perms => {
+  //   Alert.alert('Permissions', JSON.stringify(perms));
+  // };
+
   let submitHandler = e => {
     const auth = {
       username: data.username,
@@ -46,6 +65,7 @@ function Login(props) {
       });
     } else {
       // console.log(props);
+      //  notif.localNotif();
       props.onLoginHandler(auth);
     }
   };
@@ -71,7 +91,7 @@ function Login(props) {
         });
       }
     }
-  }, [props.loginReducer.err?.data?.message]);
+  }, [props.loginReducer.err]);
 
   return (
     <SafeAreaView fadeIn style={styles.container}>
@@ -132,11 +152,7 @@ function Login(props) {
               </TouchableOpacity>
             </View>
             <View style={styles.input}>
-              <TouchableOpacity
-                style={styles.btngoogle}
-                onPress={() => {
-                  console.log(API_URL);
-                }}>
+              <TouchableOpacity style={styles.btngoogle} onPress={() => {}}>
                 <Image
                   style={styles.googleicon}
                   source={require('../../../assets/icons/icon_google.png')}

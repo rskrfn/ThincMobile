@@ -10,6 +10,7 @@ import {
   ScrollView,
   SafeAreaView,
   RefreshControl,
+  Alert,
 } from 'react-native';
 import {Button, Input, Icon, Item, Picker} from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -19,16 +20,38 @@ import axios from 'axios';
 import {API_URL} from '@env';
 import {TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
+import NotifService from '../../../../NotifService';
 
 function Member({...props}) {
   const [myClass, setMyClass] = useState();
   const [newClass, setNewClass] = useState([]);
   const [selectedCategory, setCategory] = useState('');
   const [selectedPrice, setPrice] = useState('');
+  const [refreshing, setRefreshing] = React.useState(false);
+
   // const [currentPage, setCurrentPage] = useState(1);
   // const [totalPage, setTotalPage] = useState(1);
   const userId = props.loginReducer.user.data?.data.id;
+  const TOKEN = props.loginReducer.user.data?.token;
   // console.log(userId);
+
+  const [registerToken, setRegisterToken] = useState('');
+  const [fcmRegistered, setFcmRegistered] = useState(false);
+
+  const onRegister = token => {
+    setRegisterToken(token.token);
+    setFcmRegistered(true);
+  };
+
+  const onNotif = notif => {
+    Alert.alert(notif.title, notif.message);
+  };
+
+  const notif = new NotifService(onRegister, onNotif);
+
+  const handlePerm = perms => {
+    Alert.alert('Permissions', JSON.stringify(perms));
+  };
 
   const getMyClass = () => {
     let config = {
@@ -56,34 +79,13 @@ function Member({...props}) {
     };
     axios(config)
       .then(res => {
-        console.log(res);
+        // console.log(res);
         setNewClass(res.data.data);
         // setCurrentPage(res.data.data.info.page);
         // setTotalPage(res.data.data.info.totalPage);
       })
       .catch(err => console.log({err}));
   };
-
-  const getObjective = id => {
-    let config = {
-      method: 'GET',
-      url: `${API_URL}/courses/objective`,
-      params: {courseid: id},
-    };
-    axios(config)
-      .then(res => {
-        // console.log(res.data.data[0].Objective);
-        if (res.data.data.length > 0) {
-          let value = res.data.data[0].Objective;
-          return value;
-        } else {
-          return null;
-        }
-      })
-      .catch(() => {});
-  };
-
-  const [refreshing, setRefreshing] = React.useState(false);
 
   const onRefresh = React.useCallback(async () => {
     try {
@@ -109,6 +111,31 @@ function Member({...props}) {
       } else {
         return '#E6422B';
       }
+    }
+  };
+
+  const onRegisterCourse = async (id, name) => {
+    try {
+      let config = {
+        method: 'POST',
+        url: `${API_URL}/courses/register`,
+        data: {userid: userId, courseid: id},
+        headers: {'x-access-token': TOKEN},
+      };
+      axios(config)
+        .then(res => {
+          if (res.status === 200) {
+            onRefresh();
+            return notif.localNotif('', `Successfully register on ${name}`);
+          }
+          // console.log(res);
+          // setNewClass(res.data.data);
+          // setCurrentPage(res.data.data.info.page);
+          // setTotalPage(res.data.data.info.totalPage);
+        })
+        .catch(err => console.log({err}));
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -143,23 +170,9 @@ function Member({...props}) {
                   <TouchableOpacity
                     style={classes.myclass}
                     onPress={() => {
-                      let config = {
-                        method: 'GET',
-                        url: `${API_URL}/courses/objective`,
-                        params: {courseid: item.id},
-                      };
-                      axios(config)
-                        .then(res => {
-                          // console.log(res.data.data[0].Objective);
-                          if (res.data.data.length > 0) {
-                            let Objective = res.data.data[0].Objective;
-                            props.navigation.navigate('ClassDetail', {
-                              ...item,
-                              Objective,
-                            });
-                          }
-                        })
-                        .catch(err => console.log(err));
+                      props.navigation.navigate('ClassDetail', {
+                        ...item,
+                      });
                     }}>
                     <Text style={classes.tableclassname}>{item.Name}</Text>
                     <View style={classes.tableprogress}>
@@ -350,11 +363,11 @@ function Member({...props}) {
                     <View style={classes.newClassItem}>
                       <Text
                         style={classes.newClassName}
-                        onPress={() =>
+                        onPress={() => {
                           props.navigation.navigate('ClassDetail', {
                             ...item,
-                          })
-                        }>
+                          });
+                        }}>
                         {item.Name && item.Name.length > 30
                           ? item.Name.slice(0, 30) + '...'
                           : item.Name}
@@ -363,7 +376,11 @@ function Member({...props}) {
                       <Text style={classes.newprice}>
                         {item.Price === 0 ? 'Free' : item.Price}
                       </Text>
-                      <TouchableOpacity style={classes.newbtnregister}>
+                      <TouchableOpacity
+                        style={classes.newbtnregister}
+                        onPress={() => {
+                          onRegisterCourse(item.id, item.Name);
+                        }}>
                         <Text style={classes.txtRegister}>Register</Text>
                       </TouchableOpacity>
                     </View>

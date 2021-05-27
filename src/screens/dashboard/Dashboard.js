@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -9,7 +10,9 @@ import {
   TouchableOpacity,
   LogBox,
   SafeAreaView,
+  Alert,
 } from 'react-native';
+import NotifService from '../../../NotifService';
 import {connect} from 'react-redux';
 import classes from './Styles';
 import Material from 'react-native-vector-icons/MaterialIcons';
@@ -25,9 +28,31 @@ const Dashboard = props => {
   const [activeTab, setActive] = React.useState(0);
   const tabList = ['All Schedule', 'For You'];
   // console.log(props.loginReducers.user.data);
+
+  const [registerToken, setRegisterToken] = useState('');
+  const [fcmRegistered, setFcmRegistered] = useState(false);
+
+  const onRegister = token => {
+    setRegisterToken(token.token);
+    setFcmRegistered(true);
+  };
+
+  const onNotif = notif => {
+    Alert.alert(notif.title, notif.message);
+  };
+
+  const notif = new NotifService(onRegister, onNotif);
+
+  const handlePerm = perms => {
+    Alert.alert('Permissions', JSON.stringify(perms));
+  };
+
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  }, []);
+    if (props.loginReducers.isLogin === true) {
+      notif.localNotif('', `Welcome back, ${name.split(' ')[0]}`);
+    }
+  }, [props.loginReducers.isLogin]);
   return (
     <Animatable.View animation="fadeIn" style={{flex: 1}}>
       <StatusBar

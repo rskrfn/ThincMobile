@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "769382662249",
+    "project_id": "thinc-app",
+    "storage_bucket": "thinc-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:769382662249:android:794cd6a93a41ca367522f8",
+        "android_client_info": {
+          "package_name": "com.thincmobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "769382662249-dnpp719kdstbc68ov3cjf1jpkn8bag1k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBb1RF-hVTG7g0h4YfgoHDWjlRMZpkIBGQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "769382662249-dnpp719kdstbc68ov3cjf1jpkn8bag1k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

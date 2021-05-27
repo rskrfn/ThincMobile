@@ -1,22 +1,87 @@
-import React from 'react';
-import {View, ScrollView, Text, StatusBar, Image} from 'react-native';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  ScrollView,
+  Text,
+  StatusBar,
+  Image,
+  TouchableNativeFeedback,
+} from 'react-native';
 import * as Progress from 'react-native-progress';
+import axios from 'axios';
+import {API_URL} from '@env';
 import classes from './Styles';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import backdropImg from '../../../assets/images/backdrop1.png';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import softwareIcon from '../../../assets/icons/icon_software.png';
+import financeIcon from '../../../assets/icons/icon_finance.png';
+import historyIcon from '../../../assets/icons/icon_history.png';
+import mathIcon from '../../../assets/icons/icon_math.png';
+import scienceIcon from '../../../assets/icons/icon_science.png';
 
-import Information from '../../../components/activity/Information';
-import ClassProgress from '../../../components/activity/ClassProgress';
+import Information from '../../../components/activity/classdetail/information/Information';
+import ClassProgress from '../../../components/activity/classdetail/progress/ClassProgress';
+import ClassDiscussion from '../../../components/activity/classdetail/discussion/ClassDiscussion';
+import {connect} from 'react-redux';
 
 const ClassDetail = props => {
+  const TOKEN = props.loginReducers.user.data?.token;
   const courseData = props.route.params;
-  const progress = 80;
-  console.log(props.route.params);
+  const userId = props.loginReducers.user.data?.data.id;
+  const progress = 60;
+  const [index, setIndex] = useState(0);
+  const [scoreData, setScoreData] = useState([]);
+
+  const getScore = () => {
+    let config = {
+      method: 'GET',
+      url: `${API_URL}/courses/score`,
+      params: {userid: userId, courseid: courseData.id},
+    };
+    axios(config)
+      .then(res => {
+        // console.log(res);
+        if (res.data.data.length > 0) {
+          setScoreData(res.data.data);
+        } else {
+        }
+      })
+      .catch(() => {});
+  };
+  useEffect(() => {
+    getScore();
+  }, []);
+  const menu = ['Information', 'Class Progress', 'Class Discussion'];
+  const renderTabContent = () => {
+    switch (index) {
+      case 1:
+        return (
+          <ClassProgress
+            token={TOKEN}
+            courseId={courseData.id}
+            scoreData={scoreData}
+          />
+        );
+      case 2:
+        return <ClassDiscussion />;
+      default:
+        return <Information course={courseData} />;
+    }
+  };
+
   function CategoryIcon() {
     if (courseData.Category === 'Software') {
       return <Image style={classes.categoryIcon} source={softwareIcon} />;
+    } else if (courseData.Category === 'Finance') {
+      return <Image style={classes.categoryIcon} source={financeIcon} />;
+    } else if (courseData.Category === 'History') {
+      return <Image style={classes.categoryIcon} source={historyIcon} />;
+    } else if (courseData.Category === 'Math') {
+      return <Image style={classes.categoryIcon} source={mathIcon} />;
+    } else if (courseData.Category === 'Science') {
+      return <Image style={classes.categoryIcon} source={scienceIcon} />;
     }
   }
   return (
@@ -81,10 +146,39 @@ const ClassDetail = props => {
             </View>
           </View>
         </View>
-        <View></View>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={classes.menuList}>
+          {menu.map((item, activeIndex) => (
+            <TouchableNativeFeedback
+              key={activeIndex}
+              onPress={() => setIndex(activeIndex)}>
+              <View
+                style={[
+                  classes.menuContainer,
+                  index === activeIndex ? classes.active : '',
+                ]}>
+                <Text
+                  style={[
+                    classes.menuText,
+                    index === activeIndex ? classes.activeText : '',
+                  ]}>
+                  {item}
+                </Text>
+              </View>
+            </TouchableNativeFeedback>
+          ))}
+        </ScrollView>
+        <View>{renderTabContent()}</View>
       </View>
     </ScrollView>
   );
 };
 
-export default ClassDetail;
+const mapStateToProps = state => ({
+  loginReducers: state.loginReducers,
+});
+const connectedClassDetail = connect(mapStateToProps)(ClassDetail);
+
+export default connectedClassDetail;

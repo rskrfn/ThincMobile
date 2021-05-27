@@ -42,7 +42,7 @@ const Profile = props => {
     };
     axios(config)
       .then(res => {
-        console.log(res);
+        // console.log(res);
         setProfile(res.data?.data[0]);
       })
       .catch(err => console.log(err));

@@ -118,8 +118,31 @@ const classes = StyleSheet.create({
   progressbar: {
     width: '100%',
   },
-  tabs: {
-    backgroundColor: 'white',
+  menuList: {
+    marginBottom: 10,
+    borderBottomWidth: 2,
+    borderBottomColor: '#C4C4C4',
+  },
+  menuContainer: {
+    padding: 10,
+    marginHorizontal: 5,
+  },
+  menuText: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: 14,
+    fontStyle: 'normal',
+    textAlign: 'left',
+    color: 'black',
+  },
+  active: {
+    zIndex: 10,
+    borderBottomWidth: 4,
+    borderBottomColor: '#5784BA',
+  },
+  activeText: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: 14,
+    color: '#5784BA',
   },
 });
 
