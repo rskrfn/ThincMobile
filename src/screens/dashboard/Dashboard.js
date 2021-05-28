@@ -48,7 +48,6 @@ const Dashboard = props => {
   };
 
   useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     if (props.loginReducers.isLogin === true) {
       notif.localNotif('', `Welcome back, ${name.split(' ')[0]}`);
     }
@@ -76,7 +75,7 @@ const Dashboard = props => {
             <TextInput
               style={classes.inputsearch}
               placeholder="Looking for something?"
-              placeholderTextColor={{color: '#010620'}}
+              placeholderTextColor={'rgba(1, 6, 32, 0.5)'}
             />
           </View>
         </View>

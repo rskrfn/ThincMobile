@@ -8,6 +8,7 @@ import {
   Image,
   TouchableOpacity,
   RefreshControl,
+  Modal,
 } from 'react-native';
 import {connect} from 'react-redux';
 import axios from 'axios';
@@ -25,11 +26,14 @@ import iconData from '../../assets/icons/icon_storage.png';
 import iconFAQ from '../../assets/icons/icon_question.png';
 import iconLogout from '../../assets/icons/icon_logout.png';
 
+import EditModal from '../../components/profile/editprofile/EditProfile';
+
 const Profile = props => {
   // const TOKEN = props.loginReducers.user?.data.token;
   let userData = props.loginReducers.user.data?.data;
   const [profile, setProfile] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [profileModal, setProfileModal] = useState(false);
 
   const getProfile = () => {
     let config = {
@@ -52,19 +56,25 @@ const Profile = props => {
     try {
       setRefreshing(true);
       await getProfile();
-      console.log(profile);
-      setRefreshing(false);
+      // console.log(profile);
+      setTimeout(() => {
+        setRefreshing(false);
+      }, 2000);
     } catch (err) {}
   }, []);
 
   const onClick = () => {
     props.onLogoutHandler();
   };
-  useEffect(() => {
-    getProfile();
-  }, []);
 
-  // console.log(props.navigation);
+  useEffect(() => {
+    const update = props.navigation.addListener('focus', () => {
+      getProfile();
+    });
+    return () => {
+      update;
+    };
+  }, [props.navigation]);
   return (
     <View style={classes.maincontainer}>
       <StatusBar
@@ -72,6 +82,17 @@ const Profile = props => {
         backgroundColor="transparent"
         barStyle="light-content"
       />
+      <Modal visible={profileModal} transparent={true}>
+        <View style={classes.modalcontainer}>
+          <EditModal
+            getProfile={getProfile}
+            modalVisible={profileModal}
+            setProfileModal={setProfileModal}
+            ProfileData={profile}
+          />
+        </View>
+      </Modal>
+
       <View style={classes.container}>
         <View style={classes.headercontainer}>
           <View style={classes.header}>
@@ -97,13 +118,21 @@ const Profile = props => {
             <TouchableOpacity
               style={classes.submenus}
               onPress={() => {
-                props.navigation.push('Phone', {phone: profile.phone});
+                setProfileModal(!profileModal);
               }}>
-              <View style={classes.icontext}>
-                <Image style={classes.settingicon} source={iconPhone} />
-                <Text style={classes.textsetting}>Phone Numbers</Text>
+              <View style={classes.menuitem}>
+                <Material
+                  name="account-circle"
+                  color="rgba(1, 6, 32, 0.75)"
+                  size={28}
+                />
+                <Text style={classes.textsetting}>Edit Profile</Text>
               </View>
-              <Material name={'chevron-right'} size={32} color={'#010620'} />
+              <Material
+                name={'chevron-right'}
+                size={32}
+                color={'rgba(1, 6, 32, 0.75)'}
+              />
             </TouchableOpacity>
             <TouchableOpacity
               style={classes.submenus}
@@ -112,55 +141,79 @@ const Profile = props => {
                   email: userData.email,
                 });
               }}>
-              <View style={classes.icontext}>
+              <View style={classes.menuitem}>
                 <Image style={classes.settingicon} source={iconPassword} />
                 <Text style={classes.textsetting}>Change Password</Text>
               </View>
-              <Material name={'chevron-right'} size={32} color={'#010620'} />
+              <Material
+                name={'chevron-right'}
+                size={32}
+                color={'rgba(1, 6, 32, 0.75)'}
+              />
             </TouchableOpacity>
           </View>
           <View style={classes.menusection}>
             <Text style={classes.textsection}>Settings</Text>
             <TouchableOpacity style={classes.submenus}>
-              <View style={classes.icontext}>
+              <View style={classes.menuitem}>
                 <Image style={classes.settingicon} source={iconChat} />
                 <Text style={classes.textsetting}>Chat Settings</Text>
               </View>
-              <Material name={'chevron-right'} size={32} color={'#010620'} />
+              <Material
+                name={'chevron-right'}
+                size={32}
+                color={'rgba(1, 6, 32, 0.75)'}
+              />
             </TouchableOpacity>
             <TouchableOpacity style={classes.submenus}>
-              <View style={classes.icontext}>
+              <View style={classes.menuitem}>
                 <Image style={classes.settingicon} source={iconNotif} />
                 <Text style={classes.textsetting}>Push Notifications</Text>
               </View>
-              <Material name={'chevron-right'} size={32} color={'#010620'} />
+              <Material
+                name={'chevron-right'}
+                size={32}
+                color={'rgba(1, 6, 32, 0.75)'}
+              />
             </TouchableOpacity>
             <TouchableOpacity style={classes.submenus}>
-              <View style={classes.icontext}>
+              <View style={classes.menuitem}>
                 <Image style={classes.settingicon} source={iconSecurity} />
                 <Text style={classes.textsetting}>Privacy and Security</Text>
               </View>
-              <Material name={'chevron-right'} size={32} color={'#010620'} />
+              <Material
+                name={'chevron-right'}
+                size={32}
+                color={'rgba(1, 6, 32, 0.75)'}
+              />
             </TouchableOpacity>
             <TouchableOpacity style={classes.submenus}>
-              <View style={classes.icontext}>
+              <View style={classes.menuitem}>
                 <Image style={classes.settingicon} source={iconData} />
                 <Text style={classes.textsetting}>Data and Storage</Text>
               </View>
-              <Material name={'chevron-right'} size={32} color={'#010620'} />
+              <Material
+                name={'chevron-right'}
+                size={32}
+                color={'rgba(1, 6, 32, 0.75)'}
+              />
             </TouchableOpacity>
           </View>
           <View style={classes.menusection}>
             <Text style={classes.textsection}>Help</Text>
             <TouchableOpacity style={classes.submenus}>
-              <View style={classes.icontext}>
+              <View style={classes.menuitem}>
                 <Image style={classes.settingicon} source={iconFAQ} />
                 <Text style={classes.textsetting}>F.A.Q</Text>
               </View>
-              <Material name={'chevron-right'} size={32} color={'#010620'} />
+              <Material
+                name={'chevron-right'}
+                size={32}
+                color={'rgba(1, 6, 32, 0.75)'}
+              />
             </TouchableOpacity>
             <TouchableOpacity style={classes.submenus} onPress={onClick}>
-              <View style={classes.icontext}>
+              <View style={classes.menuitem}>
                 <Image style={classes.settingicon} source={iconLogout} />
                 <Text style={classes.textsetting}>Logout</Text>
               </View>

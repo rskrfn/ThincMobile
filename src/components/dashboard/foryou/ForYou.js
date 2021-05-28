@@ -1,6 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
-import Timeline from 'react-native-timeline-flatlist';
+import {View, Text} from 'react-native';
 import classes from './Styles';
 
 const ForYou = () => {
@@ -15,19 +14,9 @@ const ForYou = () => {
     },
   ];
   return (
-    <Timeline
-      data={data}
-      circleSize={16}
-      circleColor="#5784BA"
-      lineColor="#5784BA"
-      renderFullLine
-      innerCircle={'dot'}
-      style={classes.list}
-      separator
-      titleStyle={classes.title}
-      timeStyle={classes.time}
-      eventDetailStyle={classes.event}
-    />
+    <View>
+      <Text>For You</Text>
+    </View>
   );
 };
 

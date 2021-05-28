@@ -1,4 +1,3 @@
-import {Row} from 'native-base';
 import {StyleSheet} from 'react-native';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 
@@ -11,6 +10,10 @@ const classes = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#E6EDF6',
+  },
+  modalcontainer: {
+    flex: 1,
+    backgroundColor: 'rgba(230, 237, 246, 0.9)',
   },
   headercontainer: {
     backgroundColor: 'white',
@@ -73,7 +76,7 @@ const classes = StyleSheet.create({
     marginTop: 16,
     paddingVertical: 8,
   },
-  icontext: {
+  menuitem: {
     flexDirection: 'row',
     alignItems: 'center',
   },

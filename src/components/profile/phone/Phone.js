@@ -9,8 +9,8 @@ import {
 import TextInputMask from 'react-native-text-input-mask';
 import {Toast} from 'native-base';
 import axios from 'axios';
-import {connect} from 'react-redux';
 import {API_URL} from '@env';
+import {connect} from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import classes from './Styles';
 

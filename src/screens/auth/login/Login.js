@@ -15,7 +15,7 @@ import * as Animatable from 'react-native-animatable';
 // import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {Toast} from 'native-base';
-// import {API_URL} from '@env';
+import {API_URL} from '@env';
 // import NotifService from '../../../../NotifService';
 
 // import CustomIcon from '../../components/customicon/icomoon';
@@ -62,6 +62,7 @@ function Login(props) {
         text: 'Fill in your data',
         type: 'warning',
         textStyle: {textAlign: 'center'},
+        duration: 3000,
       });
     } else {
       // console.log(props);
@@ -152,7 +153,11 @@ function Login(props) {
               </TouchableOpacity>
             </View>
             <View style={styles.input}>
-              <TouchableOpacity style={styles.btngoogle} onPress={() => {}}>
+              <TouchableOpacity
+                style={styles.btngoogle}
+                onPress={() => {
+                  console.log(API_URL);
+                }}>
                 <Image
                   style={styles.googleicon}
                   source={require('../../../assets/icons/icon_google.png')}

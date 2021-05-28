@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
+    "pixel": "react-native run-android --deviceId=Pixel4",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "dev": "react-native start run-android",
@@ -26,6 +27,9 @@
     "react-native-dotenv": "^2.5.5",
     "react-native-elements": "^3.4.1",
     "react-native-gesture-handler": "^1.10.3",
+    "react-native-image-crop-picker": "^0.36.2",
+    "react-native-image-picker": "^4.0.2",
+    "react-native-linear-gradient": "^2.5.6",
     "react-native-pager-view": "^5.1.9",
     "react-native-progress": "^4.1.2",
     "react-native-progress-circle": "^2.1.0",

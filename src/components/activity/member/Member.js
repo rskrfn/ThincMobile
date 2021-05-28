@@ -11,6 +11,7 @@ import {
   SafeAreaView,
   RefreshControl,
   Alert,
+  LogBox,
 } from 'react-native';
 import {Button, Input, Icon, Item, Picker} from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -140,6 +141,7 @@ function Member({...props}) {
   };
 
   useEffect(() => {
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     getMyClass();
     getNewClass();
   }, []);
@@ -160,6 +162,7 @@ function Member({...props}) {
         {myClass ? (
           <SafeAreaView style={classes.maincontainer}>
             <FlatList
+              nestedScrollEnabled
               scrollEnabled={false}
               data={myClass.slice(0, 3)}
               keyExtractor={(item, index) => {
