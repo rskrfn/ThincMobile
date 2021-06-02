@@ -20,8 +20,8 @@ import DP from '../../../assets/images/profilepicture.jpg';
 import LinearGradient from 'react-native-linear-gradient';
 
 const EditProfile = props => {
-  const TOKEN = props.loginReducers.user?.data.token;
-  const userId = props.loginReducers.user?.data.data.id;
+  const TOKEN = props.loginReducers.user?.token;
+  const userId = props.loginReducers.user?.data.id;
   const [dp, setdp] = useState();
   const [fullName, setFullName] = useState(props.ProfileData.name);
   const [nameEditable, setNameEditable] = useState(false);

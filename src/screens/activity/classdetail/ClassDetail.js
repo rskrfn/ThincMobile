@@ -27,9 +27,9 @@ import ClassDiscussion from '../../../components/activity/classdetail/discussion
 import {connect} from 'react-redux';
 
 const ClassDetail = props => {
-  const TOKEN = props.loginReducers.user.data?.token;
+  const TOKEN = props.loginReducers.user?.token;
   const courseData = props.route.params;
-  const userId = props.loginReducers.user.data?.data.id;
+  const userId = props.loginReducers.user.data?.id;
   const progress = 60;
   const [index, setIndex] = useState(0);
   const [scoreData, setScoreData] = useState([]);

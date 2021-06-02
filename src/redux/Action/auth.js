@@ -26,7 +26,7 @@ export function loginAction(data) {
     });
     axios(config)
       .then(res => {
-        dispatch({type: 'LOGIN_SUCCESS', payload: res.data});
+        dispatch({type: 'LOGIN_SUCCESS', payload: res.data.data});
       })
       .catch(err => {
         dispatch({

@@ -26,13 +26,14 @@ import NotifService from '../../../../NotifService';
 function Member({...props}) {
   const [myClass, setMyClass] = useState();
   const [newClass, setNewClass] = useState([]);
-  const [selectedCategory, setCategory] = useState('');
-  const [selectedPrice, setPrice] = useState('');
+  const [selectedCategory, setCategory] = useState(null);
+  const [selectedLevel, setLevel] = useState(null);
+  const [selectedPrice, setPrice] = useState(null);
+  const [selectedSort, setSort] = useState(null);
   const [refreshing, setRefreshing] = React.useState(false);
-
   // const [currentPage, setCurrentPage] = useState(1);
   // const [totalPage, setTotalPage] = useState(1);
-  const userId = props.loginReducer.user.data?.data.id;
+  const userId = props.loginReducer.user.data?.id;
   const TOKEN = props.loginReducer.user.data?.token;
   // console.log(userId);
 
@@ -50,9 +51,9 @@ function Member({...props}) {
 
   const notif = new NotifService(onRegister, onNotif);
 
-  const handlePerm = perms => {
-    Alert.alert('Permissions', JSON.stringify(perms));
-  };
+  // const handlePerm = perms => {
+  //   Alert.alert('Permissions', JSON.stringify(perms));
+  // };
 
   const getMyClass = () => {
     let config = {
@@ -253,16 +254,24 @@ function Member({...props}) {
               </Button>
             </View>
           </TouchableWithoutFeedback>
-          <View style={classes.filterSection}>
+          <ScrollView
+            horizontal
+            style={classes.filterSection}
+            showsHorizontalScrollIndicator={false}>
+            <TouchableOpacity style={classes.filterbtn}>
+              <Text style={classes.filterbtntext}>Filter</Text>
+            </TouchableOpacity>
             <Item picker style={{width: 100, overflow: 'hidden'}}>
               <Picker
                 mode="dropdown"
-                style={{width: 145}}
-                placeholder="Select your SIM"
-                placeholderStyle={{color: '#bfc6ea'}}
-                placeholderIconColor="#007aff"
+                style={{width: 140}}
                 selectedValue={selectedCategory}
                 onValueChange={e => setCategory(e)}>
+                <Picker.Item
+                  label="Category"
+                  value=""
+                  style={classes.pickeritem}
+                />
                 <Picker.Item
                   label="Software"
                   value="software"
@@ -290,15 +299,17 @@ function Member({...props}) {
                 style={{position: 'absolute', right: 0}}
               />
             </Item>
-            <Item picker style={{width: 100, overflow: 'hidden'}}>
+            <Item picker style={{width: 90, overflow: 'hidden'}}>
               <Picker
                 mode="dropdown"
-                style={{width: 145}}
-                placeholder="Select your SIM"
-                placeholderStyle={{color: '#bfc6ea'}}
-                placeholderIconColor="#007aff"
-                selectedValue={selectedCategory}
-                onValueChange={e => setCategory(e)}>
+                style={{width: 140}}
+                selectedValue={selectedLevel}
+                onValueChange={e => setLevel(e)}>
+                <Picker.Item
+                  label="Level"
+                  value=""
+                  style={classes.pickeritem}
+                />
                 <Picker.Item
                   label="Beginner"
                   value="beginner"
@@ -321,23 +332,78 @@ function Member({...props}) {
                 style={{position: 'absolute', right: 0}}
               />
             </Item>
-            <Item picker style={{width: 90, overflow: 'hidden'}}>
+            <Item picker style={{width: 75, overflow: 'hidden'}}>
               <Picker
                 mode="dropdown"
-                style={{width: 145}}
-                placeholder="Select your SIM"
-                placeholderStyle={{color: '#bfc6ea'}}
-                placeholderIconColor="#007aff"
+                style={{width: 140}}
                 selectedValue={selectedPrice}
                 onValueChange={e => setPrice(e)}>
+                <Picker.Item
+                  label="Price"
+                  value=""
+                  style={classes.pickeritem}
+                />
                 <Picker.Item
                   label="Free"
                   value="free"
                   style={classes.pickeritem}
                 />
                 <Picker.Item
-                  label="Paid"
-                  value="paid"
+                  label="$10"
+                  value="10"
+                  style={classes.pickeritem}
+                />
+                <Picker.Item
+                  label="$50"
+                  value="50"
+                  style={classes.pickeritem}
+                />
+              </Picker>
+              <MaterialIcons
+                name="expand-more"
+                size={18}
+                style={{position: 'absolute', right: 0}}
+              />
+            </Item>
+            <Item picker style={{width: 160, overflow: 'hidden'}}>
+              <Picker
+                mode="dropdown"
+                style={{width: 200}}
+                selectedValue={selectedSort}
+                onValueChange={e => setSort(e)}>
+                <Picker.Item
+                  label="Sort By"
+                  value=""
+                  style={classes.pickeritem}
+                />
+                <Picker.Item
+                  label="Category ASC"
+                  value="Category-AZ"
+                  style={classes.pickeritem}
+                />
+                <Picker.Item
+                  label="Category DESC"
+                  value="Category-ZA"
+                  style={classes.pickeritem}
+                />
+                <Picker.Item
+                  label="Level ASC"
+                  value="Level-AZ"
+                  style={classes.pickeritem}
+                />
+                <Picker.Item
+                  label="Level DESC"
+                  value="Level-ZA"
+                  style={classes.pickeritem}
+                />
+                <Picker.Item
+                  label="Price ASC"
+                  value="Price-AZ"
+                  style={classes.pickeritem}
+                />
+                <Picker.Item
+                  label="Price DESC"
+                  value="Price-ZA"
                   style={classes.pickeritem}
                 />
               </Picker>
@@ -347,7 +413,7 @@ function Member({...props}) {
                 style={{position: 'absolute', right: 18}}
               />
             </Item>
-          </View>
+          </ScrollView>
           <View style={classes.header}>
             <Text style={classes.headname}>Class Name</Text>
             <Text style={classes.headlevel}>Level</Text>

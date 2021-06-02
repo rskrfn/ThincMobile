@@ -8,7 +8,7 @@ import MyClassMember from '../../../components/activity/member/MyClassMember';
 // import MyClassFacilitator from '../../../components/activity/facilitator/MyClassFacilitator';
 
 function MyClass({...props}) {
-  let role = props.loginReducers.user.data.data.role;
+  let role = props.loginReducers.user?.data.role;
   return (
     <>
       <StatusBar

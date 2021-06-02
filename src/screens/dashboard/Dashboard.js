@@ -23,11 +23,11 @@ import ForYou from '../../components/dashboard/foryou/ForYou';
 
 const Dashboard = props => {
   const notifActive = true;
-  const name = props.loginReducers.user.data?.data.name;
+  const name = props.loginReducers.user.data?.name || 'User';
   // let role = props.loginReducers.user.data.data.role;
   const [activeTab, setActive] = React.useState(0);
   const tabList = ['All Schedule', 'For You'];
-  // console.log(props.loginReducers.user.data);
+  console.log(props.loginReducers.user.data);
 
   const [registerToken, setRegisterToken] = useState('');
   const [fcmRegistered, setFcmRegistered] = useState(false);

@@ -16,8 +16,8 @@ import classes from './Style';
 import {connect} from 'react-redux';
 
 const ChangePassword = props => {
-  const TOKEN = props.loginReducers.user?.data.token;
-  const userId = props.loginReducers.user?.data.data.id;
+  const TOKEN = props.loginReducers.user?.token;
+  const userId = props.loginReducers.user?.data.id;
   const [password, setPassword] = useState();
   const [repeat, setRepeat] = useState();
   const [eye, setEye] = useState({

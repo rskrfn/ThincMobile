@@ -16,8 +16,8 @@ import classes from './Styles';
 
 const Phone = props => {
   const [phone, setPhone] = useState('');
-  const TOKEN = props.loginReducers.user?.data.token;
-  const userId = props.loginReducers.user?.data.data.id;
+  const TOKEN = props.loginReducers.user?.token;
+  const userId = props.loginReducers.user?.data.id;
   let userPhone = props.route.params.phone;
   // console.log(props.route.params.phone);
   const FormData = require('form-data');

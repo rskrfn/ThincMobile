@@ -10,7 +10,7 @@ import {
   RefreshControl,
   Modal,
 } from 'react-native';
-import {connect} from 'react-redux';
+import {connect, useDispatch} from 'react-redux';
 import axios from 'axios';
 import {API_URL} from '@env';
 import classes from './Styles';
@@ -30,10 +30,11 @@ import EditModal from '../../components/profile/editprofile/EditProfile';
 
 const Profile = props => {
   // const TOKEN = props.loginReducers.user?.data.token;
-  let userData = props.loginReducers.user.data?.data;
+  let userData = props.loginReducers.user.data;
   const [profile, setProfile] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [profileModal, setProfileModal] = useState(false);
+  const dispatch = useDispatch();
 
   const getProfile = () => {
     let config = {
@@ -75,6 +76,7 @@ const Profile = props => {
       update;
     };
   }, [props.navigation]);
+
   return (
     <View style={classes.maincontainer}>
       <StatusBar
@@ -92,7 +94,6 @@ const Profile = props => {
           />
         </View>
       </Modal>
-
       <View style={classes.container}>
         <View style={classes.headercontainer}>
           <View style={classes.header}>
@@ -201,7 +202,14 @@ const Profile = props => {
           </View>
           <View style={classes.menusection}>
             <Text style={classes.textsection}>Help</Text>
-            <TouchableOpacity style={classes.submenus}>
+            <TouchableOpacity
+              style={classes.submenus}
+              onPress={() => {
+                dispatch({
+                  type: 'LOGIN_SUCCESS',
+                  payload: {data: {data: {...userData, name: 'Riski Arifani'}}},
+                });
+              }}>
               <View style={classes.menuitem}>
                 <Image style={classes.settingicon} source={iconFAQ} />
                 <Text style={classes.textsetting}>F.A.Q</Text>
