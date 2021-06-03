@@ -8,7 +8,6 @@ import {
   ScrollView,
   TextInput,
   TouchableOpacity,
-  LogBox,
   SafeAreaView,
   Alert,
 } from 'react-native';
@@ -27,7 +26,7 @@ const Dashboard = props => {
   // let role = props.loginReducers.user.data.data.role;
   const [activeTab, setActive] = React.useState(0);
   const tabList = ['All Schedule', 'For You'];
-  console.log(props.loginReducers.user.data);
+  // console.log(props.loginReducers.user.data);
 
   const [registerToken, setRegisterToken] = useState('');
   const [fcmRegistered, setFcmRegistered] = useState(false);

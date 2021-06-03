@@ -110,7 +110,7 @@ const classes = StyleSheet.create({
   },
   searchInput: {
     fontFamily: 'Montserrat-Medium',
-    color: '#ADA9A9',
+    color: 'black',
     fontSize: 14,
   },
   btnSearch: {

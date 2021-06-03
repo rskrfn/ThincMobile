@@ -16,7 +16,7 @@ import {API_URL} from '@env';
 import classes from './Styles';
 import {logoutHandler} from '../../redux/Action/auth';
 import Material from 'react-native-vector-icons/MaterialIcons';
-import DP from '../../assets/images/profilepicture.jpg';
+import DP from '../../assets/images/profilepicture.png';
 import iconPhone from '../../assets/icons/icon_phone.png';
 import iconPassword from '../../assets/icons/icon_stars.png';
 import iconChat from '../../assets/icons/icon_chat.png';
@@ -76,7 +76,7 @@ const Profile = props => {
       update;
     };
   }, [props.navigation]);
-
+  console.log(profile);
   return (
     <View style={classes.maincontainer}>
       <StatusBar
@@ -88,6 +88,7 @@ const Profile = props => {
         <View style={classes.modalcontainer}>
           <EditModal
             getProfile={getProfile}
+            onRefresh={onRefresh}
             modalVisible={profileModal}
             setProfileModal={setProfileModal}
             ProfileData={profile}
@@ -99,7 +100,14 @@ const Profile = props => {
           <View style={classes.header}>
             <Text style={classes.title}>Profile</Text>
             <View style={classes.profileinfo}>
-              <Image style={classes.profilepicture} source={DP} />
+              <Image
+                style={classes.profilepicture}
+                source={
+                  profile.display_picture === null
+                    ? DP
+                    : {uri: `${API_URL}${profile.display_picture}`}
+                }
+              />
               <View style={classes.info}>
                 <Text style={classes.name}>
                   {profile.name ? profile.name : 'User name'}

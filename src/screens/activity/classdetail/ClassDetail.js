@@ -84,6 +84,7 @@ const ClassDetail = props => {
       return <Image style={classes.categoryIcon} source={scienceIcon} />;
     }
   }
+  // console.log(scoreData.length);
   return (
     <ScrollView style={classes.maincontainer}>
       <StatusBar
@@ -108,9 +109,11 @@ const ClassDetail = props => {
       </View>
       <View style={classes.container}>
         <View style={classes.btncontainer}>
-          <TouchableOpacity style={classes.btnregister}>
-            <Text style={classes.btntext}>Register</Text>
-          </TouchableOpacity>
+          {!scoreData.length ? (
+            <TouchableOpacity style={classes.btnregister}>
+              <Text style={classes.btntext}>Register</Text>
+            </TouchableOpacity>
+          ) : null}
         </View>
         <View style={classes.courseinfo}>
           <View style={classes.categoryimgcontainer}>{CategoryIcon()}</View>
@@ -133,16 +136,22 @@ const ClassDetail = props => {
               </View>
             </View>
             <View style={classes.progresscontainer}>
-              <Text style={classes.textprogress}>{progress}% to complete</Text>
-              <Progress.Bar
-                style={classes.progressbar}
-                width={null}
-                progress={progress / 100}
-                color={'#5784BA'}
-                unfilledColor={'#C4C4C4'}
-                borderWidth={0}
-                height={8}
-              />
+              {scoreData.length > 0 ? (
+                <>
+                  <Text style={classes.textprogress}>
+                    {progress}% to complete
+                  </Text>
+                  <Progress.Bar
+                    style={classes.progressbar}
+                    width={null}
+                    progress={progress / 100}
+                    color={'#5784BA'}
+                    unfilledColor={'#C4C4C4'}
+                    borderWidth={0}
+                    height={8}
+                  />
+                </>
+              ) : null}
             </View>
           </View>
         </View>

@@ -26,13 +26,16 @@ import NotifService from '../../../../NotifService';
 function Member({...props}) {
   const [myClass, setMyClass] = useState();
   const [newClass, setNewClass] = useState([]);
-  const [selectedCategory, setCategory] = useState(null);
-  const [selectedLevel, setLevel] = useState(null);
-  const [selectedPrice, setPrice] = useState(null);
-  const [selectedSort, setSort] = useState(null);
+  let [searchvalue, setSearch] = useState('');
+  let [selectedCategory, setCategory] = useState(null);
+  let [selectedLevel, setLevel] = useState(null);
+  let [selectedPrice, setPrice] = useState(null);
+  let [selectedSort, setSort] = useState(null);
   const [refreshing, setRefreshing] = React.useState(false);
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const [totalPage, setTotalPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
+  const [prev, setPrev] = useState(null);
+  const [next, setNext] = useState(null);
   const userId = props.loginReducer.user.data?.id;
   const TOKEN = props.loginReducer.user.data?.token;
   // console.log(userId);
@@ -76,15 +79,24 @@ function Member({...props}) {
   const getNewClass = () => {
     let config = {
       method: 'GET',
-      url: `${API_URL}/courses/newclass`,
-      params: {id: userId},
+      url: `${API_URL}/courses/all`,
+      params: {
+        userid: userId,
+        search: searchvalue,
+        sort: selectedSort,
+        category: selectedCategory,
+        level: selectedLevel,
+        price: selectedPrice,
+        page: currentPage,
+      },
     };
     axios(config)
       .then(res => {
-        // console.log(res);
-        setNewClass(res.data.data);
-        // setCurrentPage(res.data.data.info.page);
-        // setTotalPage(res.data.data.info.totalPage);
+        console.log(res);
+        setNewClass(res.data.data.result);
+        setTotalPage(res.data.data.info.totalPage);
+        setPrev(res.data.data.info.prev);
+        setNext(res.data.data.info.next);
       })
       .catch(err => console.log({err}));
   };
@@ -95,6 +107,15 @@ function Member({...props}) {
       setMyClass('');
       setNewClass('');
       await getMyClass();
+      await getNewClass();
+      setRefreshing(false);
+    } catch (err) {}
+  }, []);
+
+  const filterHandler = React.useCallback(async () => {
+    try {
+      setRefreshing(true);
+      setNewClass('');
       await getNewClass();
       setRefreshing(false);
     } catch (err) {}
@@ -146,6 +167,7 @@ function Member({...props}) {
     getMyClass();
     getNewClass();
   }, []);
+  console.log(searchvalue);
   return (
     <ScrollView
       nestedScrollEnabled
@@ -239,9 +261,39 @@ function Member({...props}) {
                   placeholder="Quick search"
                   placeholderTextColor="#ADA9A9"
                   style={classes.searchInput}
+                  value={searchvalue}
+                  onChangeText={value => {
+                    console.log(value);
+                    setSearch(value);
+                  }}
                 />
               </Item>
-              <Button style={classes.btnSearch}>
+              <Button
+                style={classes.btnSearch}
+                onPress={() => {
+                  let config = {
+                    method: 'GET',
+                    url: `${API_URL}/courses/all`,
+                    params: {
+                      userid: userId,
+                      search: searchvalue,
+                      sort: selectedSort,
+                      category: selectedCategory,
+                      level: selectedLevel,
+                      price: selectedPrice,
+                      page: currentPage,
+                    },
+                  };
+                  axios(config)
+                    .then(res => {
+                      console.log(res);
+                      setNewClass(res.data.data.result);
+                      setTotalPage(res.data.data.info.totalPage);
+                      setPrev(res.data.data.info.prev);
+                      setNext(res.data.data.info.next);
+                    })
+                    .catch(err => console.log({err}));
+                }}>
                 <Text
                   style={{
                     color: 'white',
@@ -258,7 +310,32 @@ function Member({...props}) {
             horizontal
             style={classes.filterSection}
             showsHorizontalScrollIndicator={false}>
-            <TouchableOpacity style={classes.filterbtn}>
+            <TouchableOpacity
+              style={classes.filterbtn}
+              onPress={() => {
+                let config = {
+                  method: 'GET',
+                  url: `${API_URL}/courses/all`,
+                  params: {
+                    userid: userId,
+                    search: searchvalue,
+                    sort: selectedSort,
+                    category: selectedCategory,
+                    level: selectedLevel,
+                    price: selectedPrice,
+                    page: currentPage,
+                  },
+                };
+                axios(config)
+                  .then(res => {
+                    console.log(res);
+                    setNewClass(res.data.data.result);
+                    setTotalPage(res.data.data.info.totalPage);
+                    setPrev(res.data.data.info.prev);
+                    setNext(res.data.data.info.next);
+                  })
+                  .catch(err => console.log({err}));
+              }}>
               <Text style={classes.filterbtntext}>Filter</Text>
             </TouchableOpacity>
             <Item picker style={{width: 100, overflow: 'hidden'}}>
@@ -274,22 +351,22 @@ function Member({...props}) {
                 />
                 <Picker.Item
                   label="Software"
-                  value="software"
+                  value="Software"
                   style={classes.pickeritem}
                 />
                 <Picker.Item
                   label="History"
-                  value="history"
+                  value="History"
                   style={classes.pickeritem}
                 />
                 <Picker.Item
                   label="Psychology"
-                  value="psychology"
+                  value="Psychology"
                   style={classes.pickeritem}
                 />
                 <Picker.Item
                   label="Finance"
-                  value="finance"
+                  value="Finance"
                   style={classes.pickeritem}
                 />
               </Picker>
@@ -312,17 +389,17 @@ function Member({...props}) {
                 />
                 <Picker.Item
                   label="Beginner"
-                  value="beginner"
+                  value="Beginner"
                   style={classes.pickeritem}
                 />
                 <Picker.Item
                   label="Intermediate"
-                  value="intermediate"
+                  value="Intermediate"
                   style={classes.pickeritem}
                 />
                 <Picker.Item
                   label="Advance"
-                  value="advance"
+                  value="Advance"
                   style={classes.pickeritem}
                 />
               </Picker>
@@ -345,7 +422,7 @@ function Member({...props}) {
                 />
                 <Picker.Item
                   label="Free"
-                  value="free"
+                  value="0"
                   style={classes.pickeritem}
                 />
                 <Picker.Item
@@ -437,8 +514,8 @@ function Member({...props}) {
                             ...item,
                           });
                         }}>
-                        {item.Name && item.Name.length > 30
-                          ? item.Name.slice(0, 30) + '...'
+                        {item.Name && item.Name.length > 25
+                          ? item.Name.slice(0, 25) + '...'
                           : item.Name}
                       </Text>
                       <Text style={classes.newlevel}>{item.Level}</Text>

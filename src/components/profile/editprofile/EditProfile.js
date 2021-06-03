@@ -2,7 +2,6 @@ import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
   Text,
-  Modal,
   TouchableOpacity,
   Animated,
   Image,
@@ -10,19 +9,22 @@ import {
   ImageBackground,
   Alert,
 } from 'react-native';
-import ImagePicker from 'react-native-image-crop-picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {Toast} from 'native-base';
 import axios from 'axios';
 import {API_URL} from '@env';
 import {connect} from 'react-redux';
 import classes from './Styles';
-import DP from '../../../assets/images/profilepicture.jpg';
+// import DP from '../../../assets/images/profilepicture.jpg';
 import LinearGradient from 'react-native-linear-gradient';
 
 const EditProfile = props => {
   const TOKEN = props.loginReducers.user?.token;
   const userId = props.loginReducers.user?.data.id;
-  const [dp, setdp] = useState();
+  const [dp, setdp] = useState(
+    `${API_URL}${props.ProfileData.display_picture}`,
+  );
+  const [file, setFile] = useState();
   const [fullName, setFullName] = useState(props.ProfileData.name);
   const [nameEditable, setNameEditable] = useState(false);
   const [phone, setPhone] = useState(props.ProfileData.phone);
@@ -59,37 +61,64 @@ const EditProfile = props => {
   };
 
   const useCamera = () => {
-    ImagePicker.openCamera({
-      width: 400,
-      height: 400,
-      cropping: true,
-    })
-      .then(image => {
-        console.log(image);
-        setdp(image.path);
-      })
-      .catch(err => {
-        if (err.code === 'E_PICKER_CANCELLED') {
-          return Alert.alert('Action Canceled', 'No photo submitted');
-        }
-      });
+    launchCamera(
+      {
+        mediaType: 'photo',
+        includeBase64: false,
+        maxHeight: 400,
+        maxWidth: 400,
+      },
+      result => {
+        setFile(result.assets[0]);
+        setdp(file.uri);
+      },
+    );
   };
   const useGallery = () => {
-    ImagePicker.openPicker({
-      width: 400,
-      height: 400,
-      cropping: true,
-    })
-      .then(image => {
-        console.log(image);
-        setdp(image.path);
+    launchImageLibrary(
+      {
+        mediaType: 'photo',
+        includeBase64: false,
+        maxHeight: 400,
+        maxWidth: 400,
+      },
+      result => {
+        setFile(result.assets[0]);
+        setdp(result.assets[0].uri);
+      },
+    );
+  };
+  function submitHandler() {
+    if (props.ProfileData.name !== fullName) {
+      data.append('name', fullName);
+    }
+    if (props.ProfileData.phone !== phone) {
+      data.append('phone', phone);
+    }
+    if (file) {
+      data.append('image', {
+        uri: file.uri,
+        name: file.fileName,
+        type: file.type,
+      });
+    }
+    axios(config)
+      .then(res => {
+        console.log(res);
+        if (res.data.message === 'Data Changed') {
+          Toast.show({
+            text: 'Success',
+            type: 'success',
+            textStyle: {textAlign: 'center'},
+            duration: 3000,
+          });
+          props.getProfile();
+        }
       })
       .catch(err => {
-        if (err.code === 'E_PICKER_CANCELLED') {
-          return Alert.alert('Action Canceled', 'No photo submitted');
-        }
+        console.log(err);
       });
-  };
+  }
   React.useEffect(() => {
     swipeIn();
   }, []);
@@ -162,7 +191,10 @@ const EditProfile = props => {
       );
     }
   }
-  console.log(props);
+
+  // console.log(data);
+  // console.log(dp);
+  // console.log(props);
   return (
     <Animated.ScrollView
       showsVerticalScrollIndicator={false}
@@ -228,7 +260,7 @@ const EditProfile = props => {
           <TouchableOpacity
             style={classes.input}
             onLongPress={() => {
-              setNameEditable(true);
+              setPhoneEditable(true);
             }}>
             <LinearGradient
               locations={[0.5, 0.5]}
@@ -265,6 +297,7 @@ const EditProfile = props => {
           <TouchableOpacity
             style={classes.btnprimary}
             onPress={async () => {
+              await submitHandler();
               swipeOut();
             }}>
             <Text style={classes.btntextprimary}>Save</Text>
