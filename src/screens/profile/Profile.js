@@ -17,7 +17,6 @@ import classes from './Styles';
 import {logoutHandler} from '../../redux/Action/auth';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import DP from '../../assets/images/profilepicture.png';
-import iconPhone from '../../assets/icons/icon_phone.png';
 import iconPassword from '../../assets/icons/icon_stars.png';
 import iconChat from '../../assets/icons/icon_chat.png';
 import iconNotif from '../../assets/icons/icon_notif.png';

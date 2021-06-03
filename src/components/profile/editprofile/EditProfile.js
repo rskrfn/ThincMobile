@@ -1,10 +1,11 @@
-import React, {useEffect, useRef, useState} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-native/no-inline-styles */
+import React, {useRef, useState} from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   Animated,
-  Image,
   TextInput,
   ImageBackground,
   Alert,
@@ -212,15 +213,11 @@ const EditProfile = props => {
       style={[classes.modalcontainer, {translateX: fadeAnim}]}>
       <View style={classes.container}>
         <Text style={classes.header}>Edit Profile</Text>
-        {dp ? (
-          <ImageBackground
-            imageStyle={{borderRadius: 100}}
-            style={classes.profilepicture}
-            source={{uri: dp}}
-          />
-        ) : (
-          <Image style={classes.profilepicture} source={DP} />
-        )}
+        <ImageBackground
+          imageStyle={{borderRadius: 100}}
+          style={classes.profilepicture}
+          source={{uri: dp}}
+        />
         <View style={classes.btngroup}>
           <View style={classes.btncontainer}>
             <TouchableOpacity style={classes.btnprimary} onPress={useCamera}>
