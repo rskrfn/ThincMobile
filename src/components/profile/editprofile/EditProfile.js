@@ -69,8 +69,13 @@ const EditProfile = props => {
         maxWidth: 400,
       },
       result => {
-        setFile(result.assets[0]);
-        setdp(file.uri);
+        if (result.didCancel) {
+          return Alert.alert('Action Canceled', 'No image selected', [
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ]);
+        }
+        setFile(result?.assets[0]);
+        setdp(result?.assets[0].uri);
       },
     );
   };
@@ -83,8 +88,13 @@ const EditProfile = props => {
         maxWidth: 400,
       },
       result => {
-        setFile(result.assets[0]);
-        setdp(result.assets[0].uri);
+        if (result.didCancel) {
+          return Alert.alert('Action Canceled', 'No image selected', [
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ]);
+        }
+        setFile(result?.assets[0]);
+        setdp(result?.assets[0].uri);
       },
     );
   };
