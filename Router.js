@@ -16,6 +16,7 @@ import Activity from './src/screens/activity/Activity';
 import MyClass from './src/screens/activity/myclass/MyClass';
 import ClassDetail from './src/screens/activity/classdetail/ClassDetail';
 import Chat from './src/screens/chat/Chat';
+import ChatRoom from './src/components/chat/ChatRoom';
 import Profile from './src/screens/profile/Profile';
 import Phone from './src/components/profile/phone/Phone';
 import ChangePassword from './src/components/profile/password/ChangePassword';
@@ -47,6 +48,18 @@ function ProfileNavigation() {
       <Stack.Screen name="ProfileMain" component={Profile} />
       <Stack.Screen name="Phone" component={Phone} />
       <Stack.Screen name="ChangePassword" component={ChangePassword} />
+    </Stack.Navigator>
+  );
+}
+
+function ChatNavigation() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}>
+      <Stack.Screen name="ChatMain" component={Chat} />
+      <Stack.Screen name="ChatRoom" component={ChatRoom} />
     </Stack.Navigator>
   );
 }
@@ -93,7 +106,7 @@ function AuthNavigation() {
       }}>
       <Tab.Screen name="Dashboard" component={Dashboard} />
       <Tab.Screen name="Activity" component={ActivityNavigation} />
-      <Tab.Screen name="Chat" component={Chat} />
+      <Tab.Screen name="Chat" component={ChatNavigation} />
       <Tab.Screen name="Profile" component={ProfileNavigation} />
     </Tab.Navigator>
   );

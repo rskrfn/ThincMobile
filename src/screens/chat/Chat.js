@@ -1,13 +1,59 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
-import {View, Text, TextInput, Modal, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  Modal,
+  Image,
+  TouchableOpacity,
+  SafeAreaView,
+  StatusBar,
+  FlatList,
+} from 'react-native';
+import {connect} from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import classes from './Styles';
+import axios from 'axios';
+import {API_URL} from '@env';
+import DP from '../../assets/images/profilepicture.png';
 
-const Chat = () => {
+const Chat = props => {
+  let userData = props.loginReducers.user?.data;
   const [modalVisible, setModalVisible] = useState(false);
   const [userName, setUserName] = useState('');
+  const [userList, setUserList] = useState([]);
+  const getUsers = () => {
+    let config = {
+      method: 'GET',
+      url: `${API_URL}/chat/user`,
+      params: {id: userData.id},
+    };
+    axios(config)
+      .then(res => {
+        console.log(res.data.data);
+        if (res.data.data.length > 0) {
+          setUserList(res.data.data);
+        }
+      })
+      .catch(err => console.log(err));
+  };
+  useEffect(() => {
+    const update = props.navigation.addListener('focus', () => {
+      getUsers();
+    });
+    return () => {
+      update;
+    };
+  }, [props.navigation]);
+  // console.log(userData);
   return (
     <View style={classes.container}>
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="light-content"
+      />
       <Modal visible={modalVisible}>
         <View style={classes.modalcontainer}>
           <Text style={classes.modalheader}>Add Chat</Text>
@@ -65,8 +111,58 @@ const Chat = () => {
           />
         </View>
       </View>
+      {userList ? (
+        <SafeAreaView
+          style={{flex: 1, paddingHorizontal: 8, paddingVertical: 8}}>
+          <FlatList
+            data={userList}
+            keyExtractor={(item, index) => {
+              return index.toString();
+            }}
+            renderItem={({item}) => {
+              return (
+                <>
+                  <View style={classes.maincontainer}>
+                    <TouchableOpacity
+                      style={classes.content}
+                      onPress={() => {
+                        props.navigation.navigate('ChatRoom', {...item});
+                      }}>
+                      <View style={classes.leftcontent}>
+                        <Image
+                          style={classes.image}
+                          source={
+                            item.display_picture === null
+                              ? DP
+                              : {uri: `${API_URL}${item.display_picture}`}
+                          }
+                        />
+                        <View>
+                          <Text style={classes.name}>{item.name}</Text>
+                          <Text style={classes.lastmessage}>
+                            *Last Message*
+                          </Text>
+                        </View>
+                      </View>
+                      <View>
+                        <Text style={classes.timestamp}>*timestamp*</Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                </>
+              );
+            }}
+          />
+        </SafeAreaView>
+      ) : (
+        <Text>Not Found</Text>
+      )}
     </View>
   );
 };
+const mapStateToProps = state => ({
+  loginReducers: state.loginReducers,
+});
 
-export default Chat;
+const connectedChat = connect(mapStateToProps)(Chat);
+export default connectedChat;

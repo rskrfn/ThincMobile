@@ -4,28 +4,28 @@ import {getStatusBarHeight} from 'react-native-status-bar-height';
 const statusBarHeight = getStatusBarHeight();
 
 const classes = StyleSheet.create({
-  container: {
-    backgroundColor: '#E6EDF6',
+  maincontainer: {
+    backgroundColor: 'white',
     flex: 1,
   },
   header: {
     paddingTop: statusBarHeight + 16,
-    backgroundColor: '#5784BA',
-    paddingHorizontal: 16,
-    borderBottomStartRadius: 20,
-    borderBottomEndRadius: 20,
+    paddingHorizontal: 32,
+    borderBottomStartRadius: 24,
+    borderBottomEndRadius: 24,
     paddingBottom: 24,
+    backgroundColor: '#5784BA',
   },
   infosection: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
-  title: {
+  headertext: {
     fontFamily: 'Kanit-Medium',
-    fontSize: 28,
     color: 'white',
-  },
-  maincontent: {
-    paddingHorizontal: 8,
+    fontSize: 24,
+    marginLeft: 16,
   },
 });
+
 export default classes;

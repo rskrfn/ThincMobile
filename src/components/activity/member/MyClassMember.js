@@ -8,10 +8,11 @@ import ProgressCircle from 'react-native-progress-circle';
 import axios from 'axios';
 import {API_URL} from '@env';
 import {connect} from 'react-redux';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 function MyClassMember({...props}) {
   const [myClass, setMyClass] = useState();
-  const userId = props.loginReducer.user.data?.data.id;
+  const userId = props.loginReducer.user.data?.id;
   useEffect(() => {}, []);
 
   const getMyClass = () => {
@@ -68,7 +69,7 @@ function MyClassMember({...props}) {
             renderItem={({item}) => {
               return (
                 <View style={classes.myclass}>
-                  <Text
+                  <TouchableOpacity
                     style={classes.tableclassname}
                     onPress={() =>
                       props.navigation.navigate('ClassDetail', {
@@ -76,7 +77,7 @@ function MyClassMember({...props}) {
                       })
                     }>
                     {item.Name}
-                  </Text>
+                  </TouchableOpacity>
                   <View style={classes.tableprogress}>
                     <ProgressCircle
                       percent={70}

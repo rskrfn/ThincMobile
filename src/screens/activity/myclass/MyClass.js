@@ -33,7 +33,7 @@ function MyClass({...props}) {
             </Text>
           </View>
         </View>
-        <ScrollView>
+        <ScrollView style={classes.maincontent}>
           {role === 'Member' ? (
             <MyClassMember navigation={props.navigation} />
           ) : null}

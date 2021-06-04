@@ -5,7 +5,7 @@ const statusBarHeight = getStatusBarHeight();
 
 const classes = StyleSheet.create({
   container: {
-    backgroundColor: '#E6EDF6',
+    backgroundColor: 'white',
     flex: 1,
   },
   modalcontainer: {
@@ -114,11 +114,6 @@ const classes = StyleSheet.create({
     color: 'white',
     fontSize: 32,
   },
-  name: {
-    color: 'white',
-    fontFamily: 'Kanit-Medium',
-    fontSize: 28,
-  },
   searchsection: {
     alignItems: 'center',
     flexDirection: 'row',
@@ -134,38 +129,40 @@ const classes = StyleSheet.create({
     color: '#010620',
     fontSize: 16,
   },
-  info: {
-    marginLeft: 33,
+  maincontainer: {
+    flex: 1,
+
+    paddingVertical: 8,
   },
-  schedule: {
-    width: '100%',
-    padding: 18,
-    backgroundColor: 'white',
-  },
-  uppersection: {
-    flexDirection: 'row',
+  content: {
+    alignItems: 'center',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  myclass: {
-    fontFamily: 'Kanit-Regular',
-    fontSize: 21,
-    color: '#010620',
-  },
-  date: {
-    fontFamily: 'Roboto-Regular',
-    color: '#4D505B',
-  },
-  bottomsection: {
     flexDirection: 'row',
-    textAlign: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 8,
   },
-  tabItem: {
-    marginHorizontal: 8,
+  leftcontent: {
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  image: {
+    width: 60,
+    height: 60,
+    borderRadius: 1000,
+    marginRight: 16,
+  },
+  name: {
+    fontFamily: 'Kanit-Regular',
+    color: 'rgba(0, 0, 0, 1)',
+    fontSize: 16,
+  },
+  lastmessage: {
+    fontFamily: 'Kanit-Regular',
+    color: 'rgba(120, 120, 120, 1)',
+    fontSize: 12,
+  },
+  timestamp: {
+    fontFamily: 'Kanit-Regular',
+    color: 'rgba(120, 120, 120, 1)',
+    fontSize: 12,
   },
 });
 
