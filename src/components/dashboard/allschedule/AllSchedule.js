@@ -27,9 +27,20 @@ const AllSchedule = () => {
     },
   ];
   return (
-    <View>
-      <Text>All Schedule</Text>
-    </View>
+    <Timeline
+      nestedScrollEnabled={true}
+      data={data}
+      circleSize={16}
+      circleColor="#5784BA"
+      lineColor="#5784BA"
+      renderFullLine
+      innerCircle={'dot'}
+      style={classes.list}
+      separator
+      titleStyle={classes.title}
+      timeStyle={classes.time}
+      eventDetailStyle={classes.event}
+    />
   );
 };
 

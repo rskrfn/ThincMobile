@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   RefreshControl,
   Modal,
+  Alert,
 } from 'react-native';
 import {connect, useDispatch} from 'react-redux';
 import axios from 'axios';
@@ -63,7 +64,7 @@ const Profile = props => {
     } catch (err) {}
   }, []);
 
-  const onClick = () => {
+  const onLogout = () => {
     props.onLogoutHandler();
   };
 
@@ -227,7 +228,22 @@ const Profile = props => {
                 color={'rgba(1, 6, 32, 0.75)'}
               />
             </TouchableOpacity>
-            <TouchableOpacity style={classes.submenus} onPress={onClick}>
+            <TouchableOpacity
+              style={classes.submenus}
+              onPress={() => {
+                Alert.alert('Hold on!', 'Are you sure to logout?', [
+                  {
+                    text: 'OK',
+                    onPress: () => onLogout(),
+                  },
+                  {
+                    text: 'CANCEL',
+                    onPress: () => {
+                      return;
+                    },
+                  },
+                ]);
+              }}>
               <View style={classes.menuitem}>
                 <Image style={classes.settingicon} source={iconLogout} />
                 <Text style={classes.textsetting}>Logout</Text>

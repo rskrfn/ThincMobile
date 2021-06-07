@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Alert,
+  LogBox,
 } from 'react-native';
 import NotifService from '../../../NotifService';
 import {connect} from 'react-redux';
@@ -47,6 +48,7 @@ const Dashboard = props => {
   };
 
   useEffect(() => {
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     if (props.loginReducers.isLogin === true) {
       notif.localNotif('', `Welcome back, ${name.split(' ')[0]}`);
     }

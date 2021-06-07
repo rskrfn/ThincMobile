@@ -201,21 +201,6 @@ const classes = StyleSheet.create({
     fontSize: 13,
     color: 'white',
   },
-  loadMore: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginVertical: 12,
-  },
-  load: {
-    alignSelf: 'center',
-    marginTop: 16,
-    color: '#ADA9A9',
-  },
-  loadarrow: {
-    alignSelf: 'center',
-    marginTop: -6,
-  },
   servererror: {
     padding: 8,
   },
@@ -224,6 +209,12 @@ const classes = StyleSheet.create({
     fontFamily: 'Kanit-Regular',
     color: 'red',
     borderRadius: 20,
+  },
+  loading: {
+    textAlign: 'center',
+    fontFamily: 'Kanit-Regular',
+    color: '#5784BA',
+    fontSize: 15,
   },
   pagination: {
     flexDirection: 'row',

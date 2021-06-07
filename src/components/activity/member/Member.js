@@ -25,7 +25,9 @@ import NotifService from '../../../../NotifService';
 
 function Member({...props}) {
   const [myClass, setMyClass] = useState();
+  const [myclassLoad, setMyclassload] = useState(false);
   const [newClass, setNewClass] = useState([]);
+  const [newclassLoad, setNewclassload] = useState(false);
   let [searchvalue, setSearch] = useState('');
   let [selectedCategory, setCategory] = useState(null);
   let [selectedLevel, setLevel] = useState(null);
@@ -36,7 +38,7 @@ function Member({...props}) {
   const [currentPage, setCurrentPage] = useState(1);
   const userId = props.loginReducer.user.data?.id;
   const TOKEN = props.loginReducer.user?.token;
-  console.log(props);
+  // console.log(props);
 
   const [registerToken, setRegisterToken] = useState('');
   const [fcmRegistered, setFcmRegistered] = useState(false);
@@ -57,6 +59,7 @@ function Member({...props}) {
   // };
 
   const getMyClass = () => {
+    setMyclassload(true);
     let config = {
       method: 'GET',
       url: `${API_URL}/courses/myclass`,
@@ -67,14 +70,26 @@ function Member({...props}) {
         // console.log(res);
         if (res.data.data.length > 0) {
           setMyClass(res.data.data);
+          setMyclassload(false);
         } else {
           setMyClass('');
+          setMyclassload(false);
         }
       })
-      .catch(() => setMyClass());
+      .catch(err => {
+        console.log({err});
+        if (err.response.data.message === 'No Data') {
+          setMyClass(false);
+          setMyclassload(false);
+        } else {
+          setMyClass(null);
+          setMyclassload(false);
+        }
+      });
   };
 
   const getNewClass = () => {
+    setNewclassload(true);
     let config = {
       method: 'GET',
       url: `${API_URL}/courses/all`,
@@ -90,11 +105,15 @@ function Member({...props}) {
     };
     axios(config)
       .then(res => {
-        console.log(res);
         setNewClass(res.data.data.result);
         setInfo(res.data.data.info);
+        setNewclassload(false);
       })
-      .catch(err => console.log({err}));
+      .catch(err => {
+        setCurrentPage(1);
+        setNewClass(null);
+        setNewclassload(false);
+      });
   };
 
   const onRefresh = React.useCallback(async () => {
@@ -104,18 +123,17 @@ function Member({...props}) {
       setNewClass('');
       await getMyClass();
       await getNewClass();
+      setCurrentPage(1);
+      setCategory(null);
+      setLevel(null);
+      setPrice(null);
+      setSort(null);
+      setSearch('');
       setRefreshing(false);
-    } catch (err) {}
+    } catch (err) {
+      console.log({err});
+    }
   }, []);
-
-  // const filterHandler = React.useCallback(async () => {
-  //   try {
-  //     setRefreshing(true);
-  //     setNewClass('');
-  //     await getNewClass();
-  //     setRefreshing(false);
-  //   } catch (err) {}
-  // }, []);
 
   const setColor = score => {
     if (myClass) {
@@ -147,10 +165,6 @@ function Member({...props}) {
             onRefresh();
             return notif.localNotif('', `Successfully register on ${name}`);
           }
-          // console.log(res);
-          // setNewClass(res.data.data);
-          // setCurrentPage(res.data.data.info.page);
-          // setTotalPage(res.data.data.info.totalPage);
         })
         .catch(err => console.log({err}));
     } catch (err) {
@@ -190,7 +204,7 @@ function Member({...props}) {
   useEffect(() => {
     getNewClass();
   }, [currentPage]);
-  console.log(currentPage);
+  // console.log(currentPage);
   return (
     <ScrollView
       nestedScrollEnabled
@@ -205,62 +219,72 @@ function Member({...props}) {
           <Text style={classes.headprogress}>Progress</Text>
           <Text style={classes.headscore}>Score</Text>
         </View>
-        {myClass ? (
-          <SafeAreaView style={classes.maincontainer}>
-            <FlatList
-              nestedScrollEnabled
-              scrollEnabled={false}
-              data={myClass.slice(0, 3)}
-              keyExtractor={(item, index) => {
-                return index.toString();
-              }}
-              renderItem={({item}) => {
-                return (
-                  <TouchableOpacity
-                    style={classes.myclass}
-                    onPress={() => {
-                      props.navigation.navigate('ClassDetail', {
-                        ...item,
-                      });
-                    }}>
-                    <Text style={classes.tableclassname}>{item.Name}</Text>
-                    <View style={classes.tableprogress}>
-                      <ProgressCircle
-                        percent={70}
-                        radius={20}
-                        borderWidth={2.8}
-                        color="#5784BA"
-                        shadowColor="#E5E6EB"
-                        bgColor="#fff">
-                        <Text style={classes.textprogress}>{70 + '%'}</Text>
-                      </ProgressCircle>
-                    </View>
-                    <Text
-                      style={{
-                        ...classes.tablescore,
-                        color: setColor(90),
+        {myclassLoad === false ? (
+          myClass ? (
+            <SafeAreaView style={classes.maincontainer}>
+              <FlatList
+                nestedScrollEnabled
+                scrollEnabled={false}
+                data={myClass.slice(0, 3)}
+                keyExtractor={(item, index) => {
+                  return index.toString();
+                }}
+                renderItem={({item}) => {
+                  return (
+                    <TouchableOpacity
+                      style={classes.myclass}
+                      onPress={() => {
+                        props.navigation.navigate('ClassDetail', {
+                          ...item,
+                        });
                       }}>
-                      {90 || null}
-                    </Text>
-                    <MaterialIcons
-                      name="more-vert"
-                      color="#D2DEED"
-                      size={32}
-                      style={{
-                        position: 'absolute',
-                        right: 1,
-                      }}
-                    />
-                  </TouchableOpacity>
-                );
-              }}
-            />
-          </SafeAreaView>
+                      <Text style={classes.tableclassname}>{item.Name}</Text>
+                      <View style={classes.tableprogress}>
+                        <ProgressCircle
+                          percent={70}
+                          radius={20}
+                          borderWidth={2.8}
+                          color="#5784BA"
+                          shadowColor="#E5E6EB"
+                          bgColor="#fff">
+                          <Text style={classes.textprogress}>{70 + '%'}</Text>
+                        </ProgressCircle>
+                      </View>
+                      <Text
+                        style={{
+                          ...classes.tablescore,
+                          color: setColor(90),
+                        }}>
+                        {90 || null}
+                      </Text>
+                      <MaterialIcons
+                        name="more-vert"
+                        color="#D2DEED"
+                        size={32}
+                        style={{
+                          position: 'absolute',
+                          right: 1,
+                        }}
+                      />
+                    </TouchableOpacity>
+                  );
+                }}
+              />
+            </SafeAreaView>
+          ) : myClass === false ? (
+            <View style={classes.servererror}>
+              <Text style={classes.loading}>
+                Seems you haven't registered into any course
+              </Text>
+            </View>
+          ) : (
+            <View style={classes.servererror}>
+              <Text style={classes.texterror}>404</Text>
+              <Text style={classes.texterror}>Server Error</Text>
+            </View>
+          )
         ) : (
-          <View style={classes.servererror}>
-            <Text style={classes.texterror}>404</Text>
-            <Text style={classes.texterror}>Server Error</Text>
-          </View>
+          <Text style={classes.loading}>Loading...</Text>
         )}
         <View style={classes.allmyclass}>
           <Text
@@ -286,7 +310,7 @@ function Member({...props}) {
                   style={classes.searchInput}
                   value={searchvalue}
                   onChangeText={value => {
-                    console.log(value);
+                    // console.log(value);
                     setSearch(value);
                   }}
                 />
@@ -453,26 +477,7 @@ function Member({...props}) {
           <Button
             style={classes.btnSearch}
             onPress={() => {
-              let config = {
-                method: 'GET',
-                url: `${API_URL}/courses/all`,
-                params: {
-                  userid: userId,
-                  search: searchvalue,
-                  sort: selectedSort,
-                  category: selectedCategory,
-                  level: selectedLevel,
-                  price: selectedPrice,
-                  page: currentPage,
-                },
-              };
-              axios(config)
-                .then(res => {
-                  console.log(res);
-                  setNewClass(res.data.data.result);
-                  setInfo(res.data.data.info);
-                })
-                .catch(err => console.log({err}));
+              getNewClass();
             }}>
             <Text
               style={{
@@ -490,67 +495,51 @@ function Member({...props}) {
             <Text style={classes.headprice}>Price</Text>
           </View>
           <View style={classes.newClassItems}>
-            {newClass ? (
-              <FlatList
-                scrollEnabled={false}
-                data={newClass}
-                keyExtractor={(item, index) => {
-                  return index.toString();
-                }}
-                renderItem={({item}) => {
-                  return (
-                    <TouchableOpacity
-                      style={classes.newClassItem}
-                      onPress={() => {
-                        props.navigation.navigate('ClassDetail', {
-                          ...item,
-                        });
-                      }}>
-                      <Text style={classes.newClassName}>
-                        {item.Name && item.Name.length > 25
-                          ? item.Name.slice(0, 25) + '...'
-                          : item.Name}
-                      </Text>
-                      <Text style={classes.newlevel}>{item.Level}</Text>
-                      <Text style={classes.newprice}>
-                        {item.Price === 0 ? 'Free' : '$' + item.Price}
-                      </Text>
+            {newclassLoad === false ? (
+              newClass !== null ? (
+                <FlatList
+                  scrollEnabled={false}
+                  data={newClass}
+                  keyExtractor={(item, index) => {
+                    return index.toString();
+                  }}
+                  renderItem={({item}) => {
+                    return (
                       <TouchableOpacity
-                        style={classes.newbtnregister}
+                        style={classes.newClassItem}
                         onPress={() => {
-                          onRegisterCourse(item.id, item.Name);
+                          props.navigation.navigate('ClassDetail', {
+                            ...item,
+                          });
                         }}>
-                        <Text style={classes.txtRegister}>Register</Text>
+                        <Text style={classes.newClassName}>
+                          {item.Name && item.Name.length > 25
+                            ? item.Name.slice(0, 25) + '...'
+                            : item.Name}
+                        </Text>
+                        <Text style={classes.newlevel}>{item.Level}</Text>
+                        <Text style={classes.newprice}>
+                          {item.Price === 0 ? 'Free' : '$' + item.Price}
+                        </Text>
+                        <TouchableOpacity
+                          style={classes.newbtnregister}
+                          onPress={() => {
+                            onRegisterCourse(item.id, item.Name);
+                          }}>
+                          <Text style={classes.txtRegister}>Register</Text>
+                        </TouchableOpacity>
                       </TouchableOpacity>
-                    </TouchableOpacity>
-                  );
-                }}
-                // ListFooterComponent={
-                //   currentPage < totalPage ? (
-                //     <View style={classes.loadMore}>
-                //       <TouchableOpacity
-                //         style={classes.btnLoadMore}
-                //         // onPress={() => {
-                //         //   setCurrentPage(currentPage);
-                //         // }}
-                //         >
-                //         <Text style={classes.load}>Expand</Text>
-                //         <MaterialIcons
-                //           name="expand-more"
-                //           color="#ADA9A9"
-                //           size={24}
-                //           style={classes.loadarrow}
-                //         />
-                //       </TouchableOpacity>
-                //     </View>
-                //   ) : null
-                // }
-              />
+                    );
+                  }}
+                />
+              ) : (
+                <View style={classes.servererror}>
+                  <Text style={classes.texterror}>404</Text>
+                  <Text style={classes.texterror}>Data Not Found</Text>
+                </View>
+              )
             ) : (
-              <View style={classes.servererror}>
-                <Text style={classes.texterror}>404</Text>
-                <Text style={classes.texterror}>Server Error</Text>
-              </View>
+              <Text style={classes.loading}>Loading...</Text>
             )}
           </View>
         </View>
@@ -563,7 +552,7 @@ function Member({...props}) {
             </Text>
             <Text style={classes.paginationinfo}>out of</Text>
             <Text style={classes.paginationinfo}>
-              {newClass ? ' ' + info?.count : 'null'}
+              {newClass ? ' ' + info?.count : ' ' + 0}
             </Text>
           </View>
           <View style={classes.rightpagination}>
