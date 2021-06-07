@@ -6,19 +6,18 @@ import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import storeWithPersistor from './src/redux/Store';
 import {Root} from 'native-base';
-// import RNBootSplash from 'react-native-bootsplash';
+import {SocketProvider} from './src/context/SocketProvider';
 
 const RouterRedux = () => {
-  // React.useEffect(() => {
-  //   RNBootSplash.hide({fade: true});
-  // }, []);
   return (
     <Root>
-      <Provider store={storeWithPersistor.store}>
-        <PersistGate loading={null} persistor={storeWithPersistor.persistor}>
-          <Router />
-        </PersistGate>
-      </Provider>
+      <SocketProvider>
+        <Provider store={storeWithPersistor.store}>
+          <PersistGate loading={null} persistor={storeWithPersistor.persistor}>
+            <Router />
+          </PersistGate>
+        </Provider>
+      </SocketProvider>
     </Root>
   );
 };

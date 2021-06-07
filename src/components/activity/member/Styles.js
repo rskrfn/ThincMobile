@@ -50,7 +50,6 @@ const classes = StyleSheet.create({
     shadowRadius: 10,
     elevation: 2,
   },
-
   tableclassname: {
     width: '55%',
     fontFamily: 'Montserrat-Medium',

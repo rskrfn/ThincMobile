@@ -43,16 +43,23 @@ const ClassDetail = props => {
     axios(config)
       .then(res => {
         // console.log(res);
-        if (res.data.data.length > 0) {
+        if (res.data.data.length !== 0) {
           setScoreData(res.data.data);
         } else {
+          setScoreData(null);
         }
       })
       .catch(() => {});
   };
   useEffect(() => {
-    getScore();
+    const update = props.navigation.addListener('focus', async () => {
+      await getScore();
+    });
+    return () => {
+      update;
+    };
   }, []);
+  // console.log('scoreasdata', scoreData);
   const menu = ['Information', 'Class Progress', 'Class Discussion'];
   const renderTabContent = () => {
     switch (index) {
@@ -84,6 +91,7 @@ const ClassDetail = props => {
       return <Image style={classes.categoryIcon} source={scienceIcon} />;
     }
   }
+
   // console.log(scoreData.length);
   return (
     <ScrollView style={classes.maincontainer}>
@@ -109,7 +117,7 @@ const ClassDetail = props => {
       </View>
       <View style={classes.container}>
         <View style={classes.btncontainer}>
-          {!scoreData.length ? (
+          {scoreData.length === 0 ? (
             <TouchableOpacity style={classes.btnregister}>
               <Text style={classes.btntext}>Register</Text>
             </TouchableOpacity>
@@ -160,7 +168,7 @@ const ClassDetail = props => {
           showsHorizontalScrollIndicator={false}
           style={classes.menuList}>
           {menu.map((item, activeIndex) => (
-            <TouchableNativeFeedback
+            <TouchableOpacity
               key={activeIndex}
               onPress={() => setIndex(activeIndex)}>
               <View
@@ -176,7 +184,7 @@ const ClassDetail = props => {
                   {item}
                 </Text>
               </View>
-            </TouchableNativeFeedback>
+            </TouchableOpacity>
           ))}
         </ScrollView>
         <View>{renderTabContent()}</View>

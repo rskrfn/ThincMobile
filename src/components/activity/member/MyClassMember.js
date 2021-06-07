@@ -13,7 +13,6 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 function MyClassMember({...props}) {
   const [myClass, setMyClass] = useState();
   const userId = props.loginReducer.user.data?.id;
-  useEffect(() => {}, []);
 
   const getMyClass = () => {
     let config = {
@@ -68,16 +67,14 @@ function MyClassMember({...props}) {
             }}
             renderItem={({item}) => {
               return (
-                <View style={classes.myclass}>
-                  <TouchableOpacity
-                    style={classes.tableclassname}
-                    onPress={() =>
-                      props.navigation.navigate('ClassDetail', {
-                        ...item,
-                      })
-                    }>
-                    {item.Name}
-                  </TouchableOpacity>
+                <TouchableOpacity
+                  style={classes.myclass}
+                  onPress={() =>
+                    props.navigation.navigate('ClassDetail', {
+                      ...item,
+                    })
+                  }>
+                  <Text style={classes.tableclassname}>{item.Name}</Text>
                   <View style={classes.tableprogress}>
                     <ProgressCircle
                       percent={70}
@@ -86,7 +83,7 @@ function MyClassMember({...props}) {
                       color="#5784BA"
                       shadowColor="#E5E6EB"
                       bgColor="#fff">
-                      <Text style={classes.textprogress}>{70 + '%'}</Text>
+                      <Text style={classes.textprogress}>70</Text>
                     </ProgressCircle>
                   </View>
                   <Text
@@ -94,7 +91,7 @@ function MyClassMember({...props}) {
                       ...classes.tablescore,
                       color: setColor(90),
                     }}>
-                    {90 || null}
+                    90
                   </Text>
                   <MaterialIcons
                     name="more-vert"
@@ -105,7 +102,7 @@ function MyClassMember({...props}) {
                       right: 1,
                     }}
                   />
-                </View>
+                </TouchableOpacity>
               );
             }}
           />

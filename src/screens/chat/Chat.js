@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 import {
@@ -11,18 +12,44 @@ import {
   StatusBar,
   FlatList,
 } from 'react-native';
+import DP from '../../assets/images/profilepicture.png';
 import {connect} from 'react-redux';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import classes from './Styles';
 import axios from 'axios';
 import {API_URL} from '@env';
-import DP from '../../assets/images/profilepicture.png';
+import {useSocket} from '../../context/SocketProvider';
 
 const Chat = props => {
   let userData = props.loginReducers.user?.data;
   const [modalVisible, setModalVisible] = useState(false);
   const [userName, setUserName] = useState('');
   const [userList, setUserList] = useState([]);
+
+  const socket = useSocket();
+  const joinHandler = item => {
+    let room = '';
+    if (userData.id === 101 || item.id === 101) {
+      room = 'room1';
+    } else {
+      room = 'room2';
+    }
+    // const body = [
+    //   {roomId: room, userId: userData.id},
+    //   {roomId: room, userId: item.id},
+    // ];
+    socket.emit('private-message', room, ({status}) => {
+      if (status) {
+        // console.log(`${userData.name} has joined ${room}`);
+        props.navigation.navigate('ChatRoom', {
+          senderData: userData,
+          receiverData: item,
+          room: room,
+        });
+      }
+    });
+  };
+
   const getUsers = () => {
     let config = {
       method: 'GET',
@@ -31,7 +58,7 @@ const Chat = props => {
     };
     axios(config)
       .then(res => {
-        console.log(res.data.data);
+        // console.log(res.data.data);
         if (res.data.data.length > 0) {
           setUserList(res.data.data);
         }
@@ -46,7 +73,18 @@ const Chat = props => {
       update;
     };
   }, [props.navigation]);
-  // console.log(userData);
+
+  useEffect(() => {
+    // socket?.on('welcome', message => {
+    //   console.log(message);
+    // });
+    socket.emit('adduser', userData.id, socket.id);
+    socket.on('getUsers', users => {
+      // console.log(users);
+    });
+  }, [socket]);
+
+  // console.log(socket);
   return (
     <View style={classes.container}>
       <StatusBar
@@ -126,7 +164,10 @@ const Chat = props => {
                     <TouchableOpacity
                       style={classes.content}
                       onPress={() => {
-                        props.navigation.navigate('ChatRoom', {...item});
+                        // socket.on('send-message', arg => {
+                        //   console.log(arg);
+                        // });
+                        joinHandler(item);
                       }}>
                       <View style={classes.leftcontent}>
                         <Image

@@ -112,14 +112,14 @@ function Member({...props}) {
     } catch (err) {}
   }, []);
 
-  const filterHandler = React.useCallback(async () => {
-    try {
-      setRefreshing(true);
-      setNewClass('');
-      await getNewClass();
-      setRefreshing(false);
-    } catch (err) {}
-  }, []);
+  // const filterHandler = React.useCallback(async () => {
+  //   try {
+  //     setRefreshing(true);
+  //     setNewClass('');
+  //     await getNewClass();
+  //     setRefreshing(false);
+  //   } catch (err) {}
+  // }, []);
 
   const setColor = score => {
     if (myClass) {
@@ -167,7 +167,7 @@ function Member({...props}) {
     getMyClass();
     getNewClass();
   }, []);
-  console.log(searchvalue);
+  // console.log(searchvalue);
   return (
     <ScrollView
       nestedScrollEnabled

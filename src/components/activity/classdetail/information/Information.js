@@ -25,7 +25,7 @@ const Information = props => {
       })
       .catch(() => {});
   };
-
+  console.log(props);
   return (
     <ScrollView style={classes.maincontainer}>
       <View style={classes.container}>
