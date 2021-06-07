@@ -513,7 +513,7 @@ function Member({...props}) {
                       </Text>
                       <Text style={classes.newlevel}>{item.Level}</Text>
                       <Text style={classes.newprice}>
-                        {item.Price === 0 ? 'Free' : item.Price}
+                        {item.Price === 0 ? 'Free' : '$' + item.Price}
                       </Text>
                       <TouchableOpacity
                         style={classes.newbtnregister}
