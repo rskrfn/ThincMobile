@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, ScrollView} from 'react-native';
 import axios from 'axios';
 import {API_URL} from '@env';
@@ -23,14 +23,17 @@ const Information = props => {
           return null;
         }
       })
-      .catch(() => {});
+      .catch(err => {
+        console.log({err});
+      });
   };
-  console.log(props);
+  useEffect(() => {}, []);
+  // console.log(props);
   return (
     <ScrollView style={classes.maincontainer}>
       <View style={classes.container}>
         <Text style={classes.header}>Description</Text>
-        <Text style={classes.textmain}>{props.course.Description}</Text>
+        <Text style={classes.textmain}>{courseData.Description}</Text>
       </View>
       <View>
         <Text style={classes.header}>What will I learn?</Text>

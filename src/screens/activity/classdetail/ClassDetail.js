@@ -77,7 +77,7 @@ const ClassDetail = props => {
         return <Information course={courseData} />;
     }
   };
-
+  console.log(props);
   function CategoryIcon() {
     if (courseData.Category === 'Software') {
       return <Image style={classes.categoryIcon} source={softwareIcon} />;

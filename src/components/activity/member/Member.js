@@ -32,13 +32,11 @@ function Member({...props}) {
   let [selectedPrice, setPrice] = useState(null);
   let [selectedSort, setSort] = useState(null);
   const [refreshing, setRefreshing] = React.useState(false);
+  const [info, setInfo] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPage, setTotalPage] = useState(1);
-  const [prev, setPrev] = useState(null);
-  const [next, setNext] = useState(null);
   const userId = props.loginReducer.user.data?.id;
-  const TOKEN = props.loginReducer.user.data?.token;
-  // console.log(userId);
+  const TOKEN = props.loginReducer.user?.token;
+  console.log(props);
 
   const [registerToken, setRegisterToken] = useState('');
   const [fcmRegistered, setFcmRegistered] = useState(false);
@@ -94,9 +92,7 @@ function Member({...props}) {
       .then(res => {
         console.log(res);
         setNewClass(res.data.data.result);
-        setTotalPage(res.data.data.info.totalPage);
-        setPrev(res.data.data.info.prev);
-        setNext(res.data.data.info.next);
+        setInfo(res.data.data.info);
       })
       .catch(err => console.log({err}));
   };
@@ -168,6 +164,33 @@ function Member({...props}) {
     getNewClass();
   }, []);
   // console.log(searchvalue);
+
+  const pageList = () => {
+    let pages = [];
+    for (let i = 1; i <= info?.totalPage; i++) {
+      pages.push(i);
+    }
+    return pages;
+  };
+  const prevHandler = () => {
+    if (currentPage === 1) {
+      return;
+    }
+    setCurrentPage(currentPage - 1);
+  };
+  const nextHandler = () => {
+    if (currentPage === info?.totalPage) {
+      return;
+    }
+    setCurrentPage(currentPage + 1);
+  };
+
+  const pages = pageList();
+
+  useEffect(() => {
+    getNewClass();
+  }, [currentPage]);
+  console.log(currentPage);
   return (
     <ScrollView
       nestedScrollEnabled
@@ -268,79 +291,15 @@ function Member({...props}) {
                   }}
                 />
               </Item>
-              <Button
-                style={classes.btnSearch}
-                onPress={() => {
-                  let config = {
-                    method: 'GET',
-                    url: `${API_URL}/courses/all`,
-                    params: {
-                      userid: userId,
-                      search: searchvalue,
-                      sort: selectedSort,
-                      category: selectedCategory,
-                      level: selectedLevel,
-                      price: selectedPrice,
-                      page: currentPage,
-                    },
-                  };
-                  axios(config)
-                    .then(res => {
-                      console.log(res);
-                      setNewClass(res.data.data.result);
-                      setTotalPage(res.data.data.info.totalPage);
-                      setPrev(res.data.data.info.prev);
-                      setNext(res.data.data.info.next);
-                    })
-                    .catch(err => console.log({err}));
-                }}>
-                <Text
-                  style={{
-                    color: 'white',
-                    fontFamily: 'Montserrat-SemiBold',
-                    fontSize: 13,
-                    textAlign: 'center',
-                  }}>
-                  Search
-                </Text>
-              </Button>
             </View>
           </TouchableWithoutFeedback>
           <ScrollView
             horizontal
             style={classes.filterSection}
             showsHorizontalScrollIndicator={false}>
-            <TouchableOpacity
-              style={classes.filterbtn}
-              onPress={() => {
-                let config = {
-                  method: 'GET',
-                  url: `${API_URL}/courses/all`,
-                  params: {
-                    userid: userId,
-                    search: searchvalue,
-                    sort: selectedSort,
-                    category: selectedCategory,
-                    level: selectedLevel,
-                    price: selectedPrice,
-                    page: currentPage,
-                  },
-                };
-                axios(config)
-                  .then(res => {
-                    console.log(res);
-                    setNewClass(res.data.data.result);
-                    setTotalPage(res.data.data.info.totalPage);
-                    setPrev(res.data.data.info.prev);
-                    setNext(res.data.data.info.next);
-                  })
-                  .catch(err => console.log({err}));
-              }}>
-              <Text style={classes.filterbtntext}>Filter</Text>
-            </TouchableOpacity>
             <Item picker style={{width: 100, overflow: 'hidden'}}>
               <Picker
-                mode="dropdown"
+                mode="dialog"
                 style={{width: 140}}
                 selectedValue={selectedCategory}
                 onValueChange={e => setCategory(e)}>
@@ -378,7 +337,7 @@ function Member({...props}) {
             </Item>
             <Item picker style={{width: 90, overflow: 'hidden'}}>
               <Picker
-                mode="dropdown"
+                mode="dialog"
                 style={{width: 140}}
                 selectedValue={selectedLevel}
                 onValueChange={e => setLevel(e)}>
@@ -411,7 +370,7 @@ function Member({...props}) {
             </Item>
             <Item picker style={{width: 75, overflow: 'hidden'}}>
               <Picker
-                mode="dropdown"
+                mode="dialog"
                 style={{width: 140}}
                 selectedValue={selectedPrice}
                 onValueChange={e => setPrice(e)}>
@@ -444,7 +403,7 @@ function Member({...props}) {
             </Item>
             <Item picker style={{width: 160, overflow: 'hidden'}}>
               <Picker
-                mode="dropdown"
+                mode="dialog"
                 style={{width: 200}}
                 selectedValue={selectedSort}
                 onValueChange={e => setSort(e)}>
@@ -491,6 +450,40 @@ function Member({...props}) {
               />
             </Item>
           </ScrollView>
+          <Button
+            style={classes.btnSearch}
+            onPress={() => {
+              let config = {
+                method: 'GET',
+                url: `${API_URL}/courses/all`,
+                params: {
+                  userid: userId,
+                  search: searchvalue,
+                  sort: selectedSort,
+                  category: selectedCategory,
+                  level: selectedLevel,
+                  price: selectedPrice,
+                  page: currentPage,
+                },
+              };
+              axios(config)
+                .then(res => {
+                  console.log(res);
+                  setNewClass(res.data.data.result);
+                  setInfo(res.data.data.info);
+                })
+                .catch(err => console.log({err}));
+            }}>
+            <Text
+              style={{
+                color: 'white',
+                fontFamily: 'Montserrat-SemiBold',
+                fontSize: 13,
+                textAlign: 'center',
+              }}>
+              Search
+            </Text>
+          </Button>
           <View style={classes.header}>
             <Text style={classes.headname}>Class Name</Text>
             <Text style={classes.headlevel}>Level</Text>
@@ -506,14 +499,14 @@ function Member({...props}) {
                 }}
                 renderItem={({item}) => {
                   return (
-                    <View style={classes.newClassItem}>
-                      <Text
-                        style={classes.newClassName}
-                        onPress={() => {
-                          props.navigation.navigate('ClassDetail', {
-                            ...item,
-                          });
-                        }}>
+                    <TouchableOpacity
+                      style={classes.newClassItem}
+                      onPress={() => {
+                        props.navigation.navigate('ClassDetail', {
+                          ...item,
+                        });
+                      }}>
+                      <Text style={classes.newClassName}>
                         {item.Name && item.Name.length > 25
                           ? item.Name.slice(0, 25) + '...'
                           : item.Name}
@@ -529,7 +522,7 @@ function Member({...props}) {
                         }}>
                         <Text style={classes.txtRegister}>Register</Text>
                       </TouchableOpacity>
-                    </View>
+                    </TouchableOpacity>
                   );
                 }}
                 // ListFooterComponent={
@@ -559,6 +552,76 @@ function Member({...props}) {
                 <Text style={classes.texterror}>Server Error</Text>
               </View>
             )}
+          </View>
+        </View>
+        <View style={classes.pagination}>
+          <View style={classes.leftpagination}>
+            <Text style={classes.paginationinfo}>Showing</Text>
+            <Text style={classes.paginationinfo}>
+              {' '}
+              {(info?.currpage - 1) * 10 + (newClass?.length || 0)}{' '}
+            </Text>
+            <Text style={classes.paginationinfo}>out of</Text>
+            <Text style={classes.paginationinfo}>
+              {newClass ? ' ' + info?.count : 'null'}
+            </Text>
+          </View>
+          <View style={classes.rightpagination}>
+            <TouchableOpacity
+              style={
+                info?.prev !== null
+                  ? classes.paginationbtn
+                  : classes.paginationbtndisable
+              }
+              disabled={!info?.prev}
+              onPress={() => {
+                prevHandler();
+              }}>
+              <MaterialIcons
+                name="chevron-left"
+                size={24}
+                color={!info?.prev ? 'white' : 'black'}
+              />
+            </TouchableOpacity>
+            {pages.map((page, index) => {
+              return (
+                <TouchableOpacity
+                  style={
+                    currentPage === page
+                      ? classes.paginationbtnactive
+                      : classes.paginationbtn
+                  }
+                  key={index}
+                  onPress={() => {
+                    setCurrentPage(page);
+                  }}>
+                  <Text
+                    style={
+                      currentPage === page
+                        ? classes.paginationtextactive
+                        : classes.paginationtext
+                    }>
+                    {page}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+            <TouchableOpacity
+              style={
+                info?.next !== null
+                  ? classes.paginationbtn
+                  : classes.paginationbtndisable
+              }
+              disabled={!info?.next}
+              onPress={() => {
+                nextHandler();
+              }}>
+              <MaterialIcons
+                name="chevron-right"
+                size={24}
+                color={!info?.prev ? 'black' : 'white'}
+              />
+            </TouchableOpacity>
           </View>
         </View>
       </View>
