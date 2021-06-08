@@ -18,7 +18,7 @@ import Material from 'react-native-vector-icons/MaterialIcons';
 import classes from './Styles';
 import axios from 'axios';
 import {API_URL} from '@env';
-import {useSocket} from '../../context/SocketProvider';
+// import {useSocket} from '../../context/SocketProvider';
 
 const Chat = props => {
   let userData = props.loginReducers.user?.data;
@@ -26,29 +26,29 @@ const Chat = props => {
   const [userName, setUserName] = useState('');
   const [userList, setUserList] = useState([]);
 
-  const socket = useSocket();
-  const joinHandler = item => {
-    let room = '';
-    if (userData.id === 101 || item.id === 101) {
-      room = 'room1';
-    } else {
-      room = 'room2';
-    }
-    // const body = [
-    //   {roomId: room, userId: userData.id},
-    //   {roomId: room, userId: item.id},
-    // ];
-    socket.emit('private-message', room, ({status}) => {
-      if (status) {
-        // console.log(`${userData.name} has joined ${room}`);
-        props.navigation.navigate('ChatRoom', {
-          senderData: userData,
-          receiverData: item,
-          room: room,
-        });
-      }
-    });
-  };
+  // const socket = useSocket();
+  // const joinHandler = item => {
+  //   let room = '';
+  //   if (userData.id === 101 || item.id === 101) {
+  //     room = 'room1';
+  //   } else {
+  //     room = 'room2';
+  //   }
+  //   // const body = [
+  //   //   {roomId: room, userId: userData.id},
+  //   //   {roomId: room, userId: item.id},
+  //   // ];
+  //   socket.emit('private-message', room, ({status}) => {
+  //     if (status) {
+  //       // console.log(`${userData.name} has joined ${room}`);
+  //       props.navigation.navigate('ChatRoom', {
+  //         senderData: userData,
+  //         receiverData: item,
+  //         room: room,
+  //       });
+  //     }
+  //   });
+  // };
 
   const getUsers = () => {
     let config = {
@@ -74,15 +74,15 @@ const Chat = props => {
     };
   }, [props.navigation]);
 
-  useEffect(() => {
-    // socket?.on('welcome', message => {
-    //   console.log(message);
-    // });
-    socket.emit('adduser', userData.id, socket.id);
-    socket.on('getUsers', users => {
-      // console.log(users);
-    });
-  }, [socket]);
+  // useEffect(() => {
+  //   // socket?.on('welcome', message => {
+  //   //   console.log(message);
+  //   // });
+  //   socket.emit('adduser', userData.id, socket.id);
+  //   socket.on('getUsers', users => {
+  //     // console.log(users);
+  //   });
+  // }, [socket]);
 
   // console.log(socket);
   return (
@@ -167,7 +167,11 @@ const Chat = props => {
                         // socket.on('send-message', arg => {
                         //   console.log(arg);
                         // });
-                        joinHandler(item);
+                        // joinHandler(item);
+                        props.navigation.navigate('ChatRoom', {
+                          senderData: userData,
+                          receiverData: item,
+                        });
                       }}>
                       <View style={classes.leftcontent}>
                         <Image

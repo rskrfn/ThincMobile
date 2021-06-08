@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
 
   btnsend: {
     width: '100%',
-    marginTop: '20%',
+    marginVertical: '10%',
     marginHorizontal: '10%',
     alignItems: 'center',
     backgroundColor: '#5784BA',

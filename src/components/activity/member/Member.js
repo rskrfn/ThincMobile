@@ -22,8 +22,10 @@ import {API_URL} from '@env';
 import {TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import NotifService from '../../../../NotifService';
+import {useSocket} from '../../../context/SocketProvider';
 
 function Member({...props}) {
+  const socket = useSocket();
   const [myClass, setMyClass] = useState();
   const [myclassLoad, setMyclassload] = useState(false);
   const [newClass, setNewClass] = useState([]);
@@ -36,6 +38,7 @@ function Member({...props}) {
   const [refreshing, setRefreshing] = React.useState(false);
   const [info, setInfo] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const userData = props.loginReducer.user?.data;
   const userId = props.loginReducer.user.data?.id;
   const TOKEN = props.loginReducer.user?.token;
   // console.log(props);
@@ -109,7 +112,7 @@ function Member({...props}) {
         setInfo(res.data.data.info);
         setNewclassload(false);
       })
-      .catch(err => {
+      .catch(() => {
         setCurrentPage(1);
         setNewClass(null);
         setNewclassload(false);
@@ -151,7 +154,7 @@ function Member({...props}) {
     }
   };
 
-  const onRegisterCourse = async (id, name) => {
+  const onRegisterCourse = async (id, name, ownerId) => {
     try {
       let config = {
         method: 'POST',
@@ -163,6 +166,19 @@ function Member({...props}) {
         .then(res => {
           if (res.status === 200) {
             onRefresh();
+            console.log('owner course', ownerId);
+            let owner = {
+              id: ownerId,
+              coursename: name,
+            };
+            let sender = {
+              id: userData.id,
+              name: userData.name,
+            };
+            let cb = ({status}) => {
+              console.log('status', status);
+            };
+            socket.emit('course-register', owner, sender, cb);
             return notif.localNotif('', `Successfully register on ${name}`);
           }
         })
@@ -523,8 +539,8 @@ function Member({...props}) {
                         </Text>
                         <TouchableOpacity
                           style={classes.newbtnregister}
-                          onPress={() => {
-                            onRegisterCourse(item.id, item.Name);
+                          onPress={async () => {
+                            onRegisterCourse(item.id, item.Name, item.Owner);
                           }}>
                           <Text style={classes.txtRegister}>Register</Text>
                         </TouchableOpacity>

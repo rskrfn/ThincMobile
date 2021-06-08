@@ -19,6 +19,7 @@ const ChangePassword = props => {
   const TOKEN = props.loginReducers.user?.token;
   const userId = props.loginReducers.user?.data.id;
   const [password, setPassword] = useState();
+  const [newpassword, setNewPassword] = useState();
   const [repeat, setRepeat] = useState();
   const [eye, setEye] = useState({
     securePass: true,
@@ -26,8 +27,6 @@ const ChangePassword = props => {
   });
   const FormData = require('form-data');
   const data = new FormData();
-  data.append('id', userId);
-  data.append('password', password);
 
   const submitHandler = e => {
     const config = {
@@ -39,15 +38,15 @@ const ChangePassword = props => {
       data: data,
     };
 
-    if (!password || !repeat) {
+    if (!password || !newpassword || !repeat) {
       return Toast.show({
-        text: 'Enter your new password!',
+        text: 'Fill out the form!',
         type: 'warning',
         textStyle: {textAlign: 'center'},
         duration: 3000,
       });
     }
-    if (password.length < 8) {
+    if (newpassword.length < 8) {
       return Toast.show({
         text: 'Password must be at least 8 characters',
         type: 'warning',
@@ -55,7 +54,7 @@ const ChangePassword = props => {
         duration: 3000,
       });
     }
-    if (password !== repeat) {
+    if (newpassword !== repeat) {
       return Toast.show({
         text: "Password didn't match",
         type: 'warning',
@@ -63,6 +62,9 @@ const ChangePassword = props => {
         duration: 3000,
       });
     }
+    data.append('id', userId);
+    data.append('password', password);
+    data.append('newpassword', newpassword);
     axios(config)
       .then(res => {
         console.log(res);
@@ -73,18 +75,43 @@ const ChangePassword = props => {
             textStyle: {textAlign: 'center'},
             duration: 3000,
           });
-          return setTimeout(() => {
-            props.navigation.goBack();
-          }, 5000);
+          setPassword('');
+          setNewPassword('');
+          setRepeat('');
+          return;
         }
       })
       .catch(err => {
-        console.log(err);
+        console.log({err});
+        if (err.response.data?.message === 'Same Password') {
+          Toast.show({
+            text: 'Password must be different from previous one',
+            type: 'danger',
+            textStyle: {textAlign: 'center'},
+            duration: 3000,
+          });
+          setPassword('');
+          setNewPassword('');
+          setRepeat('');
+          return;
+        }
+        if (err.response.data?.message === 'Wrong Password') {
+          Toast.show({
+            text: 'Your password is incorrect',
+            type: 'danger',
+            textStyle: {textAlign: 'center'},
+            duration: 3000,
+          });
+          setPassword('');
+          setNewPassword('');
+          setRepeat('');
+          return;
+        }
       });
   };
 
   function passwordWarning() {
-    if (password.length < 8) {
+    if (newpassword.length < 8) {
       return (
         <View style={classes.warning}>
           <Text style={{...classes.inputwarning, color: '#010620'}}>
@@ -93,7 +120,7 @@ const ChangePassword = props => {
         </View>
       );
     }
-    if (password.length > 16) {
+    if (newpassword.length > 16) {
       return (
         <View style={classes.warning}>
           <Text style={{...classes.inputwarning, color: '#FF1313'}}>
@@ -134,7 +161,7 @@ const ChangePassword = props => {
         </View>
       );
     }
-    if (repeat !== password) {
+    if (repeat !== newpassword) {
       return (
         <View style={classes.warning}>
           <Text style={{...classes.inputwarning, color: '#FF1313'}}>
@@ -149,7 +176,7 @@ const ChangePassword = props => {
         </View>
       );
     }
-    if (repeat === password) {
+    if (repeat === newpassword) {
       return (
         <View style={classes.warning}>
           <Text style={{...classes.inputwarning, color: '#0EAA00'}}>
@@ -168,7 +195,9 @@ const ChangePassword = props => {
 
   useEffect(() => {}, []);
   return (
-    <ScrollView style={classes.maincontainer}>
+    <ScrollView
+      style={classes.maincontainer}
+      showsVerticalScrollIndicator={false}>
       <StatusBar barStyle="dark-content" backgroundColor="white" />
       <View style={classes.buttonbar}>
         <TouchableOpacity
@@ -186,7 +215,7 @@ const ChangePassword = props => {
         <Text style={classes.desc1}>
           Your new password must be different from previous used password!
         </Text>
-        <View style={classes.input}>
+        <View style={{...classes.input, marginBottom: '5%'}}>
           <Text style={classes.inputlabel}>Password</Text>
           <TextInput
             style={classes.textInputPassword}
@@ -212,7 +241,33 @@ const ChangePassword = props => {
             )}
           </TouchableOpacity>
         </View>
-        {password ? passwordWarning() : null}
+        <View style={classes.input}>
+          <Text style={classes.inputlabel}>New Password</Text>
+          <TextInput
+            style={classes.textInputPassword}
+            autoCapitalize="none"
+            secureTextEntry={eye.securePass ? true : false}
+            value={newpassword}
+            onChangeText={value => {
+              setNewPassword(value);
+            }}
+          />
+          <TouchableOpacity
+            style={classes.eye}
+            onPress={() => {
+              setEye({
+                ...eye,
+                securePass: !eye.securePass,
+              });
+            }}>
+            {eye.securePass ? (
+              <MaterialIcons name="visibility" color="black" size={24} />
+            ) : (
+              <MaterialIcons name="visibility-off" color="black" size={24} />
+            )}
+          </TouchableOpacity>
+        </View>
+        {newpassword ? passwordWarning() : null}
         <View style={classes.input2}>
           <Text style={classes.inputlabel}>Repeat Password</Text>
           <TextInput

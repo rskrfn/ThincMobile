@@ -1,10 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import 'react-native-gesture-handler';
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Alert} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {connect} from 'react-redux';
+import {useSocket} from './src/context/SocketProvider';
+import NotifService from './NotifService';
 import RNBootSplash from 'react-native-bootsplash';
 import Login from './src/screens/auth/login/Login';
 import Register from './src/screens/auth/register/Register';
@@ -113,9 +116,29 @@ function AuthNavigation() {
 }
 
 function Router(props) {
-  // React.useEffect(() => {
-  //   console.log(props);
-  // }, [props]);
+  let userData = props.loginReducers.user?.data;
+  const onNotif = notif => {
+    Alert.alert(notif.title, notif.message);
+  };
+
+  const notif = new NotifService(onNotif);
+  let socket = useSocket();
+  React.useEffect(() => {
+    socket;
+    // console.log(socket.id);
+    socket.emit('adduser', userData.id, socket.id, socket.connected);
+  }, []);
+  React.useEffect(() => {
+    socket.on('course-notif', (courseName, sender) => {
+      console.log('index rn', courseName, sender);
+      notif.localNotif('', `${sender.name} Registered on ${courseName}`);
+    });
+  }, [socket]);
+  React.useEffect(() => {
+    if (props.loginReducers.isLogin === true) {
+      notif.localNotif('', `Welcome back, ${userData.name.split(' ')[0]}`);
+    }
+  }, [props.loginReducers.isLogin]);
 
   return (
     <NavigationContainer onReady={() => RNBootSplash.hide()}>

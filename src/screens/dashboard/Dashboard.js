@@ -49,10 +49,10 @@ const Dashboard = props => {
 
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-    if (props.loginReducers.isLogin === true) {
-      notif.localNotif('', `Welcome back, ${name.split(' ')[0]}`);
-    }
-  }, [props.loginReducers.isLogin]);
+    // if (props.loginReducers.isLogin === true) {
+    //   notif.localNotif('', `Welcome back, ${name.split(' ')[0]}`);
+    // }
+  }, []);
   return (
     <Animatable.View animation="fadeIn" style={{flex: 1}}>
       <StatusBar

@@ -16,41 +16,9 @@ const ChatRoom = props => {
   const [messageHistory, setHistory] = useState([]);
   const userData = props.route.params.senderData;
   const receiverData = props.route.params.receiverData;
-  const room = props.route.params.room;
   console.log(props.route.params);
 
   const socket = useSocket();
-
-  const sendMessage = () => {
-    const body = {
-      sender: userData.id,
-      receiver: receiverData.id,
-      room: room,
-      message: message,
-    };
-    const cb = ({status}) => {
-      if (status) {
-        console.log(status);
-        setHistory(prevMessage => {
-          return [...prevMessage, body];
-        });
-      }
-    };
-    // console.log(body);
-    socket.emit('send-message', body, room, cb);
-    setMessage('');
-  };
-
-  const chat = () => {
-    const body = {msg: message, sender: userData.id};
-    const cb = ({status}) => {
-      if (status) {
-        console.log(status);
-        setMessage('');
-      }
-    };
-    socket.emit('chat', body, room, cb);
-  };
 
   const privatechat = () => {
     const body = {msg: message, sender: userData.id};
@@ -67,31 +35,12 @@ const ChatRoom = props => {
   };
 
   useEffect(() => {
-    // socket.on('chat', body => {
-    //   console.log(body);
-    //   setHistory(prevMsg => {
-    //     return [...prevMsg, body];
-    //   });
-    // });
-
     socket.on('getMessage', body => {
       console.log('body', body);
       setHistory(prevMsg => {
         return [...prevMsg, body];
       });
     });
-
-    // return socket.off('chat');
-    // const display = () => {
-    //   socket.on('message-received', newMessage => {
-    //     console.log(newMessage);
-    //     setHistory(prevMessage => {
-    //       return [...prevMessage, newMessage];
-    //     });
-    //   });
-    // };
-    // socket.on('connection', display);
-    // return () => socket.off('connection', display);
   }, [socket]);
   console.log('messagehistory', messageHistory);
   return (
