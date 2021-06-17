@@ -126,11 +126,11 @@ function Router(props) {
   React.useEffect(() => {
     socket;
     // console.log(socket.id);
-    socket.emit('adduser', userData.id, socket.id, socket.connected);
-  }, []);
+    socket.emit('adduser', userData?.id, socket.id, socket.connected);
+  }, [socket]);
   React.useEffect(() => {
     socket.on('course-notif', (courseName, sender) => {
-      console.log('index rn', courseName, sender);
+      // console.log('index rn', courseName, sender);
       notif.localNotif('', `${sender.name} Registered on ${courseName}`);
     });
   }, [socket]);

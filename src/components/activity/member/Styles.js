@@ -171,6 +171,7 @@ const classes = StyleSheet.create({
 
   newClassName: {
     width: '39%',
+    paddingRight: '3%',
     fontFamily: 'Montserrat-Medium',
     fontSize: 13,
   },

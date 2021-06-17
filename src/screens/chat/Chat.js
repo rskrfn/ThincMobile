@@ -164,10 +164,6 @@ const Chat = props => {
                     <TouchableOpacity
                       style={classes.content}
                       onPress={() => {
-                        // socket.on('send-message', arg => {
-                        //   console.log(arg);
-                        // });
-                        // joinHandler(item);
                         props.navigation.navigate('ChatRoom', {
                           senderData: userData,
                           receiverData: item,

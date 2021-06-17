@@ -70,7 +70,7 @@ const ChangePassword = props => {
         console.log(res);
         if (res.data.message === 'Data Changed') {
           Toast.show({
-            text: 'Password has been changed',
+            text: 'Change password success',
             type: 'success',
             textStyle: {textAlign: 'center'},
             duration: 3000,
@@ -78,6 +78,7 @@ const ChangePassword = props => {
           setPassword('');
           setNewPassword('');
           setRepeat('');
+          props.navigation.goBack();
           return;
         }
       })

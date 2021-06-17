@@ -33,6 +33,7 @@ const ClassDetail = props => {
   const progress = 60;
   const [index, setIndex] = useState(0);
   const [scoreData, setScoreData] = useState([]);
+  const [Objective, setObjective] = useState('');
 
   const getScore = () => {
     let config = {
@@ -51,9 +52,31 @@ const ClassDetail = props => {
       })
       .catch(() => {});
   };
+
+  const getObjective = () => {
+    let config = {
+      method: 'GET',
+      url: `${API_URL}/courses/objective`,
+      params: {courseid: courseData.id},
+    };
+    axios(config)
+      .then(res => {
+        // console.log(res.data.data[0].Objective);
+        if (res.data.data.length > 0) {
+          let value = res.data.data[0].Objective.split(',').join(', ');
+          setObjective(value);
+        } else {
+          return null;
+        }
+      })
+      .catch(err => {
+        console.log({err});
+      });
+  };
   useEffect(() => {
     const update = props.navigation.addListener('focus', async () => {
-      await getScore();
+      getScore();
+      getObjective();
     });
     return () => {
       update;
@@ -74,7 +97,7 @@ const ClassDetail = props => {
       case 2:
         return <ClassDiscussion />;
       default:
-        return <Information course={courseData} />;
+        return <Information course={courseData} objective={Objective} />;
     }
   };
   console.log(props);
@@ -187,7 +210,7 @@ const ClassDetail = props => {
             </TouchableOpacity>
           ))}
         </ScrollView>
-        <View>{renderTabContent()}</View>
+        {renderTabContent()}
       </View>
     </ScrollView>
   );

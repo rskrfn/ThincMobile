@@ -202,25 +202,13 @@ function Member({...props}) {
     }
     return pages;
   };
-  const prevHandler = () => {
-    if (currentPage === 1) {
-      return;
-    }
-    setCurrentPage(currentPage - 1);
-  };
-  const nextHandler = () => {
-    if (currentPage === info?.totalPage) {
-      return;
-    }
-    setCurrentPage(currentPage + 1);
-  };
 
   const pages = pageList();
 
   useEffect(() => {
     getNewClass();
   }, [currentPage]);
-  // console.log(currentPage);
+  console.log(currentPage);
   return (
     <ScrollView
       nestedScrollEnabled
@@ -337,12 +325,14 @@ function Member({...props}) {
             horizontal
             style={classes.filterSection}
             showsHorizontalScrollIndicator={false}>
-            <Item picker style={{width: 100, overflow: 'hidden'}}>
+            <Item picker style={{width: 95, overflow: 'hidden'}}>
               <Picker
                 mode="dialog"
                 style={{width: 140}}
                 selectedValue={selectedCategory}
-                onValueChange={e => setCategory(e)}>
+                onValueChange={e => {
+                  setCategory(e);
+                }}>
                 <Picker.Item
                   label="Category"
                   value=""
@@ -375,10 +365,10 @@ function Member({...props}) {
                 style={{position: 'absolute', right: 0}}
               />
             </Item>
-            <Item picker style={{width: 90, overflow: 'hidden'}}>
+            <Item picker style={{width: 75, overflow: 'hidden'}}>
               <Picker
                 mode="dialog"
-                style={{width: 140}}
+                style={{width: 120}}
                 selectedValue={selectedLevel}
                 onValueChange={e => setLevel(e)}>
                 <Picker.Item
@@ -413,7 +403,9 @@ function Member({...props}) {
                 mode="dialog"
                 style={{width: 140}}
                 selectedValue={selectedPrice}
-                onValueChange={e => setPrice(e)}>
+                onValueChange={e => {
+                  setPrice(e);
+                }}>
                 <Picker.Item
                   label="Price"
                   value=""
@@ -441,10 +433,10 @@ function Member({...props}) {
                 style={{position: 'absolute', right: 0}}
               />
             </Item>
-            <Item picker style={{width: 160, overflow: 'hidden'}}>
+            <Item picker style={{width: 110, overflow: 'hidden'}}>
               <Picker
                 mode="dialog"
-                style={{width: 200}}
+                style={{width: 140}}
                 selectedValue={selectedSort}
                 onValueChange={e => setSort(e)}>
                 <Picker.Item
@@ -580,7 +572,10 @@ function Member({...props}) {
               }
               disabled={!info?.prev}
               onPress={() => {
-                prevHandler();
+                if (info?.prev === null) {
+                  return;
+                }
+                setCurrentPage(currentPage - 1);
               }}>
               <MaterialIcons
                 name="chevron-left"
@@ -619,7 +614,10 @@ function Member({...props}) {
               }
               disabled={!info?.next}
               onPress={() => {
-                nextHandler();
+                if (currentPage === info?.totalPage) {
+                  return;
+                }
+                setCurrentPage(currentPage + 1);
               }}>
               <MaterialIcons
                 name="chevron-right"
