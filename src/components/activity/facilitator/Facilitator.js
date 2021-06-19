@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -6,14 +6,23 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
+  Modal,
 } from 'react-native';
-import {Button, Input, Icon, Item, Picker} from 'native-base';
+import DatePicker from 'react-native-date-picker';
+import moment from 'moment';
+import {Item, Picker} from 'native-base';
 import classes from './Styles';
 import MyClassFacilitator from './MyClassFacilitator';
 import MemberIcon from '../../../assets/icons/icon_student.png';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const Facilitator = props => {
+  const [date, setDate] = useState(new Date());
+  const [start, setStart] = useState(new Date());
+  const [end, setEnd] = useState(new Date());
+  const [showDate, setShowDate] = useState(false);
+  const [showStartModal, setShowStart] = useState(false);
+  const [showEndModal, setShowEnd] = useState(false);
   const myClassDummy = [
     {
       classname: 'Class one',
@@ -40,8 +49,89 @@ const Facilitator = props => {
       student: 28,
     },
   ];
+
+  console.log(moment(date).format('HH : mm'));
+
   return (
     <ScrollView>
+      <Modal
+        transparent
+        style={classes.modaldate}
+        visible={showDate}
+        onRequestClose={() => {
+          setShowDate(false);
+        }}>
+        <View style={classes.modalcontainer}>
+          <View style={classes.datepicker}>
+            <DatePicker
+              mode={'date'}
+              date={date}
+              onDateChange={value => {
+                setDate(value);
+              }}
+            />
+            <TouchableOpacity
+              style={classes.modalbtn}
+              onPress={() => {
+                setShowDate(false);
+              }}>
+              <Text style={classes.modalbtntext}>Select</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        transparent
+        style={classes.modaldate}
+        visible={showStartModal}
+        onRequestClose={() => {
+          setShowStart(false);
+        }}>
+        <View style={classes.modalcontainer}>
+          <View style={classes.datepicker}>
+            <DatePicker
+              mode="time"
+              date={start}
+              onDateChange={value => {
+                setStart(value);
+              }}
+            />
+            <TouchableOpacity
+              style={classes.modalbtn}
+              onPress={() => {
+                setShowStart(false);
+              }}>
+              <Text style={classes.modalbtntext}>Select</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        transparent
+        style={classes.modaldate}
+        visible={showEndModal}
+        onRequestClose={() => {
+          setShowEnd(false);
+        }}>
+        <View style={classes.modalcontainer}>
+          <View style={classes.datepicker}>
+            <DatePicker
+              mode="time"
+              date={end}
+              onDateChange={value => {
+                setEnd(value);
+              }}
+            />
+            <TouchableOpacity
+              style={classes.modalbtn}
+              onPress={() => {
+                setShowEnd(false);
+              }}>
+              <Text style={classes.modalbtntext}>Select</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
       <View style={classes.container}>
         <Text style={classes.textpage}>My class</Text>
         <View style={classes.header}>
@@ -52,7 +142,7 @@ const Facilitator = props => {
       <View style={classes.myclasscontainer}>
         {myClassDummy
           ? myClassDummy.slice(0, 3).map((item, index) => {
-              console.log(item);
+              // console.log(item);
               return (
                 <TouchableOpacity style={classes.myclass} key={index}>
                   <Text style={classes.tableclassname}>{item.classname}</Text>
@@ -147,6 +237,27 @@ const Facilitator = props => {
           <View style={{...classes.input, marginVertical: 10}}>
             <Text style={classes.inputdesc}>Schedule</Text>
             <Text>:</Text>
+            <TouchableOpacity
+              style={classes.schedule}
+              onPress={() => {
+                setShowDate(true);
+              }}>
+              <Text style={classes.date}>{moment(date).format('dddd')}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setShowStart(true);
+              }}>
+              <Text style={classes.start}>
+                {moment(start).format('hh:mm A')}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setShowEnd(true);
+              }}>
+              <Text style={classes.end}>{moment(end).format('hh:mm A')}</Text>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={classes.inputgroup}>

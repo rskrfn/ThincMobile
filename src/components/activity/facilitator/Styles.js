@@ -6,6 +6,30 @@ const classes = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 16,
   },
+  modalcontainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  datepicker: {
+    backgroundColor: 'white',
+    paddingHorizontal: '5%',
+    paddingVertical: '10%',
+    borderRadius: 10,
+  },
+  modalbtn: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(87, 132, 186, 1)',
+    marginTop: '10%',
+    paddingVertical: '5%',
+    borderRadius: 10,
+  },
+  modalbtntext: {
+    fontFamily: 'Montserrat-SemiBold',
+    fontSize: 16,
+    color: 'white',
+  },
   textpage: {
     fontFamily: 'Montserrat-Bold',
     fontSize: 18,
@@ -149,6 +173,24 @@ const classes = StyleSheet.create({
     fontSize: 14,
     borderRadius: 10,
     backgroundColor: 'rgba(235, 235, 235, 1)',
+  },
+  schedule: {
+    flexDirection: 'row',
+  },
+  date: {
+    fontFamily: 'Montserrat-Medium',
+    fontSize: 14,
+    marginLeft: 10,
+  },
+  start: {
+    fontFamily: 'Montserrat-Medium',
+    fontSize: 14,
+    marginLeft: 10,
+  },
+  end: {
+    fontFamily: 'Montserrat-Medium',
+    fontSize: 14,
+    marginLeft: 10,
   },
   createbtn: {
     justifyContent: 'center',
