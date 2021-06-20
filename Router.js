@@ -17,6 +17,7 @@ import NewPassword from './src/screens/auth/reset/newpassword/NewPassword';
 import Dashboard from './src/screens/dashboard/Dashboard';
 import Activity from './src/screens/activity/Activity';
 import MyClass from './src/screens/activity/myclass/MyClass';
+import MyClassFacilitator from './src/components/activity/facilitator/facilitatorclass/MyClassFacilitator';
 import ClassDetail from './src/screens/activity/classdetail/ClassDetail';
 import Chat from './src/screens/chat/Chat';
 import ChatRoom from './src/components/chat/ChatRoom';
@@ -37,6 +38,7 @@ function ActivityNavigation() {
       }}>
       <Stack.Screen name="ActivityMain" component={Activity} />
       <Stack.Screen name="MyClass" component={MyClass} />
+      <Stack.Screen name="MyClassFacilitator" component={MyClassFacilitator} />
       <Stack.Screen name="ClassDetail" component={ClassDetail} />
     </Stack.Navigator>
   );

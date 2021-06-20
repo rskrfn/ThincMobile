@@ -1,3 +1,5 @@
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -10,11 +12,13 @@ import {
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
-import {Item, Picker} from 'native-base';
+import {Item, Picker, Toast} from 'native-base';
 import classes from './Styles';
-import MyClassFacilitator from './MyClassFacilitator';
 import MemberIcon from '../../../assets/icons/icon_student.png';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {useSelector} from 'react-redux';
+import {API_URL} from '@env';
+import axios from 'axios';
 
 const Facilitator = props => {
   const [date, setDate] = useState(new Date());
@@ -23,34 +27,109 @@ const Facilitator = props => {
   const [showDate, setShowDate] = useState(false);
   const [showStartModal, setShowStart] = useState(false);
   const [showEndModal, setShowEnd] = useState(false);
-  const myClassDummy = [
-    {
-      classname: 'Class one',
-      student: 24,
-    },
-    {
-      classname: 'Class two',
-      student: 32,
-    },
-    {
-      classname: 'Class three',
-      student: 28,
-    },
-    {
-      classname: 'Class one',
-      student: 24,
-    },
-    {
-      classname: 'Class two',
-      student: 32,
-    },
-    {
-      classname: 'Class three',
-      student: 28,
-    },
-  ];
+  const [myClass, setMyclass] = useState();
+  const [newClass, setNewClass] = useState({
+    coursename: '',
+    category: '',
+    level: '',
+    price: '',
+    description: '',
+  });
 
-  console.log(moment(date).format('HH : mm'));
+  const profileData = useSelector(state => state.loginReducers?.user);
+
+  const getFacilitatorClass = () => {
+    let config = {
+      method: 'GET',
+      url: `${API_URL}/courses/facilitatorclass`,
+      headers: {'x-access-token': profileData.token},
+      params: {id: profileData.data?.id},
+    };
+    axios(config)
+      .then(res => {
+        console.log(res);
+        if (res.data?.message === "Particular user doesn't have any courses") {
+          setMyclass(false);
+        }
+        if (res.data?.data.length > 0) {
+          setMyclass(res.data.data);
+        }
+      })
+      .catch(err => {
+        console.log({err});
+      });
+  };
+
+  const createCourse = () => {
+    if (
+      !newClass.coursename ||
+      !newClass.category ||
+      !newClass.level ||
+      !newClass.price ||
+      !newClass.description
+    ) {
+      return Toast.show({
+        text: 'Fill the data',
+        type: 'warning',
+        textStyle: {textAlign: 'center'},
+        duration: 3000,
+      });
+    }
+    const config = {
+      method: 'POST',
+      url: `${API_URL}/courses/addcourse`,
+      headers: {'x-access-token': profileData.token},
+      data: {
+        id: profileData.data?.id,
+        coursename: newClass.coursename,
+        category: newClass.category,
+        level: newClass.level,
+        price: newClass.price,
+        description: newClass.description,
+        schedule: moment(date).format('YYYY-MM-DD'),
+        start: moment(start).format('HH:mm:ss'),
+        end: moment(end).format('HH:mm:ss'),
+      },
+    };
+    console.log(config.data);
+    axios(config)
+      .then(res => {
+        console.log(res);
+        getFacilitatorClass();
+        setNewClass({
+          ...newClass,
+          coursename: '',
+          category: '',
+          level: '',
+          price: '',
+          description: '',
+        });
+        setDate(new Date());
+        setStart(new Date());
+        setEnd(new Date());
+        return Toast.show({
+          text: 'Course Created',
+          type: 'success',
+          textStyle: {textAlign: 'center'},
+          duration: 3000,
+        });
+      })
+      .catch(err => {
+        console.log({err});
+        return Toast.show({
+          text: 'Error Occured',
+          type: 'danger',
+          textStyle: {textAlign: 'center'},
+          duration: 3000,
+        });
+      });
+  };
+
+  useEffect(() => {
+    getFacilitatorClass();
+  }, []);
+
+  console.log('newclass', newClass);
 
   return (
     <ScrollView>
@@ -140,14 +219,14 @@ const Facilitator = props => {
         </View>
       </View>
       <View style={classes.myclasscontainer}>
-        {myClassDummy
-          ? myClassDummy.slice(0, 3).map((item, index) => {
+        {myClass
+          ? myClass.slice(0, 3).map((item, index) => {
               // console.log(item);
               return (
                 <TouchableOpacity style={classes.myclass} key={index}>
-                  <Text style={classes.tableclassname}>{item.classname}</Text>
+                  <Text style={classes.tableclassname}>{item.course_name}</Text>
                   <View style={classes.tablestudent}>
-                    <Text style={classes.studenttext}>{item.student}</Text>
+                    <Text style={classes.studenttext}>{item.students}</Text>
                     <Image style={classes.studenticon} source={MemberIcon} />
                   </View>
                   <MaterialIcons
@@ -164,15 +243,12 @@ const Facilitator = props => {
       <View style={classes.allmyclass}>
         <Text
           style={classes.textallmyclass}
-          onPress={() => props.navigation.navigate('MyClass')}>
+          onPress={() =>
+            props.navigation.navigate('MyClassFacilitator', {data: myClass})
+          }>
           view all
         </Text>
-        <MaterialIcons
-          name="chevron-right"
-          size={20}
-          style={{marginTop: 1}}
-          onPress={() => props.navigation.navigate('MyClass')}
-        />
+        <MaterialIcons name="chevron-right" size={20} style={{marginTop: 1}} />
       </View>
       <View style={classes.createnewclass}>
         <Text style={classes.newclassheader}>Create new class</Text>
@@ -183,6 +259,11 @@ const Facilitator = props => {
             <TextInput
               style={classes.inputbox}
               placeholder="Enter class name"
+              autoCapitalize="words"
+              value={newClass.coursename}
+              onChangeText={value => {
+                setNewClass({...newClass, coursename: value});
+              }}
             />
           </View>
         </View>
@@ -191,7 +272,13 @@ const Facilitator = props => {
             <Text style={classes.inputdesc}>Categories</Text>
             <Text>:</Text>
             <Item picker style={classes.categorypicker}>
-              <Picker mode="dialog" style={{marginLeft: -15}}>
+              <Picker
+                mode="dialog"
+                style={{marginLeft: -15}}
+                selectedValue={newClass.category}
+                onValueChange={value => {
+                  setNewClass({...newClass, category: value});
+                }}>
                 <Picker.Item
                   label="Category"
                   value=""
@@ -199,22 +286,68 @@ const Facilitator = props => {
                 />
                 <Picker.Item
                   label="Software"
-                  value="software"
+                  value="1"
                   style={classes.pickeritem}
                 />
                 <Picker.Item
                   label="History"
-                  value="History"
+                  value="2"
                   style={classes.pickeritem}
                 />
                 <Picker.Item
                   label="Psychology"
-                  value="Psychology"
+                  value="3"
                   style={classes.pickeritem}
                 />
                 <Picker.Item
                   label="Finance"
-                  value="Finance"
+                  value="4"
+                  style={classes.pickeritem}
+                />
+                <Picker.Item
+                  label="Math"
+                  value="5"
+                  style={classes.pickeritem}
+                />
+                <Picker.Item
+                  label="Science"
+                  value="6"
+                  style={classes.pickeritem}
+                />
+              </Picker>
+            </Item>
+          </View>
+        </View>
+        <View style={classes.inputgroup}>
+          <View style={classes.input}>
+            <Text style={classes.inputdesc}>Course Level</Text>
+            <Text>:</Text>
+            <Item picker style={classes.categorypicker}>
+              <Picker
+                mode="dialog"
+                style={{marginLeft: -15}}
+                selectedValue={newClass.level}
+                onValueChange={value => {
+                  setNewClass({...newClass, level: value});
+                }}>
+                <Picker.Item
+                  label="Course level"
+                  value=""
+                  style={classes.pickeritem}
+                />
+                <Picker.Item
+                  label="Beginner"
+                  value="1"
+                  style={classes.pickeritem}
+                />
+                <Picker.Item
+                  label="Intermediate"
+                  value="2"
+                  style={classes.pickeritem}
+                />
+                <Picker.Item
+                  label="Advance"
+                  value="3"
                   style={classes.pickeritem}
                 />
               </Picker>
@@ -230,6 +363,10 @@ const Facilitator = props => {
               style={{...classes.inputbox, paddingLeft: '5%'}}
               placeholder="Enter course price"
               keyboardType="number-pad"
+              value={newClass.price}
+              onChangeText={value => {
+                setNewClass({...newClass, price: value});
+              }}
             />
           </View>
         </View>
@@ -271,8 +408,16 @@ const Facilitator = props => {
           multiline={true}
           numberOfLines={5}
           placeholder="Course description"
+          value={newClass.description}
+          onChangeText={value => {
+            setNewClass({...newClass, description: value});
+          }}
         />
-        <TouchableOpacity style={classes.createbtn}>
+        <TouchableOpacity
+          style={classes.createbtn}
+          onPress={() => {
+            createCourse();
+          }}>
           <Text style={classes.createbtntext}>Create</Text>
         </TouchableOpacity>
       </View>
