@@ -18,15 +18,14 @@ import classes from './Styles';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import * as Animatable from 'react-native-animatable';
 import News from '../../components/dashboard/news/News';
-import AllSchedule from '../../components/dashboard/allschedule/AllSchedule';
-import ForYou from '../../components/dashboard/foryou/ForYou';
+import MemberDashboard from './member/MemberDashboard';
+import FacilitatorDashboard from './facilitator/FacilitatorDashboard';
 
 const Dashboard = props => {
   const notifActive = true;
   const name = props.loginReducers.user.data?.name || 'User';
   // let role = props.loginReducers.user.data.data.role;
-  const [activeTab, setActive] = React.useState(0);
-  const tabList = ['All Schedule', 'For You'];
+
   // console.log(props.loginReducers.user.data);
 
   const [registerToken, setRegisterToken] = useState('');
@@ -82,31 +81,11 @@ const Dashboard = props => {
         </View>
         <ScrollView nestedScrollEnabled>
           <News />
-          <View style={classes.schedule}>
-            <View style={classes.uppersection}>
-              <View style={classes.left}>
-                <Text style={classes.myclass}>My Class</Text>
-                <Text style={classes.date}>Today, October 10</Text>
-              </View>
-              <Material name="event" size={24} color={'#010620'} />
-            </View>
-            <View style={classes.bottomsection}>
-              {tabList.map((tabName, index) => (
-                <TouchableOpacity key={index} onPress={() => setActive(index)}>
-                  <Text
-                    style={{
-                      ...classes.tabItem,
-                      color: activeTab === index ? '#5784BA' : '#ADA9BB',
-                    }}>
-                    {tabName}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-            <SafeAreaView>
-              {activeTab === 0 ? <AllSchedule /> : <ForYou />}
-            </SafeAreaView>
-          </View>
+          {props.loginReducers.user?.data?.role === 'Member' ? (
+            <MemberDashboard />
+          ) : (
+            <FacilitatorDashboard />
+          )}
         </ScrollView>
       </View>
     </Animatable.View>

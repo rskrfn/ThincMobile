@@ -58,7 +58,7 @@ const classes = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     backgroundColor: '#FFFFFF',
-    marginVertical: 1,
+    margin: 2,
     paddingVertical: '6%',
     paddingHorizontal: 10,
     alignItems: 'center',
@@ -154,7 +154,7 @@ const classes = StyleSheet.create({
     marginLeft: 5,
     overflow: 'hidden',
     borderBottomColor: 'grey',
-    borderBottomWidth: 1,
+    borderBottomWidth: 1.2,
   },
   pickeritem: {
     margin: 0,

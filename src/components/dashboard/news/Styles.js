@@ -19,12 +19,13 @@ const classes = StyleSheet.create({
     right: 0,
     left: 0,
     bottom: 0,
-    marginBottom: 48,
+    marginBottom: 40,
+    paddingHorizontal: '2%',
   },
   text: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Montserrat-Bold',
+    color: 'white',
+    fontSize: 14,
     textAlign: 'center',
   },
   overlay: {
@@ -37,6 +38,18 @@ const classes = StyleSheet.create({
     width: '100%',
     height: 200,
     borderRadius: 18,
+  },
+  loadingcontainer: {
+    height: 200,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingtext: {
+    fontFamily: 'Montserrat-Bold',
+    color: 'black',
+    fontSize: 16,
+    textAlignVertical: 'center',
   },
 });
 export default classes;

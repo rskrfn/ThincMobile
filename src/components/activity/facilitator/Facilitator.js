@@ -126,10 +126,15 @@ const Facilitator = props => {
   };
 
   useEffect(() => {
-    getFacilitatorClass();
-  }, []);
+    const update = props.navigation.addListener('focus', () => {
+      getFacilitatorClass();
+    });
+    return () => {
+      update;
+    };
+  }, [props.navigation]);
 
-  console.log('newclass', newClass);
+  // console.log('newclass', newClass);
 
   return (
     <ScrollView>
