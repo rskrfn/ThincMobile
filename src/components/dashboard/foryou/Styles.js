@@ -1,9 +1,5 @@
 import {StyleSheet} from 'react-native';
 const classes = StyleSheet.create({
-  timeline: {
-    marginTop: 16,
-  },
-  list: {},
   time: {
     fontFamily: 'Roboto-Medium',
     fontSize: 16,

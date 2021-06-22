@@ -4,9 +4,34 @@ import {getStatusBarHeight} from 'react-native-status-bar-height';
 const statusBarHeight = getStatusBarHeight();
 
 const classes = StyleSheet.create({
+  modalcontainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  datepicker: {
+    backgroundColor: 'white',
+    paddingHorizontal: '5%',
+    paddingVertical: '10%',
+    borderRadius: 10,
+  },
+  modalbtn: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(87, 132, 186, 1)',
+    marginTop: '10%',
+    paddingVertical: '5%',
+    borderRadius: 10,
+  },
+  modalbtntext: {
+    fontFamily: 'Montserrat-SemiBold',
+    fontSize: 16,
+    color: 'white',
+  },
   schedule: {
     width: '100%',
-    padding: 18,
+    paddingHorizontal: '3%',
+    paddingVertical: 18,
     backgroundColor: 'white',
   },
   uppersection: {
