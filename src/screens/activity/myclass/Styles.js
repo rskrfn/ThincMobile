@@ -27,5 +27,14 @@ const classes = StyleSheet.create({
   maincontent: {
     paddingHorizontal: 8,
   },
+  servererror: {
+    padding: 8,
+  },
+  loading: {
+    textAlign: 'center',
+    fontFamily: 'Kanit-Regular',
+    color: '#5784BA',
+    fontSize: 15,
+  },
 });
 export default classes;

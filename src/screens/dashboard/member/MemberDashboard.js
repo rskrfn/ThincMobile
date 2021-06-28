@@ -9,13 +9,16 @@ import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import axios from 'axios';
 import {API_URL} from '@env';
+import {useSelector} from 'react-redux';
 
-const MemberDashboard = () => {
+const MemberDashboard = props => {
   const [date, setDate] = useState(new Date());
   const [datepicker, setdatepicker] = useState(false);
   const [activeTab, setActive] = useState(1);
   const tabList = ['All Schedule', 'For You'];
   const [allSchedule, setAllSchedule] = useState();
+  const [forYou, setForYou] = useState();
+  const profileData = useSelector(state => state.loginReducers.user?.data);
 
   const getAllSchedule = () => {
     let config = {
@@ -40,8 +43,32 @@ const MemberDashboard = () => {
       });
   };
 
+  const getForYou = () => {
+    let config = {
+      method: 'GET',
+      url: `${API_URL}/courses/foryou`,
+      params: {
+        userid: profileData.id,
+        schedule: moment(date).format('YYYY-MM-DD'),
+      },
+    };
+    axios(config)
+      .then(res => {
+        console.log('foryou', res);
+        if (res.data?.data.length > 0) {
+          setForYou(res.data.data);
+        }
+      })
+      .catch(err => {
+        if (err.response.data.message === 'Data not found') {
+          setForYou(false);
+        }
+      });
+  };
+
   useEffect(() => {
     getAllSchedule();
+    getForYou();
   }, [date]);
 
   return (
@@ -109,7 +136,11 @@ const MemberDashboard = () => {
           ))}
         </View>
         <View>
-          {activeTab === 0 ? <AllSchedule data={allSchedule} /> : <ForYou />}
+          {activeTab === 0 ? (
+            <AllSchedule data={allSchedule} />
+          ) : (
+            <ForYou data={forYou} />
+          )}
         </View>
       </View>
     </>

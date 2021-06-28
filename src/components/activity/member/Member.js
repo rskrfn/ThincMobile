@@ -8,10 +8,8 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   ScrollView,
-  SafeAreaView,
   RefreshControl,
   Alert,
-  LogBox,
 } from 'react-native';
 import {Button, Input, Icon, Item, Picker} from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -43,36 +41,27 @@ function Member({...props}) {
   const TOKEN = props.loginReducer.user?.token;
   // console.log(props);
 
-  const [registerToken, setRegisterToken] = useState('');
-  const [fcmRegistered, setFcmRegistered] = useState(false);
-
-  const onRegister = token => {
-    setRegisterToken(token.token);
-    setFcmRegistered(true);
-  };
-
   const onNotif = notif => {
     Alert.alert(notif.title, notif.message);
   };
 
-  const notif = new NotifService(onRegister, onNotif);
-
-  // const handlePerm = perms => {
-  //   Alert.alert('Permissions', JSON.stringify(perms));
-  // };
+  const notif = new NotifService(onNotif);
 
   const getMyClass = () => {
     setMyclassload(true);
     let config = {
       method: 'GET',
       url: `${API_URL}/courses/myclass`,
-      params: {id: userId},
+      params: {
+        id: userId,
+        page: 1,
+      },
     };
     axios(config)
       .then(res => {
-        // console.log(res);
-        if (res.data.data.length > 0) {
-          setMyClass(res.data.data);
+        console.log('myclass', res.data.data.result);
+        if (res.data.data.result.length > 0) {
+          setMyClass(res.data.data.result);
           setMyclassload(false);
         } else {
           setMyClass('');
@@ -80,7 +69,7 @@ function Member({...props}) {
         }
       })
       .catch(err => {
-        console.log({err});
+        console.log('myclass', {err});
         if (err.response.data.message === 'No Data') {
           setMyClass(false);
           setMyclassload(false);
@@ -189,9 +178,7 @@ function Member({...props}) {
   };
 
   useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     getMyClass();
-    getNewClass();
   }, []);
   // console.log(searchvalue);
 
@@ -208,7 +195,8 @@ function Member({...props}) {
   useEffect(() => {
     getNewClass();
   }, [currentPage]);
-  console.log(currentPage);
+  // console.log(currentPage);
+  console.log('hasil', myClass);
   return (
     <ScrollView
       nestedScrollEnabled
@@ -225,56 +213,47 @@ function Member({...props}) {
         </View>
         {myclassLoad === false ? (
           myClass ? (
-            <SafeAreaView style={classes.maincontainer}>
-              <FlatList
-                nestedScrollEnabled
-                scrollEnabled={false}
-                data={myClass.slice(0, 3)}
-                keyExtractor={(item, index) => {
-                  return index.toString();
-                }}
-                renderItem={({item}) => {
-                  return (
-                    <TouchableOpacity
-                      style={classes.myclass}
-                      onPress={() => {
-                        props.navigation.navigate('ClassDetail', {
-                          ...item,
-                        });
-                      }}>
-                      <Text style={classes.tableclassname}>{item.Name}</Text>
-                      <View style={classes.tableprogress}>
-                        <ProgressCircle
-                          percent={70}
-                          radius={20}
-                          borderWidth={2.8}
-                          color="#5784BA"
-                          shadowColor="#E5E6EB"
-                          bgColor="#fff">
-                          <Text style={classes.textprogress}>{70 + '%'}</Text>
-                        </ProgressCircle>
-                      </View>
-                      <Text
-                        style={{
-                          ...classes.tablescore,
-                          color: setColor(90),
-                        }}>
-                        {90 || null}
-                      </Text>
-                      <MaterialIcons
-                        name="more-vert"
-                        color="#D2DEED"
-                        size={32}
-                        style={{
-                          position: 'absolute',
-                          right: 1,
-                        }}
-                      />
-                    </TouchableOpacity>
-                  );
-                }}
-              />
-            </SafeAreaView>
+            myClass.slice(0, 3).map((item, index) => {
+              return (
+                <TouchableOpacity
+                  key={index}
+                  style={classes.myclass}
+                  onPress={() => {
+                    props.navigation.navigate('ClassDetail', {
+                      ...item,
+                    });
+                  }}>
+                  <Text style={classes.tableclassname}>{item.Name}</Text>
+                  <View style={classes.tableprogress}>
+                    <ProgressCircle
+                      percent={70}
+                      radius={20}
+                      borderWidth={2.8}
+                      color="#5784BA"
+                      shadowColor="#E5E6EB"
+                      bgColor="#fff">
+                      <Text style={classes.textprogress}>{70 + '%'}</Text>
+                    </ProgressCircle>
+                  </View>
+                  <Text
+                    style={{
+                      ...classes.tablescore,
+                      color: setColor(90),
+                    }}>
+                    {90 || null}
+                  </Text>
+                  <MaterialIcons
+                    name="more-vert"
+                    color="#D2DEED"
+                    size={32}
+                    style={{
+                      position: 'absolute',
+                      right: 1,
+                    }}
+                  />
+                </TouchableOpacity>
+              );
+            })
           ) : myClass === false ? (
             <View style={classes.servererror}>
               <Text style={classes.loading}>
@@ -622,7 +601,7 @@ function Member({...props}) {
               <MaterialIcons
                 name="chevron-right"
                 size={24}
-                color={!info?.prev ? 'black' : 'white'}
+                color={!info?.next ? 'white' : 'black'}
               />
             </TouchableOpacity>
           </View>

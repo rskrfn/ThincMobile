@@ -4,12 +4,11 @@ import {View, Text, StatusBar, ScrollView} from 'react-native';
 import {connect} from 'react-redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import classes from './Styles';
-import MyClassMember from '../../../components/activity/member/MyClassMember';
-// import MyClassFacilitator from '../../../components/activity/facilitator/MyClassFacilitator';
+import MyClassMember from '../../../components/activity/member/myclass/MyClassMember';
 
 function MyClass({...props}) {
   console.log(props);
-  let role = props.loginReducers.user?.data.role;
+  let role = props.loginReducers.user?.data?.role;
   return (
     <>
       <StatusBar
@@ -37,7 +36,13 @@ function MyClass({...props}) {
         <ScrollView style={classes.maincontent}>
           {role === 'Member' ? (
             <MyClassMember navigation={props.navigation} />
-          ) : null}
+          ) : (
+            <View style={classes.servererror}>
+              <Text style={classes.loading}>
+                Seems you haven't registered into any course
+              </Text>
+            </View>
+          )}
         </ScrollView>
       </View>
     </>

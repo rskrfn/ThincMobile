@@ -1,13 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  ScrollView,
-  Text,
-  StatusBar,
-  Image,
-  TouchableNativeFeedback,
-} from 'react-native';
+import {View, ScrollView, Text, StatusBar, Image} from 'react-native';
 import * as Progress from 'react-native-progress';
 import axios from 'axios';
 import {API_URL} from '@env';
