@@ -18,13 +18,14 @@ import Dashboard from './src/screens/dashboard/Dashboard';
 import Activity from './src/screens/activity/Activity';
 import MyClass from './src/screens/activity/myclass/MyClass';
 import MyClassFacilitator from './src/components/activity/facilitator/facilitatorclass/MyClassFacilitator';
-import ClassDetail from './src/screens/activity/classdetail/ClassDetail';
+import ClassDetail from './src/components/activity/member/classdetail/ClassDetail';
+import ClassDetailFacilitator from './src/components/activity/facilitator/classdetail/ClassDetailFacilitator';
+import ScoreDetail from './src/components/activity/classdetail/score/ScoreDetail';
 import Chat from './src/screens/chat/Chat';
 import ChatRoom from './src/components/chat/ChatRoom';
 import Profile from './src/screens/profile/Profile';
 import Phone from './src/components/profile/phone/Phone';
 import ChangePassword from './src/components/profile/password/ChangePassword';
-
 import CustomIcon from './src/components/customicon/icomoon';
 
 const Stack = createStackNavigator();
@@ -40,6 +41,11 @@ function ActivityNavigation() {
       <Stack.Screen name="MyClass" component={MyClass} />
       <Stack.Screen name="MyClassFacilitator" component={MyClassFacilitator} />
       <Stack.Screen name="ClassDetail" component={ClassDetail} />
+      <Stack.Screen
+        name="ClassDetailFacilitator"
+        component={ClassDetailFacilitator}
+      />
+      <Stack.Screen name="ScoreDetail" component={ScoreDetail} />
     </Stack.Navigator>
   );
 }

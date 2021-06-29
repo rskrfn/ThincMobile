@@ -11,23 +11,27 @@ const classes = StyleSheet.create({
   header: {
     paddingTop: statusBarHeight + 16,
     backgroundColor: '#5784BA',
-    paddingHorizontal: 26,
+    paddingHorizontal: '3%',
     borderBottomStartRadius: 20,
     borderBottomEndRadius: 20,
     paddingBottom: 24,
   },
   infosection: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   title: {
     fontFamily: 'Kanit-Medium',
-    fontSize: 28,
+    fontSize: 24,
     color: 'white',
+  },
+  maincontainer: {
+    paddingHorizontal: '2%',
   },
   tableheader: {
     flexDirection: 'row',
-    paddingHorizontal: 5,
     marginBottom: '5%',
+    paddingHorizontal: '2%',
   },
   headmyclass: {
     fontFamily: 'Montserrat-SemiBold',
@@ -49,7 +53,7 @@ const classes = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     backgroundColor: '#FFFFFF',
-    marginVertical: 1,
+    marginVertical: 2,
     paddingVertical: '6%',
     paddingHorizontal: 10,
     alignItems: 'center',

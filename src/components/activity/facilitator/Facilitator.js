@@ -5,6 +5,7 @@ import {
   View,
   Text,
   ScrollView,
+  RefreshControl,
   TouchableOpacity,
   Image,
   TextInput,
@@ -35,10 +36,13 @@ const Facilitator = props => {
     price: '',
     description: '',
   });
+  const [refreshing, setRefreshing] = React.useState(false);
+  const [myclassLoad, setMyclassload] = useState(false);
 
   const profileData = useSelector(state => state.loginReducers?.user);
 
   const getFacilitatorClass = () => {
+    setMyclassload(true);
     let config = {
       method: 'GET',
       url: `${API_URL}/courses/facilitatorclass`,
@@ -47,16 +51,25 @@ const Facilitator = props => {
     };
     axios(config)
       .then(res => {
-        console.log(res);
-        if (res.data?.message === "Particular user doesn't have any courses") {
-          setMyclass(false);
-        }
+        console.log('fasclass', res);
+
         if (res.data?.data.length > 0) {
           setMyclass(res.data.data);
         }
+        setMyclassload(false);
       })
       .catch(err => {
-        console.log({err});
+        console.log('fasclass', {err});
+        if (
+          err.response.data?.message ===
+          "Particular user doesn't have any courses"
+        ) {
+          setMyclass(false);
+        }
+        if (err.response.data?.message === 'Data not found') {
+          setMyclass(false);
+        }
+        setMyclassload(false);
       });
   };
 
@@ -91,10 +104,10 @@ const Facilitator = props => {
         end: moment(end).format('HH:mm:ss'),
       },
     };
-    console.log(config.data);
+    // console.log(config.data);
     axios(config)
       .then(res => {
-        console.log(res);
+        // console.log(res);
         getFacilitatorClass();
         setNewClass({
           ...newClass,
@@ -125,6 +138,17 @@ const Facilitator = props => {
       });
   };
 
+  const onRefresh = React.useCallback(async () => {
+    try {
+      setRefreshing(true);
+      setMyclass('');
+      await getFacilitatorClass();
+      setRefreshing(false);
+    } catch (err) {
+      console.log({err});
+    }
+  }, []);
+
   useEffect(() => {
     const update = props.navigation.addListener('focus', () => {
       getFacilitatorClass();
@@ -135,9 +159,12 @@ const Facilitator = props => {
   }, [props.navigation]);
 
   // console.log('newclass', newClass);
-
+  // console.log('myclass', myClass);
   return (
-    <ScrollView>
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
       <Modal
         transparent
         style={classes.modaldate}
@@ -224,11 +251,19 @@ const Facilitator = props => {
         </View>
       </View>
       <View style={classes.myclasscontainer}>
-        {myClass
-          ? myClass.slice(0, 3).map((item, index) => {
+        {myclassLoad === false ? (
+          myClass ? (
+            myClass.slice(0, 3).map((item, index) => {
               // console.log(item);
               return (
-                <TouchableOpacity style={classes.myclass} key={index}>
+                <TouchableOpacity
+                  style={classes.myclass}
+                  key={index}
+                  onPress={() => {
+                    props.navigation.navigate('ClassDetailFacilitator', {
+                      ...item,
+                    });
+                  }}>
                   <Text style={classes.tableclassname}>{item.course_name}</Text>
                   <View style={classes.tablestudent}>
                     <Text style={classes.studenttext}>{item.students}</Text>
@@ -243,7 +278,21 @@ const Facilitator = props => {
                 </TouchableOpacity>
               );
             })
-          : null}
+          ) : myClass === false ? (
+            <View style={classes.servererror}>
+              <Text style={classes.loading}>
+                Seems you do not have any courses
+              </Text>
+            </View>
+          ) : (
+            <View style={classes.servererror}>
+              <Text style={classes.texterror}>404</Text>
+              <Text style={classes.texterror}>Server Error</Text>
+            </View>
+          )
+        ) : (
+          <Text style={classes.loading}>Loading...</Text>
+        )}
       </View>
       <View style={classes.allmyclass}>
         <Text

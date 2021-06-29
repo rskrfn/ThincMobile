@@ -16,7 +16,7 @@ import axios from 'axios';
 import {API_URL} from '@env';
 import {connect} from 'react-redux';
 import classes from './Styles';
-// import DP from '../../../assets/images/profilepicture.jpg';
+import DP from '../../../assets/images/profilepicture.png';
 import LinearGradient from 'react-native-linear-gradient';
 
 const EditProfile = props => {
@@ -204,7 +204,7 @@ const EditProfile = props => {
   }
 
   // console.log(data);
-  // console.log(dp);
+  console.log(dp);
   // console.log(props);
   return (
     <Animated.ScrollView
@@ -216,7 +216,7 @@ const EditProfile = props => {
         <ImageBackground
           imageStyle={{borderRadius: 100}}
           style={classes.profilepicture}
-          source={{uri: dp}}
+          source={dp !== `${API_URL}null` ? {uri: dp} : DP}
         />
         <View style={classes.btngroup}>
           <View style={classes.btncontainer}>

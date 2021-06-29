@@ -140,10 +140,16 @@ const FacilitatorDashboard = props => {
           {schedule ? (
             schedule.map((item, index) => (
               <View style={classes.schedulecontainer} key={index}>
-                <Text style={classes.coursetime}>
-                  {item.start_time.slice(0, 5)} - {item.end_time.slice(0, 5)}
-                </Text>
-                <Text style={classes.coursename}>{item.course_name}</Text>
+                <View style={classes.leftsection}>
+                  <Text style={classes.coursetime}>
+                    {item.start_time.slice(0, 5)} - {item.end_time.slice(0, 5)}
+                  </Text>
+                  <Text style={classes.coursename}>
+                    {item.course_name.length > 25
+                      ? item.course_name.slice(0, 25) + '...'
+                      : item.course_name}
+                  </Text>
+                </View>
                 <View style={classes.rightsection}>
                   <Text style={classes.coursestudent}>{item.students}</Text>
                   <Image style={classes.studenticon} source={MemberIcon} />

@@ -6,17 +6,17 @@ import axios from 'axios';
 import {API_URL} from '@env';
 import classes from './Styles';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import backdropImg from '../../../assets/images/backdrop1.png';
+import backdropImg from '../../../../assets/images/backdrop1.png';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import softwareIcon from '../../../assets/icons/icon_software.png';
-import financeIcon from '../../../assets/icons/icon_finance.png';
-import historyIcon from '../../../assets/icons/icon_history.png';
-import mathIcon from '../../../assets/icons/icon_math.png';
-import scienceIcon from '../../../assets/icons/icon_science.png';
+import softwareIcon from '../../../../assets/icons/icon_software.png';
+import financeIcon from '../../../../assets/icons/icon_finance.png';
+import historyIcon from '../../../../assets/icons/icon_history.png';
+import mathIcon from '../../../../assets/icons/icon_math.png';
+import scienceIcon from '../../../../assets/icons/icon_science.png';
 
-import Information from '../../../components/activity/classdetail/information/Information';
-import ClassProgress from '../../../components/activity/classdetail/progress/ClassProgress';
-import ClassDiscussion from '../../../components/activity/classdetail/discussion/ClassDiscussion';
+import Information from '../../../activity/classdetail/information/Information';
+import ClassProgress from '../../../activity/classdetail/progress/ClassProgress';
+import ClassDiscussion from '../../../activity/classdetail/discussion/ClassDiscussion';
 import {connect} from 'react-redux';
 
 const ClassDetail = props => {
@@ -85,6 +85,7 @@ const ClassDetail = props => {
             token={TOKEN}
             courseId={courseData.id}
             scoreData={scoreData}
+            user={props.loginReducers.user.data}
           />
         );
       case 2:

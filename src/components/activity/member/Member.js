@@ -70,7 +70,7 @@ function Member({...props}) {
       })
       .catch(err => {
         console.log('myclass', {err});
-        if (err.response.data.message === 'No Data') {
+        if (err.response.data?.message === 'Data not found') {
           setMyClass(false);
           setMyclassload(false);
         } else {

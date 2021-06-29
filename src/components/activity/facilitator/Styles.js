@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
+// import {getStatusBarHeight} from 'react-native-status-bar-height';
 
 const classes = StyleSheet.create({
   container: {
@@ -58,7 +58,7 @@ const classes = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     backgroundColor: '#FFFFFF',
-    margin: 2,
+    marginVertical: 2,
     paddingVertical: '6%',
     paddingHorizontal: 10,
     alignItems: 'center',
@@ -205,6 +205,21 @@ const classes = StyleSheet.create({
     fontFamily: 'Montserrat-SemiBold',
     fontSize: 16,
     color: 'white',
+  },
+  servererror: {
+    padding: 8,
+  },
+  texterror: {
+    textAlign: 'center',
+    fontFamily: 'Kanit-Regular',
+    color: 'red',
+    borderRadius: 20,
+  },
+  loading: {
+    textAlign: 'center',
+    fontFamily: 'Kanit-Regular',
+    color: '#5784BA',
+    fontSize: 15,
   },
 });
 export default classes;

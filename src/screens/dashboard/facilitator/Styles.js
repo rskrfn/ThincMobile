@@ -1,7 +1,7 @@
 import {StyleSheet} from 'react-native';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
+// import {getStatusBarHeight} from 'react-native-status-bar-height';
 
-const statusBarHeight = getStatusBarHeight();
+// const statusBarHeight = getStatusBarHeight();
 
 const classes = StyleSheet.create({
   modalcontainer: {
@@ -93,7 +93,7 @@ const classes = StyleSheet.create({
   schedulecontainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    // alignItems: 'center',
     width: '100%',
     marginBottom: '2%',
     backgroundColor: 'white',
@@ -103,11 +103,16 @@ const classes = StyleSheet.create({
     shadowColor: 'black',
     elevation: 4,
   },
+  leftsection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   coursetime: {
     fontFamily: 'Roboto-Bold',
     fontSize: 12,
   },
   coursename: {
+    marginLeft: 10,
     fontFamily: 'Montserrat-SemiBold',
     fontSize: 14,
   },
@@ -115,6 +120,7 @@ const classes = StyleSheet.create({
     fontFamily: 'Montserrat-SemiBold',
     fontSize: 14,
   },
+
   rightsection: {
     flexDirection: 'row',
   },

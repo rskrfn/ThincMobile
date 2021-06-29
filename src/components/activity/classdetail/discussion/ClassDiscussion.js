@@ -5,7 +5,9 @@ import classes from './Styles';
 const ClassDiscussion = props => {
   return (
     <View>
-      <Text>Class Discussion</Text>
+      <Text style={classes.placeholder}>
+        This page is currently on development
+      </Text>
     </View>
   );
 };
