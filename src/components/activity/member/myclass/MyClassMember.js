@@ -79,45 +79,43 @@ function MyClassMember({...props}) {
           {myClass
             ? myClass.map((item, index) => {
                 return (
-                  <>
-                    <TouchableOpacity
-                      key={index}
-                      style={classes.myclass}
-                      onPress={() =>
-                        props.navigation.navigate('ClassDetail', {
-                          ...item,
-                        })
-                      }>
-                      <Text style={classes.tableclassname}>{item.Name}</Text>
-                      <View style={classes.tableprogress}>
-                        <ProgressCircle
-                          percent={70}
-                          radius={20}
-                          borderWidth={2.8}
-                          color="#5784BA"
-                          shadowColor="#E5E6EB"
-                          bgColor="#fff">
-                          <Text style={classes.textprogress}>70</Text>
-                        </ProgressCircle>
-                      </View>
-                      <Text
-                        style={{
-                          ...classes.tablescore,
-                          color: setColor(90),
-                        }}>
-                        90
-                      </Text>
-                      <MaterialIcons
-                        name="more-vert"
-                        color="#D2DEED"
-                        size={32}
-                        style={{
-                          position: 'absolute',
-                          right: 1,
-                        }}
-                      />
-                    </TouchableOpacity>
-                  </>
+                  <TouchableOpacity
+                    key={index}
+                    style={classes.myclass}
+                    onPress={() =>
+                      props.navigation.navigate('ClassDetail', {
+                        ...item,
+                      })
+                    }>
+                    <Text style={classes.tableclassname}>{item.Name}</Text>
+                    <View style={classes.tableprogress}>
+                      <ProgressCircle
+                        percent={70}
+                        radius={20}
+                        borderWidth={2.8}
+                        color="#5784BA"
+                        shadowColor="#E5E6EB"
+                        bgColor="#fff">
+                        <Text style={classes.textprogress}>70</Text>
+                      </ProgressCircle>
+                    </View>
+                    <Text
+                      style={{
+                        ...classes.tablescore,
+                        color: setColor(90),
+                      }}>
+                      90
+                    </Text>
+                    <MaterialIcons
+                      name="more-vert"
+                      color="#D2DEED"
+                      size={32}
+                      style={{
+                        position: 'absolute',
+                        right: 1,
+                      }}
+                    />
+                  </TouchableOpacity>
                 );
               })
             : null}
