@@ -6,7 +6,7 @@ import {
   TextInput,
   ScrollView,
   Keyboard,
-  Pressable,
+  TouchableOpacity,
   StatusBar,
 } from 'react-native';
 import {Toast} from 'native-base';
@@ -29,6 +29,8 @@ const Verification = props => {
   const [code4, setCode4] = useState();
   const [code4focus, setFocus4] = useState();
   const coderef4 = useRef();
+
+  const reg = /^[0-9]*$/;
 
   const email = props.route.params.email;
 
@@ -99,7 +101,15 @@ const Verification = props => {
   return (
     <ScrollView style={classes.maincontainer}>
       <StatusBar barStyle="dark-content" backgroundColor="white" />
-      <Material name="chevron-left" size={42} color={'#010620'} />
+      <View style={classes.backbtn}>
+        <TouchableOpacity
+          onPress={() => {
+            props.navigation.goBack();
+          }}>
+          <Material name="chevron-left" size={42} color={'#010620'} />
+        </TouchableOpacity>
+      </View>
+
       <View style={classes.content}>
         <Text style={classes.header}>Account Verification</Text>
         <Image style={classes.image} source={resetImage} />
@@ -108,7 +118,7 @@ const Verification = props => {
         </Text>
         <View style={classes.inputbox}>
           <TextInput
-            style={code1focus ? classes.codeinputActive : classes.codeinput}
+            style={code1 ? classes.codeinputActive : classes.codeinput}
             autoCapitalize="none"
             value={code1}
             maxLength={1}
@@ -117,13 +127,18 @@ const Verification = props => {
             onChangeText={value => {
               if (value.length > 0) {
                 setFocus1(true);
-                coderef2.current.focus();
               }
-              setCode1(value);
+              if (reg.test(value)) {
+                setCode1(value);
+                return coderef2.current.focus();
+              }
+              if (!reg.test(value)) {
+                return setCode1('');
+              }
             }}
           />
           <TextInput
-            style={code2focus ? classes.codeinputActive : classes.codeinput}
+            style={code2 ? classes.codeinputActive : classes.codeinput}
             autoCapitalize="none"
             value={code2}
             maxLength={1}
@@ -132,13 +147,18 @@ const Verification = props => {
             onChangeText={value => {
               if (value.length > 0) {
                 setFocus2(true);
-                coderef3.current.focus();
               }
-              setCode2(value);
+              if (reg.test(value)) {
+                setCode2(value);
+                return coderef3.current.focus();
+              }
+              if (!reg.test(value)) {
+                return setCode2('');
+              }
             }}
           />
           <TextInput
-            style={code3focus ? classes.codeinputActive : classes.codeinput}
+            style={code3 ? classes.codeinputActive : classes.codeinput}
             autoCapitalize="none"
             value={code3}
             maxLength={1}
@@ -147,13 +167,18 @@ const Verification = props => {
             onChangeText={value => {
               if (value.length > 0) {
                 setFocus3(true);
-                coderef4.current.focus();
               }
-              setCode3(value);
+              if (reg.test(value)) {
+                setCode3(value);
+                return coderef4.current.focus();
+              }
+              if (!reg.test(value)) {
+                return setCode3('');
+              }
             }}
           />
           <TextInput
-            style={code4focus ? classes.codeinputActive : classes.codeinput}
+            style={code4 ? classes.codeinputActive : classes.codeinput}
             autoCapitalize="none"
             value={code4}
             maxLength={1}
@@ -162,30 +187,35 @@ const Verification = props => {
             onChangeText={value => {
               if (value.length > 0) {
                 setFocus4(true);
-                Keyboard.dismiss();
               }
-              setCode4(value);
+              if (reg.test(value)) {
+                setCode4(value);
+                return Keyboard.dismiss();
+              }
+              if (!reg.test(value)) {
+                return setCode4('');
+              }
             }}
           />
         </View>
         <View style={classes.input}>
           <Text style={classes.subtext}>Didn't Recieve a code?</Text>
-          <Pressable
+          <TouchableOpacity
             style={classes.resendpressable}
             onPress={() => {
-              props.navigation.navigate('SendEmail');
+              props.navigation.goBack();
             }}>
             <Text style={classes.resendlink}>Resend</Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
         <View style={classes.input}>
-          <Pressable
+          <TouchableOpacity
             style={classes.btnsend}
             onPress={() => {
               submitHandler();
             }}>
             <Text style={classes.btntextsend}>Verify</Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>

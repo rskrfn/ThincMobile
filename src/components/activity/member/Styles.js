@@ -22,7 +22,7 @@ const classes = StyleSheet.create({
     fontFamily: 'Montserrat-SemiBold',
     fontSize: 16,
     marginTop: 16,
-    width: '48%',
+    width: '46%',
   },
   headprogress: {
     textAlign: 'center',
@@ -36,7 +36,7 @@ const classes = StyleSheet.create({
     fontFamily: 'Montserrat-SemiBold',
     fontSize: 16,
     marginTop: 16,
-    width: '25%',
+    width: '28%',
   },
   myclass: {
     flexDirection: 'row',
@@ -51,12 +51,13 @@ const classes = StyleSheet.create({
     elevation: 2,
   },
   tableclassname: {
-    width: '55%',
+    width: '46%',
     fontFamily: 'Montserrat-Medium',
     fontSize: 13,
   },
   tableprogress: {
     width: '25%',
+    alignItems: 'center',
   },
   textprogress: {
     color: '#5784BA',
@@ -64,9 +65,25 @@ const classes = StyleSheet.create({
     fontSize: 10,
   },
   tablescore: {
-    width: '20%',
+    width: '26%',
+    textAlign: 'center',
     fontFamily: 'Montserrat-Bold',
     fontSize: 20,
+  },
+  unfinishedcontainer: {
+    width: '23%',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginHorizontal: '1%',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    backgroundColor: '#EDD2D2',
+    borderRadius: 20,
+  },
+  unfinishtext: {
+    fontFamily: 'Montserrat-Medium',
+    color: '#BA5757',
+    fontSize: 10,
   },
   allmyclass: {
     flexDirection: 'row',
@@ -78,6 +95,7 @@ const classes = StyleSheet.create({
     fontFamily: 'Montserrat-Medium',
     fontSize: 14,
   },
+
   newClassSection: {
     marginTop: 16,
     backgroundColor: '#FFFFFF',

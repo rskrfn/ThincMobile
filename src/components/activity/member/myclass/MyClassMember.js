@@ -90,22 +90,37 @@ function MyClassMember({...props}) {
                     <Text style={classes.tableclassname}>{item.Name}</Text>
                     <View style={classes.tableprogress}>
                       <ProgressCircle
-                        percent={70}
+                        percent={Number(
+                          ((item.progress / item.totalsubcourse) * 100).toFixed(
+                            0,
+                          ),
+                        )}
                         radius={20}
                         borderWidth={2.8}
                         color="#5784BA"
                         shadowColor="#E5E6EB"
                         bgColor="#fff">
-                        <Text style={classes.textprogress}>70</Text>
+                        <Text style={classes.textprogress}>
+                          {(
+                            (item.progress / item.totalsubcourse) *
+                            100
+                          ).toFixed(0) + '%'}
+                        </Text>
                       </ProgressCircle>
                     </View>
-                    <Text
-                      style={{
-                        ...classes.tablescore,
-                        color: setColor(90),
-                      }}>
-                      90
-                    </Text>
+                    {item.score ? (
+                      <Text
+                        style={{
+                          ...classes.tablescore,
+                          color: setColor(item.score.slice(0, 2)),
+                        }}>
+                        {item.score.slice(0, 2)}
+                      </Text>
+                    ) : (
+                      <View style={classes.unfinishedcontainer}>
+                        <Text style={classes.unfinishtext}>Unfinished</Text>
+                      </View>
+                    )}
                     <MaterialIcons
                       name="more-vert"
                       color="#D2DEED"

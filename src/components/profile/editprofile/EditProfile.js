@@ -145,20 +145,20 @@ const EditProfile = props => {
       );
     }
     let splittedName = fullName.split(' ');
-    if (splittedName[0].length < 2) {
+    if (splittedName[0].length < 3) {
       return (
         <View style={classes.warning}>
           <Text style={{...classes.inputwarning, color: 'rgb(255, 19, 19)'}}>
-            First name must be at least 2 characters
+            First name must be at least 3 characters
           </Text>
         </View>
       );
     }
-    if (splittedName[1] && splittedName[1].length < 2) {
+    if (splittedName[1] && splittedName[1].length < 3) {
       return (
         <View style={classes.warning}>
           <Text style={{...classes.inputwarning, color: 'rgb(255, 19, 19)'}}>
-            Last / Middle name must be at least 2 characters
+            Last name must be at least 3 characters
           </Text>
         </View>
       );
@@ -167,7 +167,7 @@ const EditProfile = props => {
       return (
         <View style={classes.warning}>
           <Text style={{...classes.inputwarning, color: 'rgb(255, 19, 19)'}}>
-            Last / Middle name must be at least 2 characters
+            Last name must be at least 2 characters
           </Text>
         </View>
       );

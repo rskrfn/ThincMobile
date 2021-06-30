@@ -6,6 +6,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: 'white',
   },
+  backbtn: {
+    width: 42,
+    marginLeft: '5%',
+  },
   content: {
     flexDirection: 'column',
     alignItems: 'center',

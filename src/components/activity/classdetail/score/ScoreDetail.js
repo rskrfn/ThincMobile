@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
-import {View, Text, TouchableOpacity, Image} from 'react-native';
+import {View, Text, TouchableOpacity, Image, ScrollView} from 'react-native';
 import classes from './Styles';
 import {API_URL} from '@env';
 import axios from 'axios';
@@ -86,32 +86,34 @@ const ScoreDetail = props => {
               <Text style={classes.headertopic}>Topic</Text>
               <Text style={classes.headerscore}>Score</Text>
             </View>
-            {scoreData ? (
-              scoreData.map((item, index) => {
-                return (
-                  <View key={index} style={classes.content}>
-                    <Text style={classes.subcoursename}>{item.Name}</Text>
-                    {item.Score ? (
-                      <Text
-                        style={{
-                          ...classes.score,
-                          color: setColor(item.Score),
-                        }}>
-                        {item.Score}
-                      </Text>
-                    ) : (
-                      <View style={classes.unfinishedcontainer}>
-                        <Text style={classes.unfinishtext}>Unfinished</Text>
-                      </View>
-                    )}
-                  </View>
-                );
-              })
-            ) : (
-              <Text style={classes.errorplaceholder}>
-                There's seems to be a problem
-              </Text>
-            )}
+            <ScrollView>
+              {scoreData ? (
+                scoreData.map((item, index) => {
+                  return (
+                    <View key={index} style={classes.content}>
+                      <Text style={classes.subcoursename}>{item.Name}</Text>
+                      {item.Score ? (
+                        <Text
+                          style={{
+                            ...classes.score,
+                            color: setColor(item.Score),
+                          }}>
+                          {item.Score}
+                        </Text>
+                      ) : (
+                        <View style={classes.unfinishedcontainer}>
+                          <Text style={classes.unfinishtext}>Unfinished</Text>
+                        </View>
+                      )}
+                    </View>
+                  );
+                })
+              ) : (
+                <Text style={classes.errorplaceholder}>
+                  There's seems to be a problem
+                </Text>
+              )}
+            </ScrollView>
           </View>
         </View>
       </View>

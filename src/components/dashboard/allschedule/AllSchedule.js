@@ -31,7 +31,7 @@ const AllSchedule = props => {
               {item.start_time.slice(0, 5)} - {item.end_time.slice(0, 5)}
             </Text>
             <Text style={classes.coursename}>{item.course_name}</Text>
-            <View style={classes.tableprogress}>
+            {/* <View style={classes.tableprogress}>
               <ProgressCircle
                 percent={70}
                 radius={20}
@@ -41,7 +41,7 @@ const AllSchedule = props => {
                 bgColor="#fff">
                 <Text style={classes.textprogress}>{70 + '%'}</Text>
               </ProgressCircle>
-            </View>
+            </View> */}
           </View>
         ))
       ) : (

@@ -1,31 +1,33 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
+
+const windowHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'row',
+    flexDirection: 'column',
     backgroundColor: '#F9F9F9',
+    height: windowHeight,
   },
-
+  content: {
+    paddingVertical: '5%',
+  },
   header: {
     alignSelf: 'center',
     fontFamily: 'Kanit-SemiBold',
     fontSize: 32,
     color: 'black',
     marginBottom: '10%',
-    marginTop: 100,
   },
   inputGroup: {
     justifyContent: 'center',
-    alignItems: 'center',
   },
   input: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: '10%',
-    marginRight: '10%',
+    marginHorizontal: '10%',
   },
   inputLabel: {
     position: 'absolute',
@@ -65,12 +67,18 @@ const styles = StyleSheet.create({
     right: 15,
     justifyContent: 'center',
   },
+  inputwarning: {
+    marginHorizontal: '10%',
+    fontFamily: 'Roboto-Medium',
+    fontSize: 12,
+    color: 'rgba(255, 91, 55, 1)',
+  },
   forgot: {
-    flex: 1,
-    alignItems: 'flex-end',
+    marginRight: '10%',
+    alignSelf: 'flex-end',
   },
   forgottext: {
-    marginTop: 10,
+    color: 'black',
     fontFamily: 'Roboto-Medium',
     fontSize: 14,
   },
@@ -122,7 +130,8 @@ const styles = StyleSheet.create({
   },
   register: {
     flexDirection: 'row',
-    marginTop: 150,
+    position: 'absolute',
+    bottom: '5%',
   },
   newusertext: {
     color: '#ADA9BB',

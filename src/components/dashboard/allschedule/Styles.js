@@ -21,12 +21,12 @@ const classes = StyleSheet.create({
     elevation: 4,
   },
   coursetime: {
-    // width: '24%',
+    width: '24%',
     fontFamily: 'Roboto-Bold',
     fontSize: 12,
   },
   coursename: {
-    width: '58%',
+    width: '76%',
     marginHorizontal: '2%',
     fontFamily: 'Montserrat-SemiBold',
     fontSize: 14,

@@ -1,12 +1,15 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 
 const statusBarHeight = getStatusBarHeight();
+
+const windowHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   maincontainer: {
     flex: 1,
     flexDirection: 'column',
+    height: windowHeight - statusBarHeight,
     backgroundColor: 'white',
     paddingTop: statusBarHeight + 16,
   },
@@ -15,26 +18,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginHorizontal: '5%',
-    alignItems: 'center',
   },
   content: {
     flex: 1,
     flexDirection: 'column',
-    alignItems: 'center',
+    paddingBottom: '10%',
   },
   header: {
-    marginTop: '2%',
+    alignSelf: 'center',
     fontFamily: 'Kanit-Medium',
     fontSize: 28,
   },
-
   desc1: {
     marginHorizontal: '10%',
-    marginTop: '20%',
+    marginTop: '10%',
     fontFamily: 'Kanit-Medium',
     fontSize: 20,
     textAlign: 'center',
-    marginBottom: '15%',
+    marginBottom: '10%',
     color: 'black',
   },
   input: {
@@ -64,28 +65,18 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'black',
   },
-  warning: {
-    marginTop: '2%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'flex-start',
-    marginHorizontal: '10%',
-  },
-
   inputwarning: {
-    paddingLeft: '2%',
-    fontFamily: 'Roboto-Regular',
-    fontSize: 14,
-  },
-  warninglogo: {
-    marginLeft: '2%',
+    marginHorizontal: '12%',
+    marginBottom: '5%',
+    fontFamily: 'Roboto-Medium',
+    fontSize: 12,
+    color: 'rgba(255, 91, 55, 1)',
   },
   input2: {
     flexDirection: 'row',
     alignItems: 'center',
     marginLeft: '10%',
     marginRight: '10%',
-    marginTop: '5%',
   },
   textInputrepeatPassword: {
     flex: 1,
@@ -102,11 +93,8 @@ const styles = StyleSheet.create({
     right: 15,
     justifyContent: 'center',
   },
-
   btnsend: {
     width: '100%',
-    marginVertical: '10%',
-    marginHorizontal: '10%',
     alignItems: 'center',
     backgroundColor: '#5784BA',
     justifyContent: 'center',

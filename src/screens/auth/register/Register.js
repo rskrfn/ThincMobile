@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {
   View,
   Text,
-  Pressable,
+  TouchableOpacity,
   TextInput,
   ScrollView,
   SafeAreaView,
@@ -17,6 +17,12 @@ import {Toast} from 'native-base';
 import axios from 'axios';
 import {API_URL} from '@env';
 import resetImage from '../../../assets/images/reset3.png';
+import {
+  nameValidation,
+  emailValidation,
+  passwordValidation,
+  usernameValidation,
+} from '../../../services/validation/inputValidation';
 
 const Register = props => {
   const [data, setData] = useState({
@@ -29,6 +35,13 @@ const Register = props => {
   const [eye, setEye] = useState({
     securePass: true,
     secureRepeat: true,
+  });
+  const [warning, setWarning] = useState({
+    namewarning: '',
+    usernamewarning: '',
+    emailwarning: '',
+    passwordwarning: '',
+    repeatwarning: '',
   });
   const [isemailValid, setValidate] = useState();
   const [modal, setModal] = useState(false);
@@ -46,7 +59,13 @@ const Register = props => {
   };
   let submitHandler = e => {
     e.preventDefault();
-    if (!data.name || !data.email || !data.password || !data.username) {
+    if (
+      !data.name ||
+      !data.email ||
+      !data.username ||
+      !data.password ||
+      !data.repeat
+    ) {
       return Toast.show({
         text: 'Fill in your information',
         type: 'warning',
@@ -54,29 +73,21 @@ const Register = props => {
         duration: 3000,
       });
     }
-    if (data.username.length < 4) {
+    if (
+      warning.namewarning ||
+      warning.usernamewarning ||
+      warning.emailwarning ||
+      warning.passwordwarning ||
+      warning.repeatwarning !== 'Password match'
+    ) {
       return Toast.show({
-        text: 'Username must be at least 4 character',
-        type: 'danger',
-        textStyle: {textAlign: 'center'},
-        duration: 3000,
-      });
-    }
-    if (data.password.length < 8) {
-      return Toast.show({
-        text: 'Password must be at least 8 character',
-        type: 'danger',
-        textStyle: {textAlign: 'center'},
-        duration: 3000,
-      });
-    }
-    if (!isemailValid) {
-      return Toast.show({text: 'Wrong Email', type: 'danger'});
-    }
-    if (data.password !== data.repeat) {
-      return Toast.show({
-        text: "Password doesn't match",
-        type: 'danger',
+        text:
+          warning.namewarning ||
+          warning.usernamewarning ||
+          warning.emailwarning ||
+          warning.passwordwarning ||
+          warning.repeatwarning,
+        type: 'warning',
         textStyle: {textAlign: 'center'},
         duration: 3000,
       });
@@ -94,10 +105,6 @@ const Register = props => {
             setModal(!modal);
             setData({});
           }
-          setTimeout(() => {
-            props.navigation.navigate('Login');
-          }, 5000);
-          console.log(res);
         })
         .catch(error => {
           console.log({error});
@@ -130,7 +137,7 @@ const Register = props => {
   };
   // console.log(eye);
   return (
-    <SafeAreaView style={classes.container}>
+    <View style={classes.container}>
       <Modal
         visible={modal}
         animationType="fade"
@@ -141,13 +148,16 @@ const Register = props => {
         <View style={classes.modalcontainer}>
           <Text style={classes.modalheader}>Registered Successfully!</Text>
           <Image style={classes.image} source={resetImage} />
-          <View>
-            <Text style={classes.textmodal}>Redirecting to login page...</Text>
-          </View>
+          <TouchableOpacity
+            onPress={() => {
+              props.navigation.navigate('Login');
+            }}>
+            <Text style={classes.textmodal}>Go to login page</Text>
+          </TouchableOpacity>
         </View>
       </Modal>
-      <ScrollView contentContainerstyle={classes.container}>
-        <Animatable.View animation="fadeIn">
+      <View>
+        <ScrollView>
           <Text style={classes.header}>Register</Text>
           <View style={classes.inputGroup}>
             <View style={classes.input}>
@@ -156,20 +166,39 @@ const Register = props => {
                 style={classes.textInputUsername}
                 autoCapitalize="none"
                 onChangeText={name => {
+                  setWarning({...warning, namewarning: ''});
                   setData({...data, name: name});
+                  setWarning({...warning, namewarning: nameValidation(name)});
                 }}
               />
             </View>
+            {warning.namewarning ? (
+              <Text style={classes.inputwarning}>{warning.namewarning}</Text>
+            ) : (
+              <View style={{marginBottom: '9%'}} />
+            )}
             <View style={classes.input}>
               <Text style={classes.inputLabel}>Username</Text>
               <TextInput
                 style={classes.textInputUsername}
                 autoCapitalize="none"
                 onChangeText={username => {
+                  setWarning({...warning, usernamewarning: ''});
                   setData({...data, username: username});
+                  setWarning({
+                    ...warning,
+                    usernamewarning: usernameValidation(username),
+                  });
                 }}
               />
             </View>
+            {warning.usernamewarning ? (
+              <Text style={classes.inputwarning}>
+                {warning.usernamewarning}
+              </Text>
+            ) : (
+              <View style={{marginBottom: '5%'}} />
+            )}
             <View style={classes.input}>
               <Text style={classes.inputLabel}>Email</Text>
               <TextInput
@@ -177,10 +206,20 @@ const Register = props => {
                 autoCapitalize="none"
                 textContentType="emailAddress"
                 onChangeText={email => {
+                  setWarning({...warning, emailwarning: ''});
                   validateEmail(email);
+                  setWarning({
+                    ...warning,
+                    emailwarning: emailValidation(email),
+                  });
                 }}
               />
             </View>
+            {warning.emailwarning ? (
+              <Text style={classes.inputwarning}>{warning.emailwarning}</Text>
+            ) : (
+              <View style={{marginBottom: '5%'}} />
+            )}
             <View style={classes.input}>
               <Text style={classes.inputLabel}>Password</Text>
               <TextInput
@@ -188,10 +227,15 @@ const Register = props => {
                 autoCapitalize="none"
                 secureTextEntry={eye.securePass ? true : false}
                 onChangeText={password => {
+                  setWarning({...warning, passwordwarning: ''});
                   setData({...data, password: password});
+                  setWarning({
+                    ...warning,
+                    passwordwarning: passwordValidation(password),
+                  });
                 }}
               />
-              <Pressable
+              <TouchableOpacity
                 style={classes.eye}
                 onPress={() => {
                   setEye({
@@ -208,8 +252,15 @@ const Register = props => {
                     size={24}
                   />
                 )}
-              </Pressable>
+              </TouchableOpacity>
             </View>
+            {warning.passwordwarning ? (
+              <Text style={classes.inputwarning}>
+                {warning.passwordwarning}
+              </Text>
+            ) : (
+              <View style={{marginBottom: '5%'}} />
+            )}
             <View style={classes.input2}>
               <Text style={classes.inputLabel}>Repeat Password</Text>
               <TextInput
@@ -217,10 +268,15 @@ const Register = props => {
                 autoCapitalize="none"
                 secureTextEntry={eye.secureRepeat ? true : false}
                 onChangeText={repeat => {
+                  setWarning({...warning, repeatwarning: ''});
                   setData({...data, repeat: repeat});
+                  setWarning({
+                    ...warning,
+                    repeatwarning: passwordValidation(repeat, data.password),
+                  });
                 }}
               />
-              <Pressable
+              <TouchableOpacity
                 style={classes.eye}
                 onPress={() => {
                   setEye({
@@ -237,34 +293,49 @@ const Register = props => {
                     size={24}
                   />
                 )}
-              </Pressable>
+              </TouchableOpacity>
             </View>
+            {warning.repeatwarning ? (
+              warning.repeatwarning === 'Password match' ? (
+                <Text style={{...classes.inputwarning, color: 'green'}}>
+                  {warning.repeatwarning}
+                </Text>
+              ) : (
+                <Text style={classes.inputwarning}>
+                  {warning.repeatwarning}
+                </Text>
+              )
+            ) : (
+              <View style={{marginBottom: '5%'}} />
+            )}
             <View style={classes.input}>
-              <Pressable style={classes.btnlogin} onPress={submitHandler}>
+              <TouchableOpacity
+                style={classes.btnlogin}
+                onPress={submitHandler}>
                 <Text style={classes.btntextlogin}>Register</Text>
-              </Pressable>
+              </TouchableOpacity>
             </View>
             <View style={classes.input}>
-              <Pressable style={classes.btngoogle}>
+              <TouchableOpacity style={classes.btngoogle}>
                 <Image
                   style={classes.googleicon}
                   source={require('../../../assets/icons/icon_google.png')}
                 />
                 <Text style={classes.btntextgoogle}>Register with Google</Text>
-              </Pressable>
-            </View>
-            <View style={classes.register}>
-              <Text style={classes.newusertext}>Already Registered?</Text>
-              <Text
-                style={classes.registertext}
-                onPress={() => props.navigation.navigate('Login')}>
-                Login
-              </Text>
+              </TouchableOpacity>
             </View>
           </View>
-        </Animatable.View>
-      </ScrollView>
-    </SafeAreaView>
+          <View style={classes.login}>
+            <Text style={classes.logintext}>Already Registered?</Text>
+            <Text
+              style={classes.login2text}
+              onPress={() => props.navigation.navigate('Login')}>
+              Login
+            </Text>
+          </View>
+        </ScrollView>
+      </View>
+    </View>
   );
 };
 

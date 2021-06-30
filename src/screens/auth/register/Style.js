@@ -1,11 +1,11 @@
-import {StyleSheet} from 'react-native';
-
+import {StyleSheet, Dimensions} from 'react-native';
+const windowHeight = Dimensions.get('window').height;
 const classes = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    paddingTop: '10%',
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'row',
+    flexDirection: 'column',
     backgroundColor: '#F9F9F9',
   },
   modalcontainer: {
@@ -44,13 +44,11 @@ const classes = StyleSheet.create({
   },
   inputGroup: {
     justifyContent: 'center',
-    alignItems: 'center',
   },
   input: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: '10%',
-    marginRight: '10%',
+    marginHorizontal: '10%',
   },
   inputLabel: {
     position: 'absolute',
@@ -70,7 +68,6 @@ const classes = StyleSheet.create({
     borderColor: '#ADA9BB',
     borderRadius: 10,
     padding: 10,
-    marginBottom: '10%',
     fontFamily: 'Roboto-Regular',
     fontSize: 20,
     color: 'black',
@@ -88,9 +85,7 @@ const classes = StyleSheet.create({
   input2: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: '10%',
-    marginRight: '10%',
-    marginTop: '8%',
+    marginHorizontal: '10%',
   },
   textInputrepeatPassword: {
     flex: 1,
@@ -107,15 +102,21 @@ const classes = StyleSheet.create({
     right: 15,
     justifyContent: 'center',
   },
+  inputwarning: {
+    marginHorizontal: '10%',
+    marginLeft: '12%',
+    marginBottom: '5%',
+    fontFamily: 'Roboto-Medium',
+    fontSize: 12,
+    color: 'rgba(255, 91, 55, 1)',
+  },
   btnlogin: {
     width: '100%',
     alignItems: 'center',
-    marginTop: '10%',
     backgroundColor: '#5784BA',
     justifyContent: 'center',
     height: 50,
     borderRadius: 10,
-    padding: 10,
   },
   btntextlogin: {
     fontSize: 18,
@@ -133,7 +134,6 @@ const classes = StyleSheet.create({
     justifyContent: 'center',
     height: 50,
     borderRadius: 10,
-    padding: 10,
   },
   googleicon: {
     alignSelf: 'center',
@@ -148,16 +148,17 @@ const classes = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'Kanit-Medium',
   },
-  register: {
+  login: {
+    marginTop: '5%',
     flexDirection: 'row',
-    marginTop: '10%',
+    alignSelf: 'center',
   },
-  newusertext: {
+  logintext: {
     color: '#ADA9BB',
     fontFamily: 'Kanit-Medium',
     fontSize: 15,
   },
-  registertext: {
+  login2text: {
     fontFamily: 'Kanit-Medium',
     marginLeft: 8,
     color: '#5784BA',

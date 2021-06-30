@@ -33,13 +33,18 @@ const ForYou = props => {
             <Text style={classes.coursename}>{item.course_name}</Text>
             <View style={classes.tableprogress}>
               <ProgressCircle
-                percent={70}
+                percent={Number(
+                  ((item.progress / item.totalsubcourse) * 100).toFixed(0),
+                )}
                 radius={20}
                 borderWidth={2.8}
                 color="#5784BA"
                 shadowColor="#E5E6EB"
                 bgColor="#fff">
-                <Text style={classes.textprogress}>{70 + '%'}</Text>
+                <Text style={classes.textprogress}>
+                  {((item.progress / item.totalsubcourse) * 100).toFixed(0) +
+                    '%'}
+                </Text>
               </ProgressCircle>
             </View>
           </View>

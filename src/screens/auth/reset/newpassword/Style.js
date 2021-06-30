@@ -6,6 +6,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: 'white',
   },
+  backbtn: {
+    width: 42,
+    marginLeft: '5%',
+  },
   modalcontainer: {
     flex: 1,
     flexDirection: 'column',
@@ -13,7 +17,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     paddingVertical: '15%',
-    marginHorizontal: '10%',
+    paddingHorizontal: '10%',
   },
   image: {
     width: 200,
@@ -27,14 +31,13 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     flexDirection: 'column',
-    alignItems: 'center',
   },
   header: {
+    alignSelf: 'center',
     marginTop: '2%',
     fontFamily: 'Kanit-Medium',
     fontSize: 28,
   },
-
   desc1: {
     marginHorizontal: '10%',
     marginTop: '20%',
@@ -78,11 +81,11 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginHorizontal: '10%',
   },
-
   inputwarning: {
-    paddingLeft: '2%',
-    fontFamily: 'Roboto-Regular',
-    fontSize: 14,
+    marginHorizontal: '12%',
+    fontFamily: 'Roboto-Medium',
+    fontSize: 12,
+    color: 'rgba(255, 91, 55, 1)',
   },
   warninglogo: {
     marginLeft: '2%',
@@ -92,7 +95,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: '10%',
     marginRight: '10%',
-    marginTop: '5%',
   },
   textInputrepeatPassword: {
     flex: 1,
@@ -109,14 +111,12 @@ const styles = StyleSheet.create({
     right: 15,
     justifyContent: 'center',
   },
-
   btnsend: {
     width: '100%',
-    marginTop: '20%',
-    marginHorizontal: '10%',
     alignItems: 'center',
     backgroundColor: '#5784BA',
     justifyContent: 'center',
+    alignSelf: 'center',
     height: 50,
     borderRadius: 10,
     padding: 10,

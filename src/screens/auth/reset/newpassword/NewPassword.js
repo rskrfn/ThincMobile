@@ -8,7 +8,7 @@ import {
   StatusBar,
   Image,
   TextInput,
-  Pressable,
+  TouchableOpacity,
   Modal,
 } from 'react-native';
 import {Toast} from 'native-base';
@@ -18,6 +18,7 @@ import * as Animatable from 'react-native-animatable';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import classes from '../../reset/newpassword/Style';
 import resetImage from '../../../../assets/images/reset3.png';
+import {passwordValidation} from '../../../../services/validation/inputValidation';
 
 const NewPassword = props => {
   const [password, setPassword] = useState();
@@ -27,6 +28,10 @@ const NewPassword = props => {
     secureRepeat: true,
   });
   const [modal, setModal] = useState(false);
+  const [warning, setWarning] = useState({
+    passwordWarning: '',
+    repeatWarning: '',
+  });
 
   const email = props.route.params.email;
 
@@ -41,17 +46,9 @@ const NewPassword = props => {
         duration: 3000,
       });
     }
-    if (password.length < 8) {
+    if (warning.passwordWarning || warning.repeatWarning !== 'Password match') {
       return Toast.show({
-        text: 'Password must be at least 8 characters',
-        type: 'warning',
-        textStyle: {textAlign: 'center'},
-        duration: 3000,
-      });
-    }
-    if (password !== repeat) {
-      return Toast.show({
-        text: "Password didn't match",
+        text: warning.passwordWarning || warning.repeatWarning,
         type: 'warning',
         textStyle: {textAlign: 'center'},
         duration: 3000,
@@ -83,89 +80,6 @@ const NewPassword = props => {
         }
       });
   };
-
-  function passwordWarning() {
-    if (password.length < 8) {
-      return (
-        <View style={classes.warning}>
-          <Text style={{...classes.inputwarning, color: '#010620'}}>
-            Must be at least 8 characters
-          </Text>
-        </View>
-      );
-    }
-    if (password.length > 16) {
-      return (
-        <View style={classes.warning}>
-          <Text style={{...classes.inputwarning, color: '#FF1313'}}>
-            Can not exceed 16 characters
-          </Text>
-          <MaterialIcons
-            style={classes.warninglogo}
-            name="cancel"
-            size={16}
-            color="#FF1313"
-          />
-        </View>
-      );
-    }
-  }
-  function repeatWarning() {
-    if (repeat.length < 8) {
-      return (
-        <View style={classes.warning}>
-          <Text style={{...classes.inputwarning, color: '#010620'}}>
-            Must be at least 8 characters
-          </Text>
-        </View>
-      );
-    }
-    if (repeat.length > 16) {
-      return (
-        <View style={classes.warning}>
-          <Text style={{...classes.inputwarning, color: '#FF1313'}}>
-            Can not exceed 16 characters
-          </Text>
-          <MaterialIcons
-            style={classes.warninglogo}
-            name="cancel"
-            size={16}
-            color="#FF1313"
-          />
-        </View>
-      );
-    }
-    if (repeat !== password) {
-      return (
-        <View style={classes.warning}>
-          <Text style={{...classes.inputwarning, color: '#FF1313'}}>
-            Password didn't match
-          </Text>
-          <MaterialIcons
-            style={classes.warninglogo}
-            name="cancel"
-            size={16}
-            color="#FF1313"
-          />
-        </View>
-      );
-    }
-    if (repeat === password) {
-      return (
-        <View style={classes.warning}>
-          <Text style={{...classes.inputwarning, color: '#0EAA00'}}>
-            Password match
-          </Text>
-          <MaterialIcons
-            style={classes.warninglogo}
-            name="check-circle"
-            size={16}
-            color="#0EAA00"
-          />
-        </View>
-      );
-    }
-  }
 
   useEffect(() => {
     const backAction = () => {
@@ -205,7 +119,7 @@ const NewPassword = props => {
         <View style={classes.modalcontainer}>
           <Text style={classes.header}>Password Changed!</Text>
           <Image style={classes.image} source={resetImage} />
-          <Pressable
+          <TouchableOpacity
             onPress={() => {
               props.navigation.replace('Login');
             }}>
@@ -216,10 +130,30 @@ const NewPassword = props => {
               style={classes.textmodal}>
               Login to your account
             </Animatable.Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
       </Modal>
-      <MaterialIcons name="chevron-left" size={42} color={'#010620'} />
+      <View style={classes.backbtn}>
+        <TouchableOpacity
+          onPress={() => {
+            Alert.alert('Hold on!', 'All progress will be lost', [
+              {
+                text: 'CANCEL',
+                onPress: () => {
+                  setPassword('');
+                  setRepeat('');
+                },
+              },
+              {
+                text: 'OK',
+                onPress: () => props.navigation.navigate('Login'),
+              },
+            ]);
+            return true;
+          }}>
+          <MaterialIcons name="chevron-left" size={42} color={'#010620'} />
+        </TouchableOpacity>
+      </View>
       <View style={classes.content}>
         <Text style={classes.header}>Create New Password</Text>
         <Text style={classes.desc1}>
@@ -233,10 +167,15 @@ const NewPassword = props => {
             secureTextEntry={eye.securePass ? true : false}
             value={password}
             onChangeText={value => {
+              setWarning({...warning, passwordWarning: ''});
               setPassword(value);
+              setWarning({
+                ...warning,
+                passwordWarning: passwordValidation(value),
+              });
             }}
           />
-          <Pressable
+          <TouchableOpacity
             style={classes.eye}
             onPress={() => {
               setEye({
@@ -249,9 +188,13 @@ const NewPassword = props => {
             ) : (
               <MaterialIcons name="visibility-off" color="black" size={24} />
             )}
-          </Pressable>
+          </TouchableOpacity>
         </View>
-        {password ? passwordWarning() : null}
+        {warning.passwordWarning ? (
+          <Text style={classes.inputwarning}>{warning.passwordWarning}</Text>
+        ) : (
+          <View style={{marginBottom: '3%'}} />
+        )}
         <View style={classes.input2}>
           <Text style={classes.inputlabel}>Repeat Password</Text>
           <TextInput
@@ -260,10 +203,15 @@ const NewPassword = props => {
             secureTextEntry={eye.secureRepeat ? true : false}
             value={repeat}
             onChangeText={value => {
+              setWarning({...warning, repeatWarning: ''});
               setRepeat(value);
+              setWarning({
+                ...warning,
+                repeatWarning: passwordValidation(value, password),
+              });
             }}
           />
-          <Pressable
+          <TouchableOpacity
             style={classes.eye}
             onPress={() => {
               setEye({
@@ -276,17 +224,27 @@ const NewPassword = props => {
             ) : (
               <MaterialIcons name="visibility-off" color="black" size={24} />
             )}
-          </Pressable>
+          </TouchableOpacity>
         </View>
-        {repeat ? repeatWarning() : null}
+        {warning.repeatWarning ? (
+          warning.repeatWarning === 'Password match' ? (
+            <Text style={{...classes.inputwarning, color: 'green'}}>
+              {warning.repeatWarning}
+            </Text>
+          ) : (
+            <Text style={classes.inputwarning}>{warning.repeatWarning}</Text>
+          )
+        ) : (
+          <View style={{marginBottom: '5%'}} />
+        )}
         <View style={classes.input}>
-          <Pressable
+          <TouchableOpacity
             style={classes.btnsend}
             onPress={() => {
               submitHandler();
             }}>
             <Text style={classes.btntextsend}>Send</Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>

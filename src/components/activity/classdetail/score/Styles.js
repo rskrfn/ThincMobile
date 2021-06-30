@@ -38,12 +38,13 @@ const classes = StyleSheet.create({
   },
   modalcontent: {
     width: '100%',
+    maxHeight: '70%',
     backgroundColor: 'white',
     paddingTop: '2%',
     paddingBottom: '5%',
     paddingHorizontal: '5%',
-
     borderRadius: 10,
+    overflow: 'hidden',
   },
   uppercontent: {
     flexDirection: 'row',
